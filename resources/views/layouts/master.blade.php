@@ -69,6 +69,8 @@
     <!-- responsive CSS
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+
+    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet"> <!--load all styles -->
     <!-- modernizr JS
         ============================================ -->
     <script src="{{ asset('js/vendor/modernizr-2.8.3.min.js') }}"></script>
