@@ -10,6 +10,8 @@
     <!-- favicon
         ============================================ -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('img/favicon.ico') }}">
+
+    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet"> <!--load all styles -->
     <!-- Google Fonts
         ============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
@@ -70,7 +72,7 @@
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
 
-    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet"> <!--load all styles -->
+
     <!-- modernizr JS
         ============================================ -->
     <script src="{{ asset('js/vendor/modernizr-2.8.3.min.js') }}"></script>
