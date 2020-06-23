@@ -1,7 +1,4 @@
 (function ($) {
- "use strict";
- 
+	"use strict";
 	$('.chosen-select').chosen({width: "100%"});
-	
- 
-})(jQuery); 
+})(jQuery);

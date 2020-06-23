@@ -3089,7 +3089,7 @@
     // BOOTSTRAP TABLE INIT
     // =======================
 
-    /*$(function () {
-        $('[data-toggle="table"]').bootstrapTable();
-    });*/
+    $(function () {
+        //$('[data-toggle="table"]').bootstrapTable();
+    });
 })(jQuery);

@@ -1,10 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-    <!-- Start Welcome area -->
-    <div class="all-content-wrapper">
-        @include('layouts.header')
-
         <div class="mg-b-15">
             <div class="container-fluid">
                 <div class="row">
@@ -141,10 +137,6 @@
             </div>
         </div>
         <!-- Static Table End -->
-
-
-        @include('layouts.footer')
-    </div>
 @endsection
 
 @section('script')

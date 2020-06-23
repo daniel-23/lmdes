@@ -1,21 +1,30 @@
 <?php
-Route::group(['middleware' => ['auth','can:super-admin']], function () {
+Route::group(['middleware' => ['auth']], function () {
 	#Rutas para gestion de Cursos
 	
+	/*CATEGORIAS*/
 	Route::get('/cursos/categorias', 'CategoryController@index')->name('categorias');
 	Route::get('/cursos/categorias/crear', 'CategoryController@crear')->name('categorias.crear');
 	Route::post('/cursos/categorias/crear', 'CategoryController@create');
 	Route::get('/cursos/categorias/cambiar-estatus/{id}', 'CategoryController@cambiar_estatus')->name('categorias.cambiar-estatus');
 	Route::get('/cursos/categorias/editar/{id}', 'CategoryController@editar')->name('categorias.editar');
 	Route::post('/cursos/categorias/editar/{id}', 'CategoryController@edit');
+	/*******************/
 
 
+	/*FORMATOS*/
 	Route::get('/cursos/formatos', 'FormatController@index')->name('formatos');
 	Route::get('/cursos/formatos/crear', 'FormatController@crear')->name('formatos.crear');
 	Route::post('/cursos/formatos/crear', 'FormatController@create');
 	Route::get('/cursos/formatos/cambiar-estatus/{id}', 'FormatController@cambiar_estatus')->name('formatos.cambiar-estatus');
 	Route::get('/cursos/formatos/editar/{id}', 'FormatController@editar')->name('formatos.editar');
 	Route::post('/cursos/formatos/editar/{id}', 'FormatController@edit');
+	/**************************/
+
+	/*PARAMETROS*/
+	Route::get('/par-courses', 'ParameterController@get_courses')->name('par-courses');
+	Route::post('/par-courses', 'ParameterController@post_courses');
+	/**************************/
 
 
 

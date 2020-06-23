@@ -11,7 +11,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        
         return view('home')
     		->with('title', 'Home')
     		->with('act_link', '');

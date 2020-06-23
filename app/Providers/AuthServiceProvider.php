@@ -107,5 +107,15 @@ class AuthServiceProvider extends ServiceProvider
             return False;
         });
 
+        Gate::define('admin', function ($user) {
+
+            foreach ($user->roles as $role) {
+                if ($role->IdRole == 2) {
+                    return True;
+                }
+            }
+            return False;
+        });
+
     }
 }

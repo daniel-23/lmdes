@@ -60,14 +60,14 @@
     <script src="{{ asset('js/vendor/modernizr-2.8.3.min.js') }}"></script>
 </head>
 
-<body style="background-image: url({{ asset('img/background.jpg') }}); background-size:cover;">
+<body style="background-image: url({{ asset('storage/images/background.jpg') }}); background-size:cover;">
     <!--[if lt IE 8]>
 		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
 	<div class="error-pagewrap">
 		<div class="error-page-int">
 			<div class="text-center m-b-md custom-login">
-                <img src="{{ asset('img/logo/logow.png') }}" alt="">
+                <img src="{{ asset('storage/images/logo/logow.png') }}" alt="">
 				<h3 style="color: white;">{{ __('PLEASE LOGIN TO APP') }}</h3>
                 @error('login')
                     <div class="alert alert-danger" role="alert">
