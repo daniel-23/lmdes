@@ -12,7 +12,7 @@ class CategoryController extends Controller
     	return view('categorias.index')
     		->with('title', 'Courses Category')
     		->with('act_link', 'parameters')
-    		->with('categories', Category::all());
+    		->with('categories', Category::select('IdCourseCategory','Name','IdCourseCategoryParent')->get());
     }
 
     public function crear()
@@ -26,7 +26,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
 
-    	$validatedData = request()->validate([
+        $validatedData = request()->validate([
             'name'        => 'required|min:4|unique:Cnf_Courses_Categories,Name',
             'code'        => 'nullable|min:4',
             'description' => 'nullable|min:4',
@@ -34,6 +34,7 @@ class CategoryController extends Controller
             'icon'        => 'required|min:4',
             'parent'      => 'required|integer'
         ]);
+
         $data = [
             'Name' => ucwords(strtolower(trim(strip_tags($request->name)))),
             'Code' => strtolower(trim(strip_tags($request->code))),
@@ -130,6 +131,59 @@ class CategoryController extends Controller
         }
 
         return $resp;
+    }
+
+    public function arbol()
+    {
+        $respuesta = '';
+        $categoriasPadres = Category::where('IdCourseCategoryParent',0)->orderBy('Name')->get();
+        foreach ($categoriasPadres as $categoriaPadre) {
+            $hij1 = Category::where('IdCourseCategoryParent',$categoriaPadre->IdCourseCategory)->orderBy('Name')->get();
+            if (count($hij1) == 0) {
+                if ($respuesta == '') { $respuesta .= "{\"text\": \"".$categoriaPadre->Name."\"}"; } else { $respuesta .= ", {\"text\": \"".$categoriaPadre->Name."\"}"; }
+            }else{
+                if ($respuesta == '') {
+                    $respuesta .= "{\"text\": \"".$categoriaPadre->Name."\",\"children\": [";
+                } else {
+                    $respuesta .= ", {\"text\": \"".$categoriaPadre->Name."\",\"children\": [";
+                }
+
+
+                foreach ($hij1 as $hijo) {
+
+                    $hij2 = Category::where('IdCourseCategoryParent',$hijo->IdCourseCategory)->orderBy('Name')->get();
+                    if (count($hij2) == 0) {
+                        $respuesta .= "{\"text\": \"".$hijo->Name."\"},";
+                    }else{
+                        $respuesta .= "{\"text\": \"".$hijo->Name."\",\"children\": [";
+
+                        foreach ($hij2 as $hijo2) {
+                            $respuesta .= "{\"text\": \"".$hijo2->Name."\"},";
+                        }
+                        $respuesta .= "]}";
+                    }
+                }
+                $respuesta .= "]}";
+            }
+
+        }
+        #return "{\"core\" : {\"data\" : [$respuesta]}}";
+
+        return "{'core' : { 'data' : [ {'text': 'Otra'}, { 'text': 'Resources', 'children': [ { 'text': 'css', 'children': [ { 'text': 'animate.css', 'icon': 'none' }, { 'text': 'bootstrap.css', 'icon': 'none' }, { 'text': 'main.css', 'icon': 'none' }, { 'text': 'style.css', 'icon': 'none' } ] } ] } ] } }";
+        
+    }
+
+    public function get_for_name($name)
+    {
+        $categoria = Category::where('name',trim(strip_tags($name)))->first();
+        $ids = explode(',', $this->printTree($categoria));
+        
+        $categories = Category::where('Enabled','E')->whereNotIn('IdCourseCategory', $ids)->get();
+
+        return response()->json([
+            'category' => $categoria,
+            'categories' => $categories,
+        ]);
     }
 
 

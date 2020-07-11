@@ -3,6 +3,11 @@ Route::group(['middleware' => ['auth']], function () {
 	#Rutas para gestion de Cursos
 	
 	/*CATEGORIAS*/
+	Route::get('/cursos/categorias/arbol', 'CategoryController@arbol')->name('categorias.arbol');
+	Route::get('/cursos/categorias/get-name/{name}', 'CategoryController@get_for_name');
+
+
+
 	Route::get('/cursos/categorias', 'CategoryController@index')->name('categorias');
 	Route::get('/cursos/categorias/crear', 'CategoryController@crear')->name('categorias.crear');
 	Route::post('/cursos/categorias/crear', 'CategoryController@create');

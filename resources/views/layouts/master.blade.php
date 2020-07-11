@@ -21,6 +21,9 @@
     <!-- Bootstrap CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- Tree-line CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/tree-viewer/tree-viewer.css') }}">
     <!-- Bootstrap CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
@@ -67,6 +70,9 @@
     <!-- select2 CSS
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">
+    <!-- colorpicker CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/colorpicker/colorpicker.css') }}">
     
     <!-- chosen CSS
         ============================================ -->
@@ -202,6 +208,7 @@
     <!-- tab JS
 		============================================ -->
     <script src="{{ asset('js/tab.js') }}"></script>
+
     <!-- plugins JS
 		============================================ -->
     <script src="{{ asset('js/plugins.js') }}"></script>

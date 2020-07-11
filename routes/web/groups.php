@@ -1,5 +1,5 @@
 <?php
-Route::group(['middleware' => ['auth','can:super-admin']], function () {
+Route::group(['middleware' => ['auth']], function () {
 	#Rutas para gestion de grupos
 	Route::get('/grupos', 'GroupController@index')->name('grupos');
 	Route::get('/grupos/crear', 'GroupController@crear')->name('grupos.crear');
@@ -12,4 +12,9 @@ Route::group(['middleware' => ['auth','can:super-admin']], function () {
 	Route::get('/grupos/cursos/{id}', 'GroupController@grupos_cursos')->name('grupos.cursos');
 	Route::post('/grupos/cursos/{id}', 'GroupController@groups_courses')->name('grupos.cursos');
 	Route::get('/grupos/cursos/{id}/eliminar/{idp}', 'GroupController@grupos_cursos_eliminar')->name('grupos.cursos.eliminar');
+
+	Route::get('/grupos/get-name/{name}', 'GroupController@grupos_get_name');
+
+
+	
 });

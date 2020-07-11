@@ -121,6 +121,14 @@
                                 <span class="mini-click-non">Administrar Cursos</span>
                             </a>
                             <ul class="submenu-angle" aria-expanded="false">
+                                @can('tiene-permiso','Grupos+Acceder')
+                                <li>
+                                    <a href="{{ route('grupos') }}">
+                                        <span class="mini-sub-pro">Grupos</span>
+                                    </a>
+                                </li>
+                                @endcan
+
                                 @can('tiene-permiso','Categorias+Acceder')
                                 <li>
                                     <a href="{{ route('categorias') }}">

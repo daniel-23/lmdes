@@ -149,7 +149,18 @@ class GroupController extends Controller
             return redirect('/grupos');
             
         }
+    }
 
+    public function grupos_get_name($name)
+    {
+        $group = Group::where('Name',trim(strip_tags($name)))->first();
+        $ids = explode(',', $this->printTree($group));
+        $groups = Group::where('Enabled','E')->whereNotIn('IdGroup', $ids)->get();
+        return response()->json([
+            'group' => $group,
+            'groups' => $groups,
+        ]);
+        
     }
 
 }
