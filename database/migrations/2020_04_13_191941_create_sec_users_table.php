@@ -15,7 +15,6 @@ class CreateSecUsersTable extends Migration
     {
         Schema::create('Sec_Users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-
             $table->increments('IdUser');
             $table->string('Code',20)->nullable();
             $table->string('Name',200)->nullable();
@@ -29,6 +28,7 @@ class CreateSecUsersTable extends Migration
             $table->string('VerifyUser')->nullable();
             $table->string('VerifyToken',200)->nullable();
             $table->string('RecoveryToken',200)->nullable();
+            $table->unsignedInteger('IdCompany')->default(0);
         });
     }
 

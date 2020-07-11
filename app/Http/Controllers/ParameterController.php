@@ -22,10 +22,9 @@ class ParameterController extends Controller
     public function post_general(Request $request)
     {
     	$validator = Validator::make($request->all(), [
-    		
     		'EmailSender' => 'nullable|email:filter',
     		'MaxSizeFile' => 'integer',
-    		'ActivateNotifications' => 'max:1',
+    		'ActivateNotifications' => ['max:1',Rule::in(['Y', 'N'])],
     	]);
 
         if ($validator->fails()) {

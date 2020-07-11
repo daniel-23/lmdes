@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Role;
-use App\Component;
-use App\Permission;
+use App\{Role,Component,Permission};
 class RoleController extends Controller
 {
     public function index()
@@ -19,24 +17,32 @@ class RoleController extends Controller
     {
     	return view('roles.create')
     		->with('title', 'Create Role')
-    		->with('act_link', 'security');
+    		->with('act_link', 'security')
+            ->with('components', Component::select(['IdComponent','Name'])->orderBy('Name')->get())
+            ->with('permissions', Permission::select(['IdPermission','Name'])->orderBy('Name')->get());
     }
 
     public function create(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required|min:4|unique:Sec_Roles,Name',
+            'permisos' => 'array',
         ]);
+
         $data = [
             'Name' => ucwords(strtolower(trim(strip_tags($request->name)))),
             'Description' => is_null($request->description) ? null : trim(strip_tags($request->description)),
         ];
 
-        if (Role::create($data)) {
-            $request->session()->flash('success', 'Role created successfully');
-            return redirect('/roles');
-            
+        $role = Role::create($data);
+
+        foreach ($request->permisos as $key => $value) {
+            list($component_id,$permission_id) = explode('-', $key);
+            $role->permissions()->attach($permission_id, ['IdComponent' => $component_id]);
         }
+
+        $request->session()->flash('success', 'Role created successfully');
+        return redirect('/roles');
 
     }
 
@@ -70,13 +76,13 @@ class RoleController extends Controller
 
             $btnEdit = '&nbsp;   <a href="'.url("/roles/editar/{$key->IdRole}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>';
 
-            $btnPermissions = '&nbsp;   <a href="'.url("/roles/permisos/{$key->IdRole}").'" title="Administrar permisos del rol" class="btn btn-custon-four btn-warning btn-xs"><i class="fas fa-key" style="color: white;"></i><a>';
+            #$btnPermissions = '&nbsp;   <a href="'.url("/roles/permisos/{$key->IdRole}").'" title="Administrar permisos del rol" class="btn btn-custon-four btn-warning btn-xs"><i class="fas fa-key" style="color: white;"></i><a>';
             
             $data['rows'][] = [
                 'IdRole' => $key->IdRole,
                 'Name' => $key->Name,
                 'Description' => $key->Description,
-                'btns' => $btnStatus . $btnEdit . $btnPermissions
+                'btns' => $btnStatus . $btnEdit  #$btnPermissions
             ];
             
         }
@@ -105,31 +111,37 @@ class RoleController extends Controller
     public function editar($id)
     {
         $role = Role::findOrFail($id);
+        
         return view('roles.edit')
             ->with('title', 'Edit Role')
             ->with('act_link', 'security')
-            ->with('role', $role);
+            ->with('role', $role)
+            ->with('components', Component::select(['IdComponent','Name'])->orderBy('Name')->get())
+            ->with('permissions', Permission::select(['IdPermission','Name'])->orderBy('Name')->get());
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $role = Role::findOrFail($id);
-
-        $rU = trim(strtolower(request()->name)) != trim(strtolower($role->Name)) ? '|unique:Sec_Roles,Name' : '';
-        
-
-
-
         $validatedData = request()->validate([
-            'name' => 'required|min:4'.$rU,
+            'name' => 'required|min:4|unique:Sec_Roles,Name,'.$id.',IdRole',
+            'description' => 'nullable|string|max:500',
+            'permisos' => 'nullable|array',
         ]);
+
+        $role->permissions()->detach();
         $role->Name = ucwords(strtolower(trim(strip_tags(request()->name))));
         $role->Description = is_null(request()->description) ? null : trim(strip_tags(request()->description));
-        if ($role->save()) {
-            request()->session()->flash('success', 'Role modify successfully');
-            return redirect('/roles');
-            
+        $role->save();
+        if (!is_null($request->permisos)) {
+            foreach ($request->permisos as $key => $value) {
+                list($component_id,$permission_id) = explode('-', $key);
+                $role->permissions()->attach($permission_id, ['IdComponent' => $component_id]);
+            }
         }
+            
+        request()->session()->flash('success', 'Role modify successfully');
+        return redirect('/roles');
     }
 
     public function permisos_index($id)

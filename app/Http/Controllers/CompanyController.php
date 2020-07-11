@@ -13,13 +13,15 @@ use App\{
     Language,
     Regional,
     User,
-    Role
+    Role,
+    ParameterGeneral
 };
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 
 class CompanyController extends Controller
@@ -37,13 +39,8 @@ class CompanyController extends Controller
         $consulta = DB::table('Sec_Companies')
             ->join('Cnf_CompanyTypes', 'Sec_Companies.IdCompanyType', '=', 'Cnf_CompanyTypes.IdCompanyType')
             ->select('Sec_Companies.*', 'Cnf_CompanyTypes.Name as Type');
-
-
-
         $data['totalNotFiltered'] = $consulta->count();
         $data['rows'] = array();
-
-
 
         if (is_null($request->search)) {
             $data['total'] = $data['totalNotFiltered'];
@@ -65,16 +62,17 @@ class CompanyController extends Controller
         }
 
         $rows = $consulta->limit($request->limit)->get();
-        
 
         foreach ($rows as $key) {
             $btnStatus = $key->Enabled == 'E' ? '<a href="'.url("/companies/cambiar-estatus/{$key->IdCompany}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/companies/cambiar-estatus/{$key->IdCompany}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
 
-            $btnEdit = '&nbsp;   <a href="'.url("/companies/editar/{$key->IdCompany}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>';
+            $btnEdit = '<a href="'.url("/companies/editar/{$key->IdCompany}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>';
 
-            $btnCnf = '&nbsp;   <a href="'.url("/companies/regional/{$key->IdCompany}").'" title="Regional" class="btn btn-custon-four btn-warning btn-xs"><i class="fas fa-cogs" style="color: white;"></i><a>';
+            $btnCnf = '<a href="'.url("/companies/regional/{$key->IdCompany}").'" title="Regional" class="btn btn-custon-four btn-warning btn-xs"><i class="fas fa-cogs" style="color: white;"></i><a>';
 
-            $btnUsers = '&nbsp;   <a href="'.url("/companies/{$key->IdCompany}/users").'" title="Usuarios" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-users" style="color: white;"></i><a>';
+            $btnUsers = '<a href="'.url("/companies/{$key->IdCompany}/users").'" title="Usuarios" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-users" style="color: white;"></i><a>';
+
+            $btnPar = '<a href="'.url("/companies/parameters/{$key->IdCompany}").'" title="Parametros Generales" class="btn btn-custon-four btn-info btn-xs"><i class="fas fa-cog" style="color: white;"></i><a>';
 
             $data['rows'][] = [
                 'IdCompany' => $key->IdCompany,
@@ -84,7 +82,7 @@ class CompanyController extends Controller
                 'ContactName' => $key->ContactName,
                 'WebSite' => "<a href=\"{$key->WebSite}\" target=\"_blanck\" class=\"btn btn-sm btn-info \">Ver</a>",
                 'DatabaseName' => $key->DatabaseName,
-                'btns' => $btnStatus . $btnEdit. $btnCnf . $btnUsers
+                'btns' => '<div class="btn-group" role="group">'.$btnStatus . $btnEdit. $btnCnf . $btnUsers . $btnPar.'</div>'
             ];
             
         }
@@ -318,12 +316,6 @@ class CompanyController extends Controller
 
     public function users($id)
     {
-        /*select_company($id);
-        echo '<pre>'; print_r(config('database')); echo '</pre>';
-        $users = DB::connection('institucion')->select('select * from Sec_Users');
-        
-        dd($users);*/
-
         return view('companies.users')
             ->with('title', 'Companies')
             ->with('act_link', 'parameters')
@@ -407,16 +399,66 @@ class CompanyController extends Controller
         $rows = $consulta->limit($request->limit)->get();  
         foreach ($rows as $key) {
             $btnStatus = $key->Status == 'A' ? '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
+
+            $btnEdit = '&nbsp;  <a href="'.url("/companies/$id/users/editar/{$key->IdUser}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>';
             $data['rows'][] = [
                 'IdUser' => $key->IdUser,
                 'Code' => $key->Code,
                 'Name' => $key->Name . ' '. $key->LastName,
                 'Email' => $key->Email,
                 'Role' => $key->role_name,
-                'btns' => $btnStatus . '&nbsp;   <a href="'.url("/usuarios/editar/{$key->IdUser}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>'
+                'btns' => $btnStatus . $btnEdit
             ];
-            
         }
         return $data;
+    }
+
+    public function parametros($id)
+    {
+        select_company($id);
+        config(['database.default' => 'institucion']);
+        $parametros = ParameterGeneral::find(1);
+        return view('companies.par_general')
+            ->with('title', 'Companies')
+            ->with('act_link', 'parameters')
+            ->with('paramater', $parametros)
+            ->with('id',$id);
+    }
+
+    public function parameters(Request $request, $id)
+    {
+        
+        select_company($id);
+        config(['database.default' => 'institucion']);
+        $validator = Validator::make($request->all(), [
+            'Logo' => 'nullable|image',
+            'EmailSender' => 'nullable|email:filter',
+            'MaxSizeFile' => 'integer',
+            'ActivateNotifications' => ['max:1',Rule::in(['Y', 'N'])],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/par-general')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        if (count($request->file()) > 0) {
+            $path = $request->file('Logo')->store(
+                'images', 'public'
+            );
+        }
+
+
+        $paramater = ParameterGeneral::find(1);
+
+        $paramater->update($request->all());
+        if (isset($path)) {
+            $paramater->Logo = $path;
+            $paramater->save();
+        }
+        
+        $request->session()->flash('success', 'Parameters modify successfully');
+        return redirect()->back();
     }
 }

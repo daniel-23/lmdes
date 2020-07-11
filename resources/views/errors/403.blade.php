@@ -1,3 +1,4 @@
+<?php $title = '403' ?>
 @extends('layouts.master')
 
 @section('content')

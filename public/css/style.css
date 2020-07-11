@@ -77,9 +77,9 @@ body {}
 @font-face {
   font-family: 'educate-icon';
   src:
-    url('fonts/educate-icon.ttf?ka5vvx') format('truetype'),
-    url('fonts/educate-icon.woff?ka5vvx') format('woff'),
-    url('fonts/educate-icon.svg?ka5vvx#educate-icon') format('svg');
+    url('./../fonts/educate-icon.ttf?ka5vvx') format('truetype'),
+    url('./../fonts/educate-icon.woff?ka5vvx') format('woff'),
+    url('./../fonts/educate-icon.svg?ka5vvx#educate-icon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -113,9 +113,14 @@ body {}
 .mg-b-15{
 	margin-bottom:20px;
 }
+.mg-b-50{
+	margin-bottom:50px;
+}
+
 .mt-b-30{
 	margin-bottom:30px;
 }
+
 .bg-green {
     background: #006DF0;
 }
@@ -3724,9 +3729,12 @@ div#sparklinehome canvas {
 }
 .footer-copyright-area {
     background: #006DF0;
-	padding: 20px 0px;
+	padding: 15px 0px;
     text-align: center;
-}
+	position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;}
 .message-single-top h1, .notification-single-top h1 {
     border-bottom: 1px solid #F6F8FA;
 }

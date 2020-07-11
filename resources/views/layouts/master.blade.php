@@ -75,6 +75,10 @@
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('css/data-table/bootstrap-table.css') }}">
     <link rel="stylesheet" href="{{ asset('css/data-table/bootstrap-editable.css') }}">
+
+    <!-- forms CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/form/all-type-forms.css') }}">
     <!-- style CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">

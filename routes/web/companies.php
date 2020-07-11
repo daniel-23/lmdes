@@ -22,12 +22,19 @@ Route::group(['middleware' => ['auth','can:super-admin']], function () {
 	Route::get('/companies/regional/eliminar/{id}', 'CompanyController@regional_delete')->where('id', '[0-9]+');
 });
 
-Route::get('/companies/{id}/users', 'CompanyController@users')->where('id', '[0-9]+')->middleware('can:companies-users')->name('companies.users');
 
-Route::get('/companies/{id}/users/create', 'CompanyController@users_crear')->where('id', '[0-9]+')->middleware('can:companies-users')->name('companies.users.create');
+Route::group(['middleware' => ['auth']], function () {
+	Route::get('/companies/{id}/users', 'CompanyController@users')->where('id', '[0-9]+')->middleware('can:companies-users')->name('companies.users');
 
-Route::post('/companies/{id}/users/create', 'CompanyController@users_create')->where('id', '[0-9]+')->middleware('can:companies-users')->name('companies.users.create');
-Route::get('/companies/{id}/users/get-list', 'CompanyController@users_get_list')->where('id', '[0-9]+')->middleware('can:companies-users')->name('company.users.get-list');
+	Route::get('/companies/{id}/users/create', 'CompanyController@users_crear')->where('id', '[0-9]+')->middleware('can:companies-users')->name('companies.users.create');
+	Route::post('/companies/{id}/users/create', 'CompanyController@users_create')->where('id', '[0-9]+')->middleware('can:companies-users')->name('companies.users.create');
+	Route::get('/companies/{id}/users/get-list', 'CompanyController@users_get_list')->where('id', '[0-9]+')->middleware('can:companies-users')->name('company.users.get-list');
+
+	Route::get('/companies/parameters/{id}', 'CompanyController@parametros')->where('id', '[0-9]+');
+	Route::post('/companies/parameters/{id}', 'CompanyController@parameters')->where('id', '[0-9]+');
+});
+
+	
 
 
 

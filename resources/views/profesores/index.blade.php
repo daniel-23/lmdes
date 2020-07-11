@@ -2,15 +2,14 @@
 
 @section('content')
 <!-- Static Table Start -->
-
-<div class="data-table-area mg-b-50">
+<div class="data-table-area mg-b-15">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">
                     <div class="sparkline13-hd">
                         <div class="main-sparkline13-hd row" style="margin-left: 3px; margin-right: 3px;">
-                            <h1>Listado de Usuarios <a href="{{ route('usuarios.crear') }}" class="btn btn-success pull-right">Crear Usuario</a></h1>
+                            <h1>Listado de Profesores <a href="{{ route('profesores.crear') }}" class="btn btn-success pull-right">Crear Profesor</a></h1>
                         </div>
                     </div>
 
@@ -42,6 +41,7 @@
                                 <thead>
                                     <tr>
                                         <th data-field="IdUser">ID</th>
+                                        <th data-field="Code">{{ __('Code') }}</th>
                                         <th data-field="Name">{{ __('Name') }}</th>
                                         <th data-field="Email">{{ __('Email') }}</th>
                                         <th data-field="Role">{{ __('Role') }}</th>
@@ -68,7 +68,7 @@
             $('#tabla').bootstrapTable();
         });
         function ajaxRequest(params) {
-            var url = '{{ route("usuarios.get-list") }}';
+            var url = '{{ route("profesores.get-list") }}';
             console.log("url", url);
             $.get(url + '?' + $.param(params.data)).then(function (res) {
                 console.log("res", res);

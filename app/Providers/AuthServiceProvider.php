@@ -25,6 +25,32 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('tiene-permiso', function ($user,$CompPerm) {
+            
+            list($componente,$permiso) = explode('+', $CompPerm);
+
+            $component = \App\Component::where('Name',$componente)->first();
+
+            $permission = \App\Permission::where('Name',$permiso)->first();
+
+
+            if (is_null($component) || is_null($permission)) {
+                return false;
+            }
+
+
+
+
+            foreach ($user->roles as $role) {
+                if (!is_null($role->permissions()->where('Sec_Permissions.IdPermission',$permission->IdPermission)->wherePivot('IdComponent',$component->IdComponent)->first())) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+
+
         Gate::define('dashboard', function ($user) {
             foreach ($user->roles as $role) {
                 $componente = $role->components()->where('name','Dashboard')->first();

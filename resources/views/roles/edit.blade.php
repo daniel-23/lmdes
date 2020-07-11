@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="basic-form-area mg-b-15">
+    <div class="basic-form-area mg-b-50">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -11,11 +11,6 @@
                                 <h1>{{ __('Edit Role') }}</h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
                             
                         </div>
                         <div class="sparkline12-graph">
@@ -28,7 +23,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('name') input-with-error @enderror">
-                                                            <input type="text" class="form-control" name="name" id="name" value="{{ old('name') ?? $role->Name }}" placeholder="{{ __('Name') }}">
+                                                            <input type="text" class="form-control" name="name" id="name" value="{{ old('name',$role->Name) }}" placeholder="{{ __('Name') }}">
                                                             @error('name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
@@ -37,9 +32,38 @@
 
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner">
-                                                            <input type="text" class="form-control" name="description" id="description" value="{{ old('description') ?? $role->Description }}" placeholder="{{ __('Description') }}">
+                                                            <input type="text" class="form-control" name="description" id="description" value="{{ old('description',$role->Description) }}" placeholder="{{ __('Description') }}">
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-xs-12" style="margin-top: 20px;">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Componente</th>
+                                                                    @foreach($permissions as $permission)
+                                                                    <th>{{ $permission->Name }}</th>
+                                                                    @endforeach
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($components as $component)
+                                                                <tr>
+                                                                    <td>{{ $component->Name }}</td>
+                                                                    @foreach($permissions as $permission)
+                                                                    <th style="text-align: center;">
+                                                                        <?php $nm = $component->IdComponent.'-'.$permission->IdPermission; ?>
+                                                                        <input type="checkbox" name="permisos[{{ $nm }}]"
+                                                                        @if(isset(old('permisos')["$nm"]) || null != $role->permissions()->where('Sec_Permissions.IdPermission',$permission->IdPermission)->wherePivot('IdComponent',$component->IdComponent)->first()) checked @endif>
+                                                                    </th>
+                                                                    @endforeach
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+
                                                     <br>&nbsp;
                                                     <div class="col-xs-12">
                                                         <button type="submit" class="btn btn-custon-four btn-primary"><i class="far fa-save"></i> {{ __('Save') }}</button>

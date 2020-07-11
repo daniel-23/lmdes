@@ -1,7 +1,9 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="basic-form-area mg-b-50">
+    <!-- Start Welcome area -->
+    
+    <div class="basic-form-area mg-b-15">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -11,29 +13,36 @@
                                 <h1>{{ __('Edit User') }}</h1>
 
                             </div>
+                            @if (session('success'))
+                                <div class="alert alert-success" role="alert">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                            
                         </div>
                         <div class="sparkline12-graph">
                             <div class="basic-login-form-ad">
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="all-form-element-inner">
-                                            <form action="{{ route('usuarios.editar',$user->IdUser) }}" method="POST">
+                                            <form action="{{ route('usuarios.crear') }}" method="POST" id="form-users">
                                                 @csrf
                                                 <div class="row">
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('name') input-with-error @enderror">
-                                                            <label for="name">Name</label>
-                                                            <input type="text" class="form-control" name="name" id="name" value="{{ old('name') ?? $user->Name }}">
+                                                            
+                                                            <input type="text" class="form-control" name="name" id="name" value="{{ old('name') ?? $user->Name }}" required placeholder="{{ __('Name') }}">
                                                             @error('name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
                                                         </div>
+                                                        
                                                     </div>
 
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('last_name') input-with-error @enderror">
-                                                            <label for="last_name">{{ __('Last Name') }}</label>
-                                                            <input type="text" class="form-control" name="last_name" id="last_name" value="{{ old('last_name')  ?? $user->LastName }}">
+                                                            
+                                                            <input type="text" class="form-control" name="last_name" id="last_name" value="{{ old('last_name') ?? $user->LastName }}" required placeholder="{{ __('Last Name') }}">
                                                             @error('last_name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
@@ -41,10 +50,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="row" style="margin-top: 15px;">
+
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('email') input-with-error @enderror">
-                                                            <label for="email">{{ __('Email') }}</label>
-                                                            <input type="text" class="form-control" name="email" id="email" value="{{ old('email')  ?? $user->Email }}">
+                                                            
+                                                            <input type="email" class="form-control" name="email" id="email" value="{{ old('email') ?? $user->Email }}" required placeholder="{{ __('Email') }}">
                                                             @error('email')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
@@ -53,17 +63,14 @@
 
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('role') input-with-error @enderror">
-                                                            <label for="role">Role</label>
-                                                            <select name="role" id="rolr" class="form-control">
-                                                                <option value="">Select</option>
-                                                                <?php $rolUser = $user->roles()->first()->IdRole ?? 0; ?>
+                                                            
+                                                            <select name="role" id="rolr" class="form-control" required>
                                                                 @foreach($roles as $role)
                                                                     @if(is_null(old('role')))
-                                                                        <option value="{{ $role->IdRole }}" {{ $rolUser == $role->IdRole ? 'selected' : '' }}>{{ $role->Name }}</option>
+                                                                        <option value="{{ $role->IdRole }}" {{ $rolId == $role->IdRole ? 'selected' : '' }}>{{ $role->Name }}</option>
                                                                     @else
                                                                         <option value="{{ $role->IdRole }}" {{ old('role') == $role->IdRole ? 'selected' : '' }}>{{ $role->Name }}</option>
                                                                     @endif
-                                                                    
                                                                 @endforeach
                                                             </select>
                                                             @error('role')
@@ -71,34 +78,16 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-
                                                 </div>
-
-                                                <div class="row" style="margin-top: 15px; @if($user->roles()->first()->IdRole == 1 ||old('role') == 1)display: none;@endif" id="company_id-container">
-                                                    <div class="col-xs-12">
-                                                        <div class="form-group-inner @error('company_id') input-with-error @enderror">
-                                                            
-                                                            <select name="company_id" id="company_id" class="form-control">
-                                                                <option value="">Seleccione la Institución</option>
-                                                                @foreach($companies as $company)
-                                                                    <option value="{{ $company->IdCompany }}" {{ old('company_id') == $company->IdCompany ? 'selected' : '' }}>{{ $company->Name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('company_id')
-                                                                <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                
 
                                                 <div class="row" style="margin-top: 15px;">
-
                                                     <div class="col-xs-12 col-md-6">
                                                         <div id="pwd-container1">
                                                             <div class="form-group-inner @error('password') input-with-error @enderror">
-                                                                <label for="password1">{{ __('Password') }}</label>
+                                                                
                                                                 <div class="input-group @error('password') input-with-error @enderror">
-                                                                    <input type="password" class="form-control example1" id="password1" value="{{ old('password') }}" name="password">
+                                                                    <input type="password" class="form-control example1" id="password1" value="{{ old('password') }}" name="password" required placeholder="{{ __('Password') }}">
                                                                     <span
                                                                         class="input-group-addon"
                                                                         title="Mostrar"
@@ -118,17 +107,17 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('password_confirmation') input-with-error @enderror">
-                                                            <label for="password_confirmation">{{ __('Password Confirmation') }}</label>
-                                                            <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                                                            
+                                                            <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" value="{{ old('password_confirmation') }}" required placeholder="{{ __('Password Confirmation') }}">
 
                                                             @error('password_confirmation')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
+                                                        
                                                 </div>
 
                                                 <div class="row" style="margin-top: 15px;">
@@ -152,14 +141,15 @@
             </div>
         </div>
     </div>
+
+
 @endsection
 
 @section('script')
 <script type="text/javascript">
     $(document).ready(function() {
-        var lang = $('html').attr('lang');
-        
 
+        var lang = $('html').attr('lang');
 
         var options1 = {};
             options1.ui = {
@@ -176,22 +166,18 @@
         $('.example1').pwstrength(options1);
 
         $(document).on('click', '#msP', function(event) {
-            $('#password').attr('type', 'text');
+            $('#password1').attr('type', 'text');
             $('#password_confirmation').attr('type', 'text');
             $(this).attr('id', 'ocP');
             $(this).html('<i class="fas fa-eye-slash"></i>');
 
         }).on('click', '#ocP', function(event) {
-            $('#password').attr('type', 'password');
+            $('#password1').attr('type', 'password');
             $('#password_confirmation').attr('type', 'password');
             $(this).attr('id', 'msP');
             $(this).html('<i class="fas fa-eye"></i>');
-        }).on('submit', '#form-users', function(event) {
+        })/*.on('submit', '#form-users', function(event) {
             var PasswordStrength = {{ $PasswordStrength }};
-
-            if ($('#password1').val().trim().length < 1) {
-                return true;
-            }
 
             if (PasswordStrength == 0) {
                 return true;
@@ -229,12 +215,14 @@
                     return false;
                 }
             }
-
             return true;
-            
+        })*/;
 
-        });
+
+
+        //$('[data-toggle="tooltip"]').tooltip('show');
         
+
     });
 </script>
 @endsection

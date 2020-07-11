@@ -14,5 +14,5 @@ Route::group(['middleware' => ['auth','can:super-admin']], function () {
 	Route::get('/usuarios/auditoria', 'UserController@auditoria')->name('usuarios.auditoria');
 	Route::get('/usuarios/get-auditoria', 'UserController@get_auditoria')->name('usuarios.get-audt');
 
-
+	Route::get('/companies/{idCompany}/users/editar/{idUser}', 'UserController@editar_usuario_compania')->where('idCompany', '[0-9]+')->where('idUser', '[0-9]+');
 });

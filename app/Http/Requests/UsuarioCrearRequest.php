@@ -24,24 +24,21 @@ class UsuarioCrearRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required|min:4|max:100',
-            'last_name'    => 'required|min:4|max:100',
-            'code'    => 'required|min:4|max:20|unique:Sec_Users,Code',
-            'email'         => 'required|email:filter|unique:Sec_Users,Email',
-            'role'         => 'required|integer',
-            'group'         => 'required|array',
-            'password'          => 'required|confirmed',
+            'name'      => 'required|min:4|max:100',
+            'last_name' => 'required|min:4|max:100',
+            'email'     => 'required|email:filter|unique:Sec_Users,Email',
+            'role'      => 'required|integer',
+            'password'  => 'required|confirmed',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name'        => 'Name',
-            'last_name'    => 'Last Name',
-            'code'    => 'Code',
-            'email'         => 'Email',
-            'role'         => 'Role',
+            'name'      => 'Name',
+            'last_name' => 'Last Name',
+            'email'     => 'Email',
+            'role'      => 'Role',
             'password'  => 'Password',
         ];
     }

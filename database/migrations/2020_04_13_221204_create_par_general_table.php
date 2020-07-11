@@ -17,7 +17,7 @@ class CreateParGeneralTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->tinyIncrements('IdGenCompany');
-            $table->string('Logo',40)->nullable();
+            $table->string('Logo',100)->nullable();
             $table->string('Appearance',100)->nullable();
             $table->string('Emailserver',45)->nullable();
             $table->string('EmailSender',45)->nullable();

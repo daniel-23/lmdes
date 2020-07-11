@@ -3,7 +3,7 @@
 @section('content')
     <!-- Start Welcome area -->
     
-    <div class="basic-form-area mg-b-15">
+    <div class="basic-form-area mg-b-50">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -52,16 +52,6 @@
                                                 <div class="row" style="margin-top: 15px;">
 
                                                     <div class="col-xs-12 col-md-6">
-                                                        <div class="form-group-inner @error('last_name') input-with-error @enderror">
-                                                            
-                                                            <input type="text" class="form-control" name="code" id="code" value="{{ old('code') }}" required placeholder="{{ __('Code') }}">
-                                                            @error('code')
-                                                                <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('email') input-with-error @enderror">
                                                             
                                                             <input type="email" class="form-control" name="email" id="email" value="{{ old('email') }}" required placeholder="{{ __('Email') }}">
@@ -70,13 +60,11 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row" style="margin-top: 15px;">
+
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('role') input-with-error @enderror">
                                                             
                                                             <select name="role" id="rolr" class="form-control" required>
-                                                                <option value="">{{ __('Elija un Rol') }}...</option>
                                                                 @foreach($roles as $role)
                                                                     <option value="{{ $role->IdRole }}" {{ old('role') == $role->IdRole ? 'selected' : '' }}>{{ $role->Name }}</option>
                                                                 @endforeach
@@ -86,29 +74,25 @@
                                                             @enderror
                                                         </div>
                                                     </div>
+                                                </div>
 
-
-                                                    <div class="col-xs-12 col-md-6">
-                                                        <div class="form-group-inner @error('group') input-with-error @enderror">
+                                                <div class="row" style="margin-top: 15px; @if(is_null(old('company_id')))display: none;@endif" id="company_id-container">
+                                                    <div class="col-xs-12">
+                                                        <div class="form-group-inner @error('company_id') input-with-error @enderror">
                                                             
-                                                            <select name="group[]" id="groupr" class="chosen-select" data-placeholder="{{ __('Choose a Groups') }}..." multiple="" tabindex="-1">
-
-                                                                @if(is_null(old('group')))
-                                                                    @foreach($groups as $group)
-                                                                        <option value="{{ $group->IdGroup }}">{{ $group->Name }}</option>
-                                                                    @endforeach
-                                                                @else
-                                                                    @foreach($groups as $group)
-                                                                        <option value="{{ $group->IdGroup }}" {{ in_array($group->IdGroup, old('group')) ? 'selected' : '' }}>{{ $group->Name }}</option>
-                                                                    @endforeach
-                                                                @endif
+                                                            <select name="company_id" id="company_id" class="form-control">
+                                                                <option value="">Seleccione la Institución</option>
+                                                                @foreach($companies as $company)
+                                                                    <option value="{{ $company->IdCompany }}" {{ old('company_id') == $company->IdCompany ? 'selected' : '' }}>{{ $company->Name }}</option>
+                                                                @endforeach
                                                             </select>
-                                                            @error('group')
+                                                            @error('company_id')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
                                                         </div>
                                                     </div>
                                                 </div>
+                                                
 
                                                 <div class="row" style="margin-top: 15px;">
                                                     <div class="col-xs-12 col-md-6">
@@ -205,7 +189,18 @@
             $('#password_confirmation').attr('type', 'password');
             $(this).attr('id', 'msP');
             $(this).html('<i class="fas fa-eye"></i>');
-        })/*.on('submit', '#form-users', function(event) {
+        }).on('change', '#rolr', function(event) {
+            if ($(this).val() == 2) {
+                $('#company_id-container').show('fast');
+                $('#company_id').attr('required', true);
+            }else{
+                $('#company_id-container').hide('fast');
+                $('#company_id').attr('required', false);
+            }
+        })
+
+
+        /*.on('submit', '#form-users', function(event) {
             var PasswordStrength = {{ $PasswordStrength }};
 
             if (PasswordStrength == 0) {

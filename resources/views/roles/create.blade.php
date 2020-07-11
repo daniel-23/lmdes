@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    <div class="basic-form-area mg-b-15">
+    <div class="basic-form-area mg-b-50">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -11,12 +11,6 @@
                                 <h1>{{ __('Create Role') }}</h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-                            
                         </div>
                         <div class="sparkline12-graph">
                             <div class="basic-login-form-ad">
@@ -39,6 +33,33 @@
                                                         <div class="form-group-inner">
                                                             <input type="text" class="form-control" name="description" id="description" value="{{ old('description') }}" placeholder="{{ __('Description') }}">
                                                         </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12" style="margin-top: 20px;">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Componente</th>
+                                                                    @foreach($permissions as $permission)
+                                                                    <th>{{ $permission->Name }}</th>
+                                                                    @endforeach
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($components as $component)
+                                                                <tr>
+                                                                    <td>{{ $component->Name }}</td>
+                                                                    @foreach($permissions as $permission)
+                                                                    <th style="text-align: center;">
+                                                                        <?php $nm = $component->IdComponent.'-'.$permission->IdPermission; ?>
+                                                                        <input type="checkbox" name="permisos[{{ $nm }}]"
+                                                                        @if(isset(old('permisos')["$nm"])) checked @endif>
+                                                                    </th>
+                                                                    @endforeach
+                                                                </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                     <br>&nbsp;
                                                     <div class="col-xs-12">

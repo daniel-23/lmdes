@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\Role;
-use App\Group;
-use App\UserParameter;
-use App\AudUser;
+use App\{
+    User,
+    Role,
+    Group,
+    UserParameter,
+    AudUser,
+    Company
+
+};
 use App\Http\Requests\UsuarioCrearRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +20,6 @@ use Illuminate\Auth\Access\Response;
 
 class UserController extends Controller
 {
-
     public function index()
     {
         return view('usuarios.index')
@@ -53,7 +56,6 @@ class UserController extends Controller
             $btnStatus = $key->Status == 'A' ? '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
             $data['rows'][] = [
                 'IdUser' => $key->IdUser,
-                'Code' => $key->Code,
                 'Name' => $key->Name . ' '. $key->LastName,
                 'Email' => $key->Email,
                 'Role' => $key->role_name,
@@ -64,68 +66,67 @@ class UserController extends Controller
         return $data;
     }
 
-
     public function crear()
     {
     	return view('usuarios.create')
     		->with('title', 'Create User')
     		->with('act_link', '')
-    		->with('roles', Role::where('Enabled','E')->get())
+    		->with('roles', Role::where('IdRole','<',3)->get())
             ->with('groups', Group::where('Enabled','E')->get())
+            ->with('companies', Company::select(['IdCompany','Name'])->where('Enabled','E')->get())
             ->with('PasswordStrength', UserParameter::find(1)->PasswordStrength);
     }
 
-    public function create(UsuarioCrearRequest $request)
+    public function create(Request $request)
     {
 
         $PasswordStrength = UserParameter::find(1)->PasswordStrength;
         $rule = 'required|confirmed';
-        $msj = '';
 
         if ($PasswordStrength != 0) {
             switch ($PasswordStrength) {
                 case 1:
                     $rule .= '|min:5';
                     break;
-
                 case 2:
                     $rule .= "|min:6|regex:/^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/";
-                    $msj = "La :attribute debe tener minimo 6 caracteres, 1 mayuscula, 1 minuscula, 1 numero";
                     break;
 
                 case 3:
                     $rule .= "|min:8|regex:/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/";
-                    $msj = "La :attribute debe tener minimo 8 caracteres, 1 mayuscula, 1 minuscula, 1 numero, 1 caracter especial";
                     break;
             }
         }
-        
+
         $validatedData = $request->validate([
-            'password'          => $rule,
-        ],[
-            'password.regex' => $msj
+            'name'       => 'required|string|min:3|max:200',
+            'last_name'  => 'required|string|min:3|max:200',
+            'email'      => 'required|email:filter|max:200|unique:Sec_Users,Email',
+            'role'       => 'required|integer|exists:Sec_Roles,IdRole',
+            'company_id' => 'exclude_if:role,1|integer|exists:Sec_Companies,IdCompany',
+            'password'   => $rule,
         ]);
 
-
-    	$role = Role::findOrFail($request->role);
 
     	$data = array(
     		'Name' => trim(ucwords(strtolower(strip_tags($request->name)))),
     		'LastName' => trim(ucwords(strtolower(strip_tags($request->last_name)))),
-    		'Code' => trim(strtolower(strip_tags($request->code))),
     		'Email' => trim(strtolower($request->email)),
-    		'password' => Hash::make(trim($request->password))
+    		'password' => Hash::make(trim($request->password)),
+            'IdCompany' => $request->role != 1 ? (int)$request->company_id : 0,
     	);
 
-    	$user = User::create($data);
+        $user = User::create($data);
+    	$user->roles()->attach($request->role);
 
-    	$user->roles()->attach($role->IdRole);
-        foreach ($request->group as $idg) {
-            $user->groups()
-            ->attach($idg, ['CreatedAt' => date('Y-m-d H:i:s'),'UpdateAt' => date('Y-m-d H:i:s'),]);
+        if ($request->role != 1) {
+            select_company($request->company_id);
+            config(['database.default' => 'institucion']);
+            $user = User::create($data);
+            $user->roles()->attach($request->role);
         }
 
-    	request()->session()->flash('success', 'User created successfully');
+        request()->session()->flash('success', 'User created successfully');
         return redirect('/usuarios');
     }
 
@@ -139,61 +140,79 @@ class UserController extends Controller
             ->with('user', $user)
     		->with('roles', Role::where('Enabled','E')->get())
             ->with('groups', Group::where('Enabled','E')->get())
+            ->with('companies', Company::select(['IdCompany','Name'])->where('Enabled','E')->get())
             ->with('PasswordStrength', UserParameter::find(1)->PasswordStrength);
     }
 
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $PasswordStrength = UserParameter::find(1)->PasswordStrength;
+        $rule = 'nullable|confirmed';
 
+        if ($PasswordStrength != 0) {
+            switch ($PasswordStrength) {
+                case 1:
+                    $rule .= '|min:5';
+                    break;
+                case 2:
+                    $rule .= "|min:6|regex:/^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/";
+                    break;
 
-        $eU = trim(strtolower(request()->email)) != trim(strtolower($user->Email)) ? '' : '';
-       
-
-        $validatedData = request()->validate([
-            'name'        => 'required|min:4|max:100',
-            'last_name'    => 'required|min:4|max:100',
-            'code'    => 'required|min:4|max:20|unique:Sec_Users,Code,'.$id.'IdUser',
-            'email'         => 'required|email:filter|unique:Sec_Users,Email,'.$id.'IdUser',
-            'role'         => 'required|integer',
-            'group'      => 'required|array',
-            'password'          => 'confirmed',
-        ]);
-        $data = array(
-    		'Name' => trim(ucwords(strtolower(strip_tags(request()->name)))),
-    		'LastName' => trim(ucwords(strtolower(strip_tags(request()->last_name)))),
-    		'Code' => trim(strtolower(strip_tags(request()->code))),
-    		'Email' => trim(strtolower(request()->email))
-    	);
-
-    	if (!is_null(request()->password) && trim(request()->password) != '') {
-    		$data['password'] = Hash::make(trim(request()->password));
-    	}
-
-
-        $role = Role::findOrFail(request()->role);
-
-        if ($user->update($data)) {
-            request()->session()->flash('success', 'User modify successfully');    
-        }
-
-        $rolUser = $user->roles()->first()->IdRole ?? 0;
-
-        if ($role->IdRole != $rolUser) {
-            if ($rolUser != 0) {
-                $user->roles()->detach($rolUser);
+                case 3:
+                    $rule .= "|min:8|regex:/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/";
+                    break;
             }
-        	
-        	$user->roles()->attach($role->IdRole);
+        }
+        $validatedData = $request->validate([
+            'name'       => 'required|string|min:3|max:200',
+            'last_name'  => 'required|string|min:3|max:200',
+            'email'      => 'required|email:filter|max:200|unique:Sec_Users,Email,'.$id.',IdUser',
+            'role'       => 'required|integer|exists:Sec_Roles,IdRole',
+            'company_id' => 'exclude_if:role,1|integer|exists:Sec_Companies,IdCompany',
+            'password'   => $rule,
+        ]);
+
+
+        $data = array(
+            'Name' => trim(ucwords(strtolower(strip_tags($request->name)))),
+            'LastName' => trim(ucwords(strtolower(strip_tags($request->last_name)))),
+            'Email' => trim(strtolower($request->email)),
+            'IdCompany' => $request->role != 1 ? (int)$request->company_id : 0,
+        );
+
+        if (!is_null($request->password) && trim($request->password) != '') {
+            $data['password'] = Hash::make(trim($request->password));
         }
 
-        $user->groups()->detach();
-        foreach (request()->group as $idg) {
-            $user->groups()
-            ->attach($idg, ['CreatedAt' => date('Y-m-d H:i:s'),'UpdateAt' => date('Y-m-d H:i:s'),]);
+
+        $user = User::findOrFail($id);
+        $user->roles()->detach();
+
+        $userEmail = $user->Email;
+
+        $user->update($data);
+        $user->IdCompany = $data['IdCompany'];
+        $user->save();
+        $user->roles()->attach($request->role);
+
+
+        if ($request->role != 1) {
+            select_company($request->company_id);
+            config(['database.default' => 'institucion']);
+            
+            $user = User::where('Email',$userEmail)->first();
+            if (is_null($user)) {
+                $user = User::create($data);
+            }else{
+                $user->roles()->detach();
+                $user->update($data);
+                $user->roles()->attach($request->role);
+            }
+            $user->IdCompany = $data['IdCompany'];
+            $user->save();
         }
 
-
+        request()->session()->flash('success', 'User modify successfully');
         return redirect('/usuarios');
     }
 
@@ -209,7 +228,6 @@ class UserController extends Controller
         if ($user->save()) {
             request()->session()->flash('success', 'User modify successfully');
             return redirect('/usuarios');
-            
         }
 
     }
@@ -308,5 +326,23 @@ class UserController extends Controller
             ];
         }
         return $data;
+    }
+
+    public function editar_usuario_compania($idCompany, $idUser)
+    {
+        select_company($idCompany);
+        config(['database.default' => 'institucion']);
+
+        $user = User::findOrFail($idUser);
+        $rolId = $user->roles()->first()->IdRole;
+
+        return view('usuarios.edit_user_company')
+            ->with('title', 'Edit User')
+            ->with('act_link', '')
+            ->with('user', $user)
+            ->with('roles', Role::where([['Enabled','=','E'],['IdRole','>',1]])->get())
+            ->with('groups', Group::where('Enabled','E')->get())
+            ->with('rolId',$rolId)
+            ->with('PasswordStrength', UserParameter::find(1)->PasswordStrength);
     }
 }
