@@ -144,6 +144,14 @@
                                     </a>
                                 </li>
                                 @endcan
+
+                                @can('tiene-permiso','Insignias+Acceder')
+                                <li>
+                                    <a href="{{ route('badges') }}">
+                                        <span class="mini-sub-pro">Insigneas</span>
+                                    </a>
+                                </li>
+                                @endcan
                                 
                                 <li>
                                     <a href="{{ route('cursos') }}">
