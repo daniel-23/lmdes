@@ -1,5 +1,17 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <a href="{{ route('plantillas') }}">{{ __('Templates') }}</a>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Competencies') }}</span>
+</li>
+@endsection
 @section('content')
 
     <div class="mg-b-15">
@@ -10,13 +22,7 @@
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd">
                                 <h1>{{ __('Add') }} <span class="table-project-n">{{ __('Competencies for template') }} {{ $template->Name}}</span></h1>
-
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
                         </div>
                         <div class="sparkline13-graph">
                             <div class="basic-login-form-ad">

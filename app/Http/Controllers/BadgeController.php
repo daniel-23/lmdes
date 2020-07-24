@@ -71,4 +71,17 @@ class BadgeController extends Controller
         return redirect('/badges');
 
     }
+
+    public function change_status($id)
+    {
+        $badge = Badge::findOrFail($id);
+        if ($badge->Enabled == 'E') {
+            $badge->Enabled = 'D';
+        }else{
+            $badge->Enabled = 'E';
+        }
+        $badge->save();
+        request()->session()->flash('success', 'Badge updated successfully');
+        return redirect('/badges');
+    }
 }

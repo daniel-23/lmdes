@@ -1,5 +1,13 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Scales') }}</span>
+</li>
+@endsection
 @section('content')
     <!-- Static Table Start -->
     <div class="data-table-area mg-b-15">
@@ -9,18 +17,16 @@
                     <div class="sparkline13-list">
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd row" style="margin: 0 3px;">
-                                <h1>{{ __('List') }} <span class="table-project-n">{{ __('Scales') }}</span> &nbsp;  
+                                <h1>{{ __('List') }} <span class="table-project-n">{{ __('Scales') }}</span>
+                                @can('tiene-permiso','Escalas+Crear')
+                                &nbsp;  
                                 <a href="{{ route('escalas.crear') }}" class="btn btn-custon-four btn-success pull-right">
                                     <i class="fas fa-plus"></i>
                                     {{ __('Add Scale') }}
-                                </a></h1>
-
+                                </a>
+                                @endcan
+                                </h1>
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
                         </div>
                         <div class="sparkline13-graph">
                             <div class="datatable-dashv1-list custom-datatable-overright">
@@ -46,7 +52,6 @@
                                     data-show-export="true"
                                     data-toolbar="#toolbar"
                                     >
-                                    
                                     <thead>
                                         <tr>
                                             <th data-field="IdState">ID</th>
@@ -62,7 +67,11 @@
                                             <td>{{ $scale->IdScale }}</td>
                                             <td>{{ $scale->Name }}</td>
                                             <td>{{ $scale->Description }}</td>
-                                            <td>{{ $scale->Scales }}</td>
+                                            <td>
+                                                @foreach($scale->escalas() as $escala)
+                                                    <span class="label label-primary">{{ $escala }}</span>
+                                                @endforeach
+                                            </td>
                                             <td>
                                                 @if($scale->Enabled == 'E')
                                                     <a href="{{ route('escalas.cambiar-estatus',$scale->IdScale) }}" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>

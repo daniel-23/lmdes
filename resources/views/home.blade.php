@@ -1,14 +1,15 @@
 @extends('layouts.master')
 
+@section('breadcome')
+<li>
+    <span class="bread-blod">Dashboard</span>
+</li>
+@endsection
+
 @section('content')
     <div class="analytics-sparkle-area">
         <div class="container-fluid">
             <div class="row">
-                 @if (session('success'))
-                    <div class="alert alert-success" role="alert">
-                        {{ __(session('success')) }}
-                    </div>
-                @endif
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                     <div class="analytics-sparkle-line reso-mg-b-30">
                         <div class="analytics-content">

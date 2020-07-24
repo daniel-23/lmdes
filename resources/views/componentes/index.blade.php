@@ -1,5 +1,13 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Security') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Components') }}</span>
+</li>
+@endsection
 @section('content')
     <!-- Static Table Start -->
     <div class="data-table-area mg-b-50">
@@ -10,10 +18,13 @@
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd row" style="margin-left: 3px; margin-right: 3px;">
                                 <h1>{{ __('List') }} <span class="table-project-n">{{ __('Components') }}</span>
-                                <a href="{{ route('componentes.crear') }}" class="btn btn-custon-four btn-success pull-right">  &nbsp;   
-                                    <i class="fas fa-plus"></i>
-                                    {{ __('Add Component') }}
-                                </a></h1>
+                                    @can('tiene-permiso','Componentes+Crear')
+                                    <a href="{{ route('componentes.crear') }}" class="btn btn-custon-four btn-success pull-right">  &nbsp;   
+                                        <i class="fas fa-plus"></i>
+                                        {{ __('Add Component') }}
+                                    </a>
+                                    @endcan
+                                </h1>
 
                             </div>
 
@@ -49,6 +60,7 @@
                                             <th data-field="IdComponent">ID</th>
                                             <th data-field="Name">{{ __('Name') }}</th>
                                             <th data-field="Description">{{ __('Description') }}</th>
+                                            <th data-field="Parent">{{ __('Component Parent') }}</th>
                                             <th data-field="btns">{{ __('Actions') }}</th>
                                             
                                         </tr>

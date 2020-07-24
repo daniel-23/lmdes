@@ -1,5 +1,13 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Courses') }}</span>
+</li>
+@endsection
 @section('content')
         
     <!-- Static Table Start -->
@@ -10,30 +18,20 @@
                     <div class="sparkline13-list">
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd row" style="margin: 0 3px;">
-                                <h1>{{ __('List') }} <span class="table-project-n">{{ __('Courses') }}</span> &nbsp;  
-                                    
-                                    <a href="{{ route('formatos') }}" class="btn btn-custon-four btn-default pull-right" title="{{ __('Courses Format') }}"><i class="fas fa-align-justify"></i></a>
-
+                                <h1>{{ __('List') }} <span class="table-project-n">{{ __('Courses') }}</span>
                                     &nbsp;
 
                                     <a href="{{ route('par-courses') }}" class="btn btn-custon-four btn-default pull-right" title="{{ __('Courses Parameters') }}" style="margin-right: 10px;"><i class="fas fa-cogs"></i></a>
 
-                                    &nbsp;   
-
-                                    <a href="{{ route('categorias') }}" class="btn btn-custon-four btn-default pull-right" title="{{ __('Categories') }}" style="margin-right: 10px;"><i class="fas fa-ad"></i></a>
-
+                                    @can('tiene-permiso','Cursos+Crear')
                                     <a href="{{ route('cursos.crear') }}" class="btn btn-custon-four btn-success pull-right" style="margin-right: 5px;">
                                         <i class="fas fa-plus"></i>
                                         {{ __('Add Course') }}
                                     </a>
+                                    @endcan
                                 </h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
                         </div>
                         <div class="sparkline13-graph">
                             <div class="datatable-dashv1-list custom-datatable-overright">
@@ -68,7 +66,6 @@
                                             <th data-field="Description">{{ __('Description') }}</th>
                                             <th data-field="Category">{{ __('Category') }}</th>
                                             <th data-field="Language">{{ __('Language') }}</th>
-
                                             <th data-field="btns">{{ __('Actions') }}</th>
                                         </tr>
                                     </thead>

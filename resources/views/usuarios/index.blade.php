@@ -1,4 +1,13 @@
 @extends('layouts.master')
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Security') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Users') }}</span>
+</li>
+@endsection
 
 @section('content')
 <!-- Static Table Start -->
@@ -10,7 +19,7 @@
                 <div class="sparkline13-list">
                     <div class="sparkline13-hd">
                         <div class="main-sparkline13-hd row" style="margin-left: 3px; margin-right: 3px;">
-                            <h1>Listado de Usuarios <a href="{{ route('usuarios.crear') }}" class="btn btn-success pull-right">Crear Usuario</a></h1>
+                            <h1>Listado de Usuarios @can('tiene-permiso','Usuarios+Crear')<a href="{{ route('usuarios.crear') }}" class="btn btn-success pull-right">Crear Usuario</a> @endcan </h1>
                         </div>
                     </div>
 
@@ -26,6 +35,7 @@
 
                             <table
                             id="tabla"
+                            data-locale="es-CL"
                             data-toggle="tabla"
                             data-ajax="ajaxRequest"
                             data-search="true"
@@ -63,6 +73,7 @@
 @endsection
 
 @section('script')
+    <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table-locale-all.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('#tabla').bootstrapTable();

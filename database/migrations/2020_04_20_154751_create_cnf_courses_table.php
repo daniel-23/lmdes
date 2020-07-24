@@ -15,7 +15,6 @@ class CreateCnfCoursesTable extends Migration
     {
         Schema::create('Cnf_Courses', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-
             $table->increments('IdCourse');
             $table->string('ShortName',45)->nullable();
             $table->string('Name',100);
@@ -29,12 +28,10 @@ class CreateCnfCoursesTable extends Migration
             $table->unsignedInteger('IdCourseFormat');
             $table->foreign('IdCourseFormat')->references('IdCourseFormat')->on('Cnf_Courses_Format');
             $table->unsignedInteger('ModulesNumber');
-            $table->unsignedInteger('ModulesFormat');
+            $table->string('ModulesFormat',45);
             $table->unsignedTinyInteger('IdLanguage');
             $table->foreign('IdLanguage')->references('IdLanguage')->on('Cnf_Languages');
-
             $table->string('ShowCalifications',1)->default('Y')->comment('Y = yes, N = No');
-
             $table->unsignedInteger('MaxFileSize')->nullable()->comment('In MB - Default value on Sec_Company table or less');
         });
     }

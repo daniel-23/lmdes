@@ -1,5 +1,17 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Global Parameters') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <a href="{{ route('companies') }}">{{ __('Institutions') }}</a>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Edit') }}</span>
+</li>
+@endsection
 @section('content')
     <div class="basic-form-area mg-b-15" style="margin-bottom: 50px;">
         <div class="container-fluid">

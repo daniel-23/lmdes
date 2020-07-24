@@ -98,7 +98,7 @@ class LoginController extends Controller
     	$user->save();
         AudUser::create([
             'IdUser' => $user->IdUser,
-            'IpConection' => $this->getRealIP(),
+            'IpConection' => request()->ip(),
             'IdEvent' => 2,
             'IdComponent' => 1,
             'SessionTime' => time(),
@@ -108,35 +108,6 @@ class LoginController extends Controller
     }
 
 
-	public function getRealIP()
-	{
-
-	    if (isset($_SERVER["HTTP_CLIENT_IP"]))
-	    {
-	        return $_SERVER["HTTP_CLIENT_IP"];
-	    }
-	    elseif (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
-	    {
-	        return $_SERVER["HTTP_X_FORWARDED_FOR"];
-	    }
-	    elseif (isset($_SERVER["HTTP_X_FORWARDED"]))
-	    {
-	        return $_SERVER["HTTP_X_FORWARDED"];
-	    }
-	    elseif (isset($_SERVER["HTTP_FORWARDED_FOR"]))
-	    {
-	        return $_SERVER["HTTP_FORWARDED_FOR"];
-	    }
-	    elseif (isset($_SERVER["HTTP_FORWARDED"]))
-	    {
-	        return $_SERVER["HTTP_FORWARDED"];
-	    }
-	    else
-	    {
-	        return $_SERVER["REMOTE_ADDR"];
-	    }
-
-	}
     public function reset_password()
     {
         return view('login.reset');
@@ -232,7 +203,7 @@ class LoginController extends Controller
 
         AudUser::create([
             'IdUser' => $user->IdUser,
-            'IpConection' => $this->getRealIP(),
+            'IpConection' => request()->ip(),
             'IdEvent' => 3,
             'IdComponent' => 1,
             'SessionTime' => time(),

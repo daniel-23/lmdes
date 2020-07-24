@@ -1,5 +1,13 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Templates') }}</span>
+</li>
+@endsection
 @section('content')
     <!-- Static Table Start -->
     <div class="data-table-area mg-b-15">
@@ -9,18 +17,17 @@
                     <div class="sparkline13-list">
                         <div class="sparkline13-hd">
                             <div class="main-sparkline13-hd row" style="margin: 0 3px;">
-                                <h1>{{ __('List') }} <span class="table-project-n">{{ __('Templates') }}</span> &nbsp;  
-                                <a href="{{ route('plantillas.crear') }}" class="btn btn-custon-four btn-success pull-right">
-                                    <i class="fas fa-plus"></i>
-                                    {{ __('Add Template')}}
-                                </a></h1>
+                                <h1>{{ __('List') }} <span class="table-project-n">{{ __('Templates') }}</span>
+                                    @can('tiene-permiso','Plantillas+Crear')
+                                    &nbsp;  
+                                    <a href="{{ route('plantillas.crear') }}" class="btn btn-custon-four btn-success pull-right">
+                                        <i class="fas fa-plus"></i>
+                                        {{ __('Add Template')}}
+                                    </a>
+                                    @endcan
+                                </h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
                         </div>
                         <div class="sparkline13-graph">
                             <div class="datatable-dashv1-list custom-datatable-overright">
@@ -33,6 +40,7 @@
                                 </div>
                                 <table
                                     id="table"
+                                    data-locale="es-CL"
                                     data-toggle="table"
                                     data-search="true"
                                     data-show-pagination-switch="true"
@@ -68,15 +76,26 @@
                                             <td>{{ $template->CreatedAt }}</td>
                                             <td>{{ $template->UpdateAt }}</td>
                                             <td>
-                                                @if($template->Enabled == 'E')
-                                                    <a href="{{ route('plantillas.cambiar-estatus',$template->IdTemplate) }}" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>
+                                                @can('tiene-permiso','Plantillas+Cambiar Estado')
+                                                    @if($template->Enabled == 'E')
+                                                        <a href="{{ route('plantillas.cambiar-estatus',$template->IdTemplate) }}" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i></a>
+                                                    @else
+                                                        <a href="{{ route('plantillas.cambiar-estatus',$template->IdTemplate) }}" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i></a>
+                                                    @endif
                                                 @else
-                                                    <a href="{{ route('plantillas.cambiar-estatus',$template->IdTemplate) }}" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>
-                                                @endif
+                                                    @if($template->Enabled == 'E')
+                                                        <button title="Desacivar" class="btn btn-custon-four btn-success btn-xs" disabled><i class="far fa-check-circle" style="color: white;"></i></button>
+                                                    @else
+                                                        <button title="Activar" class="btn btn-custon-four btn-danger btn-xs" disabled><i class="fas fa-times-circle" style="color: white;"></i></button>
+                                                    @endif
+                                                @endcan
+                                                    
+                                                @can('tiene-permiso','Plantillas+Editar')
                                                 &nbsp;   
                                                 <a href="{{ url('/plantillas/editar/'.$template->IdTemplate) }}" title="Editar" class="btn btn-custon-four btn-primary btn-xs">
                                                     <i class="fas fa-pencil-alt" style="color: white;"></i>
-                                                <a>
+                                                </a>
+                                                @endcan
 
                                                 &nbsp;   
                                                 <a href="{{ url('/plantillas/competencias/'.$template->IdTemplate) }}" title="{{ __('Competencies') }}" class="btn btn-custon-four btn-warning btn-xs">
@@ -98,11 +117,10 @@
 @endsection
 
 @section('script')
+    <script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table-locale-all.min.js"></script>
     <script type="text/javascript">
         $(function () {
             $('#table').bootstrapTable();
         });
-
-        
     </script>      
 @endsection

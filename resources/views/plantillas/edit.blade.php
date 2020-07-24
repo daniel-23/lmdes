@@ -1,5 +1,17 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <a href="{{ route('plantillas') }}">{{ __('Templates') }}</a>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Edit') }}</span>
+</li>
+@endsection
 @section('content')
         
     <div class="basic-form-area mg-b-15">

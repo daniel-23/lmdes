@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+
 use App\{
     Course,
     Category,
     Format,
-    Language
+    Language,
+    Competency
 };
 
 class CourseController extends Controller
@@ -15,9 +18,9 @@ class CourseController extends Controller
     public function index()
     {
     	return view('cursos.index')
-    		->with('title', 'Courses')
-    		->with('act_link', '')
-    		->with('courses', Course::all());
+            ->with('title', 'Courses')
+            ->with('act_link', '')
+            ->with('courses', Course::all());
     }
 
     public function crear()
@@ -27,13 +30,12 @@ class CourseController extends Controller
     		->with('act_link', '')
     		->with('categories', Category::where('Enabled','E')->get())
             ->with('formats', Format::where('Enabled','E')->get())
+            ->with('competencies', Competency::where('Enabled','E')->get())
             ->with('languages', Language::all());
     }
 
     public function create(Request $request)
     {
-        
-
         $validatedData = request()->validate([
             'name'              => 'required|min:4|unique:Cnf_Courses,Name',
             'short_name'        => 'required|min:4',
@@ -48,6 +50,7 @@ class CourseController extends Controller
             'language'          => 'required|integer',
             'show_califications'=> 'required|max:1',
             'max_file_size'     => 'nullable|integer',
+            'competencies'      => 'required|array',
         ]);
 
         $data = [
@@ -65,24 +68,28 @@ class CourseController extends Controller
             'ShowCalifications' => $request->show_califications,
             'MaxFileSize'       => (int) $request->max_file_size,
         ];
+        $curso = Course::create($data);
+        $curso->competencies()->attach($request->competencies);
+        $request->session()->flash('success', 'Course created successfully');
 
-        if (Course::create($data)) {
-            $request->session()->flash('success', 'Course created successfully');
         
-        }
         return redirect('/cursos');
     }
 
     public function editar($id)
     {
         $course = Course::findOrFail($id);
+        $competenciesCourse = $course->competencies()->select('Cnf_Competencies.IdCompetency')->get();
+
         return view('cursos.edit')
             ->with('title', 'Edit Course')
             ->with('act_link', '')
             ->with('course',$course)
             ->with('categories', Category::where('Enabled','E')->get())
             ->with('formats', Format::where('Enabled','E')->get())
-            ->with('languages', Language::all());
+            ->with('languages', Language::all())
+            ->with('competenciesCourse', $competenciesCourse)
+            ->with('competencies', Competency::where('Enabled','E')->get());
     }
 
     public function edit(Request $request, $id)
@@ -102,6 +109,7 @@ class CourseController extends Controller
             'language'          => 'required|integer',
             'show_califications'=> 'required|max:1',
             'max_file_size'     => 'nullable|integer',
+            'competencies'      => 'required|array',
         ]);
 
         $data = [
@@ -121,6 +129,8 @@ class CourseController extends Controller
         ];
 
         $course->update($data);
+        $course->competencies()->detach();
+        $course->competencies()->attach($request->competencies);
         $request->session()->flash('success', 'Course modify successfully');
         return redirect('/cursos');
     }

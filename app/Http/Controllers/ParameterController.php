@@ -45,6 +45,7 @@ class ParameterController extends Controller
     public function get_courses()
     {
         $paramater = ParameterCourse::find(1);
+
         return view('parametros.cursos')
             ->with('title', 'Paramaters Courses')
             ->with('act_link', 'parameters')
@@ -70,7 +71,7 @@ class ParameterController extends Controller
 
         $paramater->update($request->all());
         $request->session()->flash('success', 'Parameters modify successfully');
-        return redirect('/par-courses');
+        return redirect()->route('cursos');
         
     }
 }

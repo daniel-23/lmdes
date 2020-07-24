@@ -1,5 +1,13 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Global Parameters') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Times Zones') }}</span>
+</li>
+@endsection
 @section('content')
 
     <!-- Static Table Start -->
@@ -17,11 +25,6 @@
                                 </a></h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
                         </div>
                         <div class="sparkline13-graph">
                             <div class="datatable-dashv1-list custom-datatable-overright">

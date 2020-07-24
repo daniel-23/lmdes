@@ -1,5 +1,17 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <a href="{{ route('competencias') }}">{{ __('Competencies') }}</a>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Create') }}</span>
+</li>
+@endsection
 @section('content')
     <div class="basic-form-area mg-b-15">
         <div class="container-fluid">
@@ -11,11 +23,6 @@
                                 <h1>{{ __('Create Competency') }}</h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
                             
                         </div>
                         <div class="sparkline12-graph">
@@ -58,21 +65,7 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-xs-12 col-md-6">
-                                                        <div class="form-group-inner @error('parent') input-with-error @enderror">
-                                                            <select name="parent" id="parent" class="form-control">
-                                                                <option value="0">{{ __('Select') }} {{ __('Competency Parent') }}</option>
-                                                                @foreach($competencies as $competency)
-                                                                    <option value="{{ $competency->IdCompetency }}" {{ old('parent') == $competency->IdCompetency ? 'selected' : '' }}>{{ $competency->Name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('parent')
-                                                                <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
                                                 </div>
-
 
                                                 <div class="row" style="margin-top: 15px;">
                                                     <div class="col-xs-12">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -18,6 +18,9 @@
     <!-- Google Fonts
 		============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+    <!--  tagsinput CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/jquery.tagsinput.css') }}">
     <!-- Bootstrap CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -85,6 +88,11 @@
     <!-- forms CSS
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/form/all-type-forms.css') }}">
+
+    <!-- modals CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/modals.css') }}">
+
     <!-- style CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Permission;
+use Illuminate\Support\Facades\{Gate};
 
 class PermissionController extends Controller
 {
@@ -43,6 +44,7 @@ class PermissionController extends Controller
     {
         $data['totalNotFiltered'] = Permission::where('IdPermission','>', 0)->count();
         $rows = array();
+        $data['rows'] = array();
 
         if (is_null($request->search)) {
             $data['total'] = $data['totalNotFiltered'];
@@ -64,13 +66,22 @@ class PermissionController extends Controller
             
         }
 
+        $puedeEditar = Gate::allows('tiene-permiso', 'Permisos+Editar');
+        $puedeCambiarStatus = Gate::allows('tiene-permiso', 'Permisos+Cambiar Estado');
+
         foreach ($rows as $key) {
-            $btnStatus = $key->Enabled == 'E' ? '<a href="'.url("/permisos/cambiar-estatus/{$key->IdPermission}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/permisos/cambiar-estatus/{$key->IdPermission}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
+            $btnEdit = $puedeEditar ? '&nbsp;   <a href="'.url("/permisos/editar/{$key->IdPermission}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i></a>' : '';
+            if ($puedeCambiarStatus) {
+                $btnStatus = $key->Enabled == 'E' ? '<a href="'.url("/permisos/cambiar-estatus/{$key->IdPermission}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i></a>' : '<a href="'.url("/permisos/cambiar-estatus/{$key->IdPermission}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i></a>';
+            }else{
+                $btnStatus = $key->Enabled == 'E' ? '<button title="Permiso Activo" class="btn btn-custon-four btn-success btn-xs disabled"><i class="far fa-check-circle" style="color: white;"></i></button>' : '<button title="Permiso Inactivo" class="btn btn-custon-four btn-danger btn-xs disabled"><i class="fas fa-times-circle" style="color: white;"></i></button>';
+            }
+            
             $data['rows'][] = [
                 'IdPermission' => $key->IdPermission,
                 'Name' => $key->Name,
                 'Description' => $key->Description,
-                'btns' => $btnStatus . '&nbsp;   <a href="'.url("/permisos/editar/{$key->IdPermission}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>'
+                'btns' => $btnStatus . $btnEdit
             ];
             
         }

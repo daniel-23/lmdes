@@ -10,4 +10,9 @@ class Scale extends Model
 	protected $table = 'Cnf_Scales';
     protected $primaryKey = 'IdScale';
     public $timestamps = false;
+
+    public function escalas($value='')
+    {
+    	return explode(',', $this->Scales);
+    }
 }

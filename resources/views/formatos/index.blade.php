@@ -1,5 +1,13 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Formats') }}</span>
+</li>
+@endsection
 @section('content')
     <!-- Static Table Start -->
     <div class="data-table-area mg-b-15">
@@ -11,19 +19,15 @@
                             <div class="main-sparkline13-hd row" style="margin: 0 3px;">
                                 <h1>{{ __('List') }}
                                     <span class="table-project-n">{{ __('Formats') }}</span>
-                                     &nbsp;  
-                                    <a href="{{ route('formatos.crear') }}" class="btn btn-custon-four btn-success pull-right">
-                                        <i class="fas fa-plus"></i>
-                                        {{ __('Add Format') }}
-                                    </a>
+                                    @can('tiene-permiso','Formatos+Crear')
+                                        &nbsp;  
+                                        <a href="{{ route('formatos.crear') }}" class="btn btn-custon-four btn-success pull-right">
+                                            <i class="fas fa-plus"></i>
+                                            {{ __('Add Format') }}
+                                        </a>
+                                    @endcan
                                 </h1>
-
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
                         </div>
                         <div class="sparkline13-graph">
                             <div class="datatable-dashv1-list custom-datatable-overright">
@@ -69,15 +73,26 @@
                                             <td>{{ $format->CreatedAt }}</td>
                                             <td>{{ $format->UpdateAt }}</td>
                                             <td>
-                                                @if($format->Enabled == 'E')
-                                                    <a href="{{ route('formatos.cambiar-estatus',$format->IdCourseFormat) }}" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>
+                                                @can('tiene-permiso','Formatos+Cambiar Estado')
+                                                    @if($format->Enabled == 'E')
+                                                        <a href="{{ route('formatos.cambiar-estatus',$format->IdCourseFormat) }}" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>
+                                                    @else
+                                                        <a href="{{ route('formatos.cambiar-estatus',$format->IdCourseFormat) }}" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>
+                                                    @endif
                                                 @else
-                                                    <a href="{{ route('formatos.cambiar-estatus',$format->IdCourseFormat) }}" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>
-                                                @endif
-                                                &nbsp;   
-                                                <a href="{{ route('formatos.editar',$format->IdCourseFormat) }}" title="Editar" class="btn btn-custon-four btn-primary btn-xs">
-                                                    <i class="fas fa-pencil-alt" style="color: white;"></i>
-                                                <a>
+                                                    @if($format->Enabled == 'E')
+                                                        <button title="Desacivar" class="btn btn-custon-four btn-success btn-xs" disabled><i class="far fa-check-circle" style="color: white;"></i></button>
+                                                    @else
+                                                        <button title="Activar" class="btn btn-custon-four btn-danger btn-xs" disabled><i class="fas fa-times-circle" style="color: white;"></i></button>
+                                                    @endif
+                                                @endcan
+                                                    
+                                                @can('tiene-permiso','Formatos+Editar')
+                                                    &nbsp;   
+                                                    <a href="{{ route('formatos.editar',$format->IdCourseFormat) }}" title="Editar" class="btn btn-custon-four btn-primary btn-xs">
+                                                        <i class="fas fa-pencil-alt" style="color: white;"></i>
+                                                    </a>
+                                                @endcan
                                             </td>
                                         </tr>
                                         @endforeach

@@ -19,6 +19,7 @@ class CreateCnfBadgesTable extends Migration
             $table->string('Name',100)->unique();
             $table->string('Description')->nullable();
             $table->string('Image')->nullable();
+            $table->string('Enabled',1)->default('E')->comment('E = enabled, D = disabled');
             $table->timestamps();
         });
     }

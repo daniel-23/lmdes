@@ -1,4 +1,17 @@
 @extends('layouts.master')
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Security') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <a href="{{ route('usuarios') }}">{{ __('Users') }}</a>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Create') }}</span>
+</li>
+@endsection
 
 @section('content')
     <!-- Start Welcome area -->

@@ -22,4 +22,9 @@ class Course extends Model
     {
         return $this->belongsTo('App\Language', 'IdLanguage', 'IdLanguage');
     }
+
+    public function competencies()
+    {
+        return $this->belongsToMany('App\Competency','Cnf_Courses_has_Cnf_Competencies','IdCourse','IdCompetency');
+    }
 }

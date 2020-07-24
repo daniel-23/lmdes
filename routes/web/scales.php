@@ -1,5 +1,5 @@
 <?php
-Route::group(['middleware' => ['auth','can:super-admin']], function () {
+Route::group(['middleware' => ['auth']], function () {
 	#Rutas para gestion de Escalas
 	Route::get('/escalas', 'ScaleController@index')->name('escalas');
 	Route::get('/escalas/get-list', 'ScaleController@get_list')->name('escalas.get-list');

@@ -1,19 +1,28 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Badges') }}</span>
+</li>
+@endsection
 @section('content')
 	<div class="product-status mg-b-50">
 		<div class="container-fluid">
 			<div class="row">
+				@can('tiene-permiso','Insignias+Acceder')
 				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 					<div class="product-status-wrap">
-						<h4>Listado de insignias</h4>
+						<h4>{{ __('List') }} {{ __('Badges') }}</h4>
 						<div class="asset-inner">
 							<table>
 								<thead>
 									<tr>
-	                                    <th>Insignia</th>
-	                                    <th>Nombre</th>
-	                                    <th>Opciones</th>
+	                                    <th>{{ __('Badge') }}</th>
+	                                    <th>{{ __('Name') }}</th>
+	                                    <th>{{ __('Actions') }}</th>
 	                                </tr>
 								</thead>
 								<tbody>
@@ -24,11 +33,33 @@
 										</td>
 										<td>{{ $badge->Name }}</td>
 										<td>
+											@can('tiene-permiso','Insignias+Editar')
 											<button title="Edit" class="pd-setting-ed edit-badge" badge-id="{{ $badge->IdBadge }}"
 											badge-name="{{ $badge->Name }}"
 											badge-des="{{ $badge->Description }}"
 											badge-img="{{ $badge->Image }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                        	<!--button data-toggle="tooltip" title="Trash" class="pd-setting-ed"><i class="fa fa-trash-o" aria-hidden="true"></i></button-->
+											@endcan
+											@can('tiene-permiso','Insignias+Cambiar Estado')
+												@if($badge->Enabled == 'E')
+													<a href="{{ route('badges.cambiar_estatus',$badge->IdBadge) }}" title="Desactivar" class="btn btn-success btn-sm">
+														<i class="fa fa-check" aria-hidden="true"></i>
+													</a>
+												@else
+													<a href="{{ route('badges.cambiar_estatus',$badge->IdBadge) }}" title="Activar" class="btn btn-danger btn-sm">
+														<i class="fa fa-times" aria-hidden="true"></i>
+													</a>
+												@endif
+											@else
+												@if($badge->Enabled == 'E')
+													<button title="Desactivar" class="btn btn-success btn-sm" disabled>
+														<i class="fa fa-check" aria-hidden="true"></i>
+													</button>
+												@else
+													<button title="Activar" class="btn btn-danger btn-sm" disabled>
+														<i class="fa fa-times" aria-hidden="true"></i>
+													</button>
+												@endif
+											@endcan
 										</td>
 
 									</tr>
@@ -48,7 +79,9 @@
                         </div>
                     </div>
                 </div>
+                @endcan
 
+                @can('tiene-permiso','Insignias+Crear')
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"  @if(!is_null(old('id')))style="display: none;"@endif id="div-create">
                 	<div class="sparkline12-hd">
                 		<div class="main-sparkline12-hd">
@@ -64,7 +97,8 @@
 	                		@enderror
 	                	</div>
 	                	<div class="form-group-inner @error('description') input-with-error @enderror">
-	                		<input name="description" type="text" class="form-control" placeholder="Descripción">
+	                		<textarea name="description" class="form-control" placeholder="Descripción" style="resize: none;">{{ old('description')}}</textarea>
+
 	                		@error('description')
 	                		<span class="help-block small" style="color: red;">{{ __($message) }}</span>
 	                		@enderror
@@ -86,10 +120,10 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">{{ __('Save') }}</button>
                 	</form>
-
-	                	
                 </div>
-
+                @endcan
+				
+				@can('tiene-permiso','Insignias+Editar')
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" @if(is_null(old('id')))style="display: none;"@endif id="div-edit">
                 	<div class="sparkline12-hd">
                 		<div class="main-sparkline12-hd">
@@ -106,7 +140,7 @@
 	                		@enderror
 	                	</div>
 	                	<div class="form-group-inner @error('description') input-with-error @enderror">
-	                		<input name="description" type="text" class="form-control" placeholder="Descripción" id="edit-description">
+	                		<textarea name="description" class="form-control" placeholder="Descripción" style="resize: none;" id="edit-description">{{ old('description')}}</textarea>
 	                		@error('description')
 	                		<span class="help-block small" style="color: red;">{{ __($message) }}</span>
 	                		@enderror
@@ -130,6 +164,7 @@
                         <input type="reset" value="Cancelar" id="btn-cancel" class="btn btn-default btn-block">
                 	</form>	
                 </div>
+                @endcan
             </div>
         </div>
     </div>

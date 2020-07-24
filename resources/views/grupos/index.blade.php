@@ -1,5 +1,13 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Groups') }}</span>
+</li>
+@endsection
 @section('content')
     <!-- Static Table Start -->
     <div class="data-table-area mg-b-50">
@@ -31,103 +39,106 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-6" id="crear-grupo" @if(null != old('id')) style="display: none" @endif>
-                    <div class="sparkline13-list">
-                        <div class="sparkline13-hd">
-                            <div class="main-sparkline13-hd">
-                                <h1>Crear nuevo Grupo</h1>
+                @can('tiene-permiso','Grupos+Crear')
+                    <div class="col-sm-12 col-md-6" id="crear-grupo" @if(null != old('id')) style="display: none" @endif>
+                        <div class="sparkline13-list">
+                            <div class="sparkline13-hd">
+                                <div class="main-sparkline13-hd">
+                                    <h1>Crear nuevo Grupo</h1>
+                                </div>
                             </div>
-                        </div>
-                        <div class="tree-viewer-area mg-b-15">
-                            <div class="container-fluid">
-                                <div class="row">
-                                	<form action="{{ route('grupos.crear') }}" method="POST">
-                                		@csrf
-                                    
-	                                    <div class="col-xs-12">
-	                                    	<div class="form-group-inner @error('name') input-with-error @enderror">
-	                                    		<input name="name" type="text" class="form-control" placeholder="Nombre del grupo" value="{{ old('name') }}">
-	                                    		@error('name')
-                                                    <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                @enderror
-	                                        </div>
+                            <div class="tree-viewer-area mg-b-15">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                    	<form action="{{ route('grupos.crear') }}" method="POST">
+                                    		@csrf
+                                        
+    	                                    <div class="col-xs-12">
+    	                                    	<div class="form-group-inner @error('name') input-with-error @enderror">
+    	                                    		<input name="name" type="text" class="form-control" placeholder="Nombre del grupo" value="{{ old('name') }}">
+    	                                    		@error('name')
+                                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                    @enderror
+    	                                        </div>
 
-	                                        <div class="form-group-inner @error('description') input-with-error @enderror">
-	                                            <input name="description" type="textarea" class="form-control" placeholder="Descripción" value="{{ old('description') }}">
-	                                            @error('description')
-                                                    <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                @enderror
-	                                        </div>
+    	                                        <div class="form-group-inner @error('description') input-with-error @enderror">
+    	                                            <input name="description" type="textarea" class="form-control" placeholder="Descripción" value="{{ old('description') }}">
+    	                                            @error('description')
+                                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                    @enderror
+    	                                        </div>
 
-	                                        <div class="form-group-inner @error('parent') input-with-error @enderror">
-	                                            <select name="parent" class="form-control">
-	                                                <option value="0" selected>Grupo padre</option>
-	                                                @foreach($groups as $group)
-	                                                <option value="{{ $group->IdGroup }}">{{ $group->Name }}</option>
-                                                    @endforeach
-	                                            </select>
-	                                            @error('parent')
-                                                    <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                @enderror
-	                                        </div>
-	                                        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-	                                    </div>
-	                                </form>
+    	                                        <div class="form-group-inner @error('parent') input-with-error @enderror">
+    	                                            <select name="parent" class="form-control">
+    	                                                <option value="0" selected>Grupo padre</option>
+    	                                                @foreach($groups as $group)
+    	                                                <option value="{{ $group->IdGroup }}">{{ $group->Name }}</option>
+                                                        @endforeach
+    	                                            </select>
+    	                                            @error('parent')
+                                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                    @enderror
+    	                                        </div>
+    	                                        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+    	                                    </div>
+    	                                </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-sm-12 col-md-6" id="editar-grupo" @if(null == old('id')) style="display: none" @endif>
-                    <div class="sparkline13-list">
-                        <div class="sparkline13-hd">
-                            <div class="main-sparkline13-hd">
-                                <h1>Editar Grupo</h1>
+                @endcan
+                @can('tiene-permiso','Grupos+Editar')
+                    <div class="col-sm-12 col-md-6" id="editar-grupo" @if(null == old('id')) style="display: none" @endif>
+                        <div class="sparkline13-list">
+                            <div class="sparkline13-hd">
+                                <div class="main-sparkline13-hd">
+                                    <h1>Editar Grupo</h1>
+                                </div>
                             </div>
-                        </div>
-                        <div class="tree-viewer-area mg-b-15">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <form action="" method="POST" id="form-editar">
-                                        @csrf
-                                        <input type="hidden" name="id" id="edit-id" value="{{ old('id') }}">
-                                    
-                                        <div class="col-xs-12">
-                                            <div class="form-group-inner @error('name') input-with-error @enderror">
-                                                <input name="name" type="text" class="form-control" placeholder="Nombre del grupo" value="{{ old('name') }}" id="edit-name">
-                                                @error('name')
-                                                    <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                @enderror
-                                            </div>
+                            <div class="tree-viewer-area mg-b-15">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <form action="" method="POST" id="form-editar">
+                                            @csrf
+                                            <input type="hidden" name="id" id="edit-id" value="{{ old('id') }}">
+                                        
+                                            <div class="col-xs-12">
+                                                <div class="form-group-inner @error('name') input-with-error @enderror">
+                                                    <input name="name" type="text" class="form-control" placeholder="Nombre del grupo" value="{{ old('name') }}" id="edit-name">
+                                                    @error('name')
+                                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                    @enderror
+                                                </div>
 
-                                            <div class="form-group-inner @error('description') input-with-error @enderror">
-                                                <input name="description" type="textarea" class="form-control" placeholder="Descripción" value="{{ old('description') }}" id="edit-description">
-                                                @error('description')
-                                                    <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                @enderror
-                                            </div>
+                                                <div class="form-group-inner @error('description') input-with-error @enderror">
+                                                    <input name="description" type="textarea" class="form-control" placeholder="Descripción" value="{{ old('description') }}" id="edit-description">
+                                                    @error('description')
+                                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                    @enderror
+                                                </div>
 
-                                            <div class="form-group-inner @error('parent') input-with-error @enderror">
-                                                <select name="parent" class="form-control" id="edit-parent">
-                                                    <option value="0" selected>Grupo padre</option>
-                                                    @foreach($groups as $group)
-                                                    <option value="{{ $group->IdGroup }}">{{ $group->Name }}</option>
-                                                    @endforeach
-                                                </select>
-                                                @error('parent')
-                                                    <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                @enderror
+                                                <div class="form-group-inner @error('parent') input-with-error @enderror">
+                                                    <select name="parent" class="form-control" id="edit-parent">
+                                                        <option value="0" selected>Grupo padre</option>
+                                                        @foreach($groups as $group)
+                                                        <option value="{{ $group->IdGroup }}">{{ $group->Name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('parent')
+                                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                    @enderror
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                                                <input type="reset" value="Cancelar" id="btn-cancel" class="btn btn-default btn-block">
                                             </div>
-                                            <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-                                            <input type="reset" value="Cancelar" id="btn-cancel" class="btn btn-default btn-block">
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endcan
 
             </div>
         </div>
@@ -143,8 +154,6 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-
-
 
         $('#using_json').jstree({
             'core' : {
@@ -179,8 +188,7 @@
             }
         });
 
-        
-
+        @can('tiene-permiso','Grupos+Editar')
         $(document).on('click', '.jstree-anchor', function(event) {
             event.preventDefault();
             var name = $(this).text();
@@ -217,6 +225,7 @@
             $('#crear-grupo').show('fast');
             $('#editar-grupo').hide('fast');
         });
+        @endcan
 
 
     });

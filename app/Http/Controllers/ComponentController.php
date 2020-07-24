@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Component;
+use Illuminate\Support\Facades\{Gate};
 
 class ComponentController extends Controller
 {
@@ -46,6 +47,7 @@ class ComponentController extends Controller
     {
         $data['totalNotFiltered'] = Component::where('IdComponent','>', 0)->count();
         $rows = array();
+        $data['rows'] = array();
 
         if (is_null($request->search)) {
             $data['total'] = $data['totalNotFiltered'];
@@ -67,13 +69,24 @@ class ComponentController extends Controller
             
         }
 
+        $puedeEditar = Gate::allows('tiene-permiso', 'Componentes+Editar');
+        $puedeCambiarStatus = Gate::allows('tiene-permiso', 'Componentes+Cambiar Estado');
+
         foreach ($rows as $key) {
-            $btnStatus = $key->Enabled == 'E' ? '<a href="'.url("/componentes/cambiar-estatus/{$key->IdComponent}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/componentes/cambiar-estatus/{$key->IdComponent}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
+            $btnEdit = $puedeEditar ? '&nbsp;   <a href="'.url("/componentes/editar/{$key->IdComponent}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i></a>' : '';
+
+            if ($puedeCambiarStatus) {
+                $btnStatus = $key->Enabled == 'E' ? '<a href="'.url("/componentes/cambiar-estatus/{$key->IdComponent}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i></a>' : '<a href="'.url("/componentes/cambiar-estatus/{$key->IdComponent}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i></a>';
+            }else{
+                $btnStatus = $key->Enabled == 'E' ? '<button title="Componente Activo" class="btn btn-custon-four btn-success btn-xs disabled"><i class="far fa-check-circle" style="color: white;"></i></button>' : '<button title="Componente Inactivo" class="btn btn-custon-four btn-danger btn-xs disabled"><i class="fas fa-times-circle" style="color: white;"></i></button>';
+            }
+            
             $data['rows'][] = [
                 'IdComponent' => $key->IdComponent,
-                'Name' => $key->Name,
+                'Name'        => $key->Name,
                 'Description' => $key->Description,
-                'btns' => $btnStatus . '&nbsp;   <a href="'.url("/componentes/editar/{$key->IdComponent}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>'
+                'Parent'      => $key->IdComponent1 == 0 ? '' : Component::find($key->IdComponent1)->Name,
+                'btns'        => $btnStatus . $btnEdit
             ];
             
         }

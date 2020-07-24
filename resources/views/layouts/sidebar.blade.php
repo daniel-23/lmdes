@@ -137,6 +137,14 @@
                                 </li>
                                 @endcan
 
+                                @can('tiene-permiso','Plantillas+Acceder')
+                                <li>
+                                    <a href="{{ route('plantillas') }}">
+                                        <span class="mini-sub-pro">{{ __('Templates') }}</span>
+                                    </a>
+                                </li>
+                                @endcan
+
                                 @can('tiene-permiso','Formatos+Acceder')
                                 <li>
                                     <a href="{{ route('formatos') }}">
@@ -145,19 +153,40 @@
                                 </li>
                                 @endcan
 
-                                @can('tiene-permiso','Insignias+Acceder')
+
+                                @can('tiene-permiso','Escalas+Acceder')
                                 <li>
-                                    <a href="{{ route('badges') }}">
-                                        <span class="mini-sub-pro">Insigneas</span>
+                                    <a href="{{ route('escalas') }}">
+                                        <span class="mini-sub-pro">Escalas</span>
                                     </a>
                                 </li>
                                 @endcan
-                                
+
+                                @can('tiene-permiso','Competencias+Acceder')
+                                <li>
+                                    <a href="{{ route('competencias') }}">
+                                        <span class="mini-sub-pro">Competencias</span>
+                                    </a>
+                                </li>
+                                @endcan
+
+                                @can('tiene-permiso','Insignias+Acceder')
+                                <li>
+                                    <a href="{{ route('badges') }}">
+                                        <span class="mini-sub-pro">Insignias</span>
+                                    </a>
+                                </li>
+                                @endcan
+
+                                @can('tiene-permiso','Cursos+Acceder')
                                 <li>
                                     <a href="{{ route('cursos') }}">
                                         <span class="mini-sub-pro">Cursos</span>
                                     </a>
                                 </li>
+                                @endcan
+                                
+                                
 
                                 @can('tiene-permiso','Parametros+Acceder')
                                 <li>
@@ -242,6 +271,7 @@
                     @endcan
 
                     @can('tiene-permiso','Seguridad+Acceder')
+                    
 
                         <li>
                             <a class="has-arrow" href="all-courses.html" aria-expanded="false">

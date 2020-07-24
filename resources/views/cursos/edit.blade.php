@@ -1,7 +1,19 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <a href="{{ route('cursos') }}">{{ __('Courses') }}</a>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Edit') }}</span>
+</li>
+@endsection
 @section('content')
-    <div class="basic-form-area mg-b-15">
+    <div class="basic-form-area mg-b-50">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -9,14 +21,7 @@
                         <div class="sparkline12-hd">
                             <div class="main-sparkline12-hd">
                                 <h1>{{ __('Edit Course') }}</h1>
-
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-                            
                         </div>
                         <div class="sparkline12-graph">
                             <div class="basic-login-form-ad">
@@ -28,7 +33,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('name') input-with-error @enderror">
-                                                            <input type="text" class="form-control" name="name" id="name" value="{{ old('name') ?? $course->Name }}" placeholder="{{ __('Name') }}">
+                                                            <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $course->Name) }}" placeholder="{{ __('Name') }}">
                                                             @error('name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
@@ -37,7 +42,7 @@
 
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('short_name') input-with-error @enderror">
-                                                            <input type="text" class="form-control" name="short_name" id="short_name" value="{{ old('short_name') ?? $course->ShortName }}" placeholder="{{ __('Short Name') }}">
+                                                            <input type="text" class="form-control" name="short_name" id="short_name" value="{{ old('short_name', $course->ShortName) }}" placeholder="{{ __('Short Name') }}">
                                                             @error('short_name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
@@ -48,7 +53,7 @@
                                                 <div class="row" style="margin-top: 15px;">
                                                     <div class="col-xs-12 col-md-6">
                                                         <div class="form-group-inner @error('code') input-with-error @enderror">
-                                                            <input type="text" class="form-control" name="code" id="code" value="{{ old('code') ?? $course->Code }}" placeholder="{{ __('Code') }}">
+                                                            <input type="text" class="form-control" name="code" id="code" value="{{ old('code', $course->Code) }}" placeholder="{{ __('Code') }}">
                                                             @error('code')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
@@ -198,6 +203,27 @@
                                                             @enderror
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <div class="row" style="margin-top: 15px;">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group-inner @error('competencies') input-with-error @enderror">
+                                                            <select name="competencies[]" id="competencies" data-placeholder="{{ __('Select') }} {{ __('las competencias') }}" class="chosen-select form-control" multiple="" tabindex="-1">
+                                                                @foreach($competencies as $competency)
+                                                                    @if(is_null(old('competencies')))
+                                                                        <option value="{{ $competency->IdCompetency }}" {{ $competenciesCourse->contains($competency->IdCompetency) ? 'selected' : '' }}>{{ $competency->Name }}</option>
+                                                                    @else
+                                                                        <option value="{{ $competency->IdCompetency }}" {{ in_array($competency->IdCompetency, old('competencies')) ? 'selected' : '' }}>{{ $competency->Name }}</option>
+                                                                    @endif
+                                                                    
+                                                                @endforeach
+                                                            </select>
+                                                            @error('competencies')
+                                                                <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 
                                                 <div class="row">

@@ -29,7 +29,7 @@ class CompanyController extends Controller
     public function index()
     {
     	return view('companies.index')
-    		->with('title', 'Companies')
+    		->with('title', 'Institutions')
     		->with('act_link', 'parameters');
     }
 

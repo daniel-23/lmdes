@@ -1,5 +1,17 @@
 @extends('layouts.master')
-
+@section('breadcome')
+<li>
+    <span class="bread-blod">{{ __('Manage Courses') }}</span>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <a href="{{ route('escalas') }}">{{ __('Scales') }}</a>
+    <span class="bread-slash">/</span>
+</li>
+<li>
+    <span class="bread-blod">{{ __('Edit') }}</span>
+</li>
+@endsection
 @section('content')
     <div class="basic-form-area mg-b-15">
         <div class="container-fluid">
@@ -47,7 +59,8 @@
                                                 <div class="row" style="margin-top: 15px;">
                                                     <div class="col-xs-12">
                                                         <div class="form-group-inner @error('scale') input-with-error @enderror">
-                                                            <textarea class="form-control" name="scale" id="scale" rows="5" style="resize: none;" placeholder="{{ __('Scale') }}">{{ old('scale') ?? $scale->Scales }}</textarea>
+                                                            <input type="text" class="form-control" name="scale" id="scale" placeholder="{{ __('Scale') }}" value="{{ old('scale',$scale->Scales) }}">
+                                                            
                                                             @error('scale')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                             @enderror
@@ -80,3 +93,21 @@
     </div>
 @endsection
 
+@section('script')
+<script type="text/javascript" src="{{ asset('js/jquery.tagsinput.js') }}"></script>
+<script type="text/javascript">
+    function onAddTag(tag) {
+        alert("Agregar escalas separadas por comas.: " + tag);
+    }
+    function onRemoveTag(tag) {
+        alert("Removed a tag: " + tag);
+    }
+
+    function onChangeTag(input,tag) {
+        alert("Changed a tag: " + tag);
+    }
+    $(function() {
+        $('#scale').tagsInput({width:'auto'});
+    });
+</script>
+@endsection

@@ -13,9 +13,12 @@ use App\{
 
 };
 use App\Http\Requests\UsuarioCrearRequest;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\{
+    Hash,
+    DB,
+    Gate
+};
+
 use Illuminate\Auth\Access\Response;
 
 class UserController extends Controller
@@ -51,15 +54,34 @@ class UserController extends Controller
         if ($request->offset > 0) {
             $consulta->offset($request->offset);
         }
-        $rows = $consulta->limit($request->limit)->get();  
+        $rows = $consulta->limit($request->limit)->get();
+
+        $puedeEditar = Gate::allows('tiene-permiso', 'Usuarios+Editar');
+        $puedeCambiarStatus = Gate::allows('tiene-permiso', 'Usuarios+Cambiar Estado');
+
         foreach ($rows as $key) {
-            $btnStatus = $key->Status == 'A' ? '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
+            $btnEdit = $puedeEditar ? '&nbsp;   <a href="'.url("/usuarios/editar/{$key->IdUser}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>' : '';
+
+            if ($puedeCambiarStatus) {
+                $btnStatus = $key->Status == 'A' ? '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/usuarios/cambiar-estatus/{$key->IdUser}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
+            }else{
+                $btnStatus = $key->Status == 'A' ? '<button  title="Usuario Activo" class="btn btn-custon-four btn-success btn-xs disabled"><i class="far fa-check-circle" style="color: white;"></i></button>' : '<button  title="Usuario Inactivo" class="btn btn-custon-four btn-danger btn-xs disabled"><i class="fas fa-times-circle" style="color: white;"></i></button>';
+            }
+
+            
+
+
+
+
+
+
+
             $data['rows'][] = [
                 'IdUser' => $key->IdUser,
                 'Name' => $key->Name . ' '. $key->LastName,
                 'Email' => $key->Email,
                 'Role' => $key->role_name,
-                'btns' => $btnStatus . '&nbsp;   <a href="'.url("/usuarios/editar/{$key->IdUser}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>'
+                'btns' => $btnStatus . $btnEdit
             ];
             
         }
@@ -112,7 +134,7 @@ class UserController extends Controller
     		'Name' => trim(ucwords(strtolower(strip_tags($request->name)))),
     		'LastName' => trim(ucwords(strtolower(strip_tags($request->last_name)))),
     		'Email' => trim(strtolower($request->email)),
-    		'password' => Hash::make(trim($request->password)),
+    		'password' => $request->role == 1 ? Hash::make(trim($request->password)) : Hash::make(trim($request->password.'12345')),
             'IdCompany' => $request->role != 1 ? (int)$request->company_id : 0,
     	);
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\{Role,Component,Permission};
+use Illuminate\Support\Facades\{Gate};
+
 class RoleController extends Controller
 {
     public function index()
@@ -50,6 +52,7 @@ class RoleController extends Controller
     {
         $data['totalNotFiltered'] = Role::where('IdRole','>', 0)->count();
         $rows = array();
+        $data['rows'] = array();
 
         if (is_null($request->search)) {
             $data['total'] = $data['totalNotFiltered'];
@@ -71,12 +74,17 @@ class RoleController extends Controller
             
         }
 
+        $puedeEditar = Gate::allows('tiene-permiso', 'Roles+Editar');
+        $puedeCambiarStatus = Gate::allows('tiene-permiso', 'Roles+Cambiar Estado');
+
         foreach ($rows as $key) {
-            $btnStatus = $key->Enabled == 'E' ? '<a href="'.url("/roles/cambiar-estatus/{$key->IdRole}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/roles/cambiar-estatus/{$key->IdRole}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
+            if ($puedeCambiarStatus) {
+                $btnStatus = $key->Enabled == 'E' ? '<a href="'.url("/roles/cambiar-estatus/{$key->IdRole}").'" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>' : '<a href="'.url("/roles/cambiar-estatus/{$key->IdRole}").'" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>';
+            }else{
+                $btnStatus = $key->Enabled == 'E' ? '<button title="Rol Activo" class="btn btn-custon-four btn-success btn-xs disabled"><i class="far fa-check-circle" style="color: white;"></i></button>' : '<button title="Rol Inactivo" class="btn btn-custon-four btn-danger btn-xs disabled"><i class="fas fa-times-circle" style="color: white;"></i></button>';
+            }
 
-            $btnEdit = '&nbsp;   <a href="'.url("/roles/editar/{$key->IdRole}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>';
-
-            #$btnPermissions = '&nbsp;   <a href="'.url("/roles/permisos/{$key->IdRole}").'" title="Administrar permisos del rol" class="btn btn-custon-four btn-warning btn-xs"><i class="fas fa-key" style="color: white;"></i><a>';
+            $btnEdit = $puedeEditar ? '&nbsp;   <a href="'.url("/roles/editar/{$key->IdRole}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>' :'';
             
             $data['rows'][] = [
                 'IdRole' => $key->IdRole,
