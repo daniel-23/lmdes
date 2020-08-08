@@ -144,4 +144,11 @@ class CityController extends Controller
     {
     	return State::select('IdState','Name')->where([['IdCountry','=',$id],['Enabled','=','E']])->get();
     }
+
+    public function get_cities_state($id)
+    {
+        return City::select(['IdCity','Name'])->where('IdState',$id)->get();
+    }
+
+    
 }

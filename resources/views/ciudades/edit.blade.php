@@ -23,11 +23,6 @@
                                 <h1>{{ __('Edit City') }}</h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
                             
                         </div>
                         <div class="sparkline12-graph">

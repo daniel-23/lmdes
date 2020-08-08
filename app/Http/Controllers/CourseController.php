@@ -10,7 +10,8 @@ use App\{
     Category,
     Format,
     Language,
-    Competency
+    Competency,
+    Resource
 };
 
 class CourseController extends Controller
@@ -31,7 +32,8 @@ class CourseController extends Controller
     		->with('categories', Category::where('Enabled','E')->get())
             ->with('formats', Format::where('Enabled','E')->get())
             ->with('competencies', Competency::where('Enabled','E')->get())
-            ->with('languages', Language::all());
+            ->with('languages', Language::all())
+            ->with('resources', Resource::orderBy('name')->get());
     }
 
     public function create(Request $request)
@@ -51,6 +53,8 @@ class CourseController extends Controller
             'show_califications'=> 'required|max:1',
             'max_file_size'     => 'nullable|integer',
             'competencies'      => 'required|array',
+            'image'             => 'nullable|image',
+            'resources'         => 'required|array',
         ]);
 
         $data = [
@@ -67,9 +71,17 @@ class CourseController extends Controller
             'IdLanguage'        => (int) $request->language,
             'ShowCalifications' => $request->show_califications,
             'MaxFileSize'       => (int) $request->max_file_size,
+            'IdCreatorUser'     => $request->user()->IdUser,
         ];
+        if (count($request->file()) > 0) {
+            $path = $request->file('image')->store(
+                'images/courses', 'public'
+            );
+            $data['Image'] = $path;
+        }
         $curso = Course::create($data);
         $curso->competencies()->attach($request->competencies);
+        $curso->resources()->attach($request->resources);
         $request->session()->flash('success', 'Course created successfully');
 
         
@@ -147,5 +159,14 @@ class CourseController extends Controller
             request()->session()->flash('success', 'Course modify successfully');
             return redirect('/cursos');
         }
+    }
+
+    public function course_info($id)
+    {
+        $curso = Course::findOrFail($id);
+        return view('cursos.info')
+            ->with('title', 'Course Info')
+            ->with('act_link', '')
+            ->with('course',$curso);
     }
 }

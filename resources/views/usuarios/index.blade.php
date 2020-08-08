@@ -19,7 +19,7 @@
                 <div class="sparkline13-list">
                     <div class="sparkline13-hd">
                         <div class="main-sparkline13-hd row" style="margin-left: 3px; margin-right: 3px;">
-                            <h1>Listado de Usuarios @can('tiene-permiso','Usuarios+Crear')<a href="{{ route('usuarios.crear') }}" class="btn btn-success pull-right">Crear Usuario</a> @endcan </h1>
+                            <h1>{{ __('List Users') }} @can('tiene-permiso','Usuarios+Crear')<a href="{{ route('usuarios.crear') }}" class="btn btn-success pull-right">{{ __('Add User') }}</a> @endcan </h1>
                         </div>
                     </div>
 

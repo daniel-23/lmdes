@@ -15,8 +15,6 @@ class CreateSecUsersHasSecRolesTable extends Migration
     {
         Schema::create('Sec_Users_has_Sec_Roles', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-
-            $table->increments('IdSec_Users_has_Sec_Roles');
             $table->unsignedInteger('IdUser');
             $table->foreign('IdUser')->references('IdUser')->on('Sec_Users');
             $table->unsignedTinyInteger('IdRole');

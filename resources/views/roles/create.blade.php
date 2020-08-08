@@ -1,16 +1,16 @@
 @extends('layouts.master')
 @section('breadcome')
-<li>
-    <span class="bread-blod">{{ __('Security') }}</span>
-    <span class="bread-slash">/</span>
-</li>
-<li>
-    <a href="{{ route('roles') }}">{{ __('Roles') }}</a>
-    <span class="bread-slash">/</span>
-</li>
-<li>
-    <span class="bread-blod">{{ __('Create') }}</span>
-</li>
+    <li>
+        <span class="bread-blod">{{ __('Security') }}</span>
+        <span class="bread-slash">/</span>
+    </li>
+    <li>
+        <a href="{{ route('roles') }}">{{ __('Roles') }}</a>
+        <span class="bread-slash">/</span>
+    </li>
+    <li>
+        <span class="bread-blod">{{ __('Create') }}</span>
+    </li>
 @endsection
 @section('content')
     <div class="basic-form-area mg-b-50">
@@ -21,7 +21,6 @@
                         <div class="sparkline12-hd">
                             <div class="main-sparkline12-hd">
                                 <h1>{{ __('Create Role') }}</h1>
-
                             </div>
                         </div>
                         <div class="sparkline12-graph">
@@ -51,7 +50,7 @@
                                                         <table class="table table-bordered">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Componente</th>
+                                                                    <th>{{ __('Component') }}</th>
                                                                     @foreach($permissions as $permission)
                                                                     <th>{{ $permission->Name }}</th>
                                                                     @endforeach
@@ -82,7 +81,6 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                
                                             </form>
                                         </div>
                                     </div>
@@ -95,4 +93,3 @@
         </div>
     </div>
 @endsection
-

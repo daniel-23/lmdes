@@ -1,114 +1,46 @@
 @extends('layouts.master')
 @section('breadcome')
 <li>
-    <span class="bread-blod">{{ __('Manage Courses') }}</span>
-    <span class="bread-slash">/</span>
-</li>
-<li>
     <span class="bread-blod">{{ __('Courses') }}</span>
 </li>
 @endsection
+
 @section('content')
-        
-    <!-- Static Table Start -->
-    <div class="data-table-area mg-b-15">
-        <div class="container-fluid">
+
+<div class="courses-area" style="margin-bottom: 50px;">
+    <div class="container-fluid">
+        @can('tiene-permiso','Cursos+Crear')
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="sparkline13-list">
-                        <div class="sparkline13-hd">
-                            <div class="main-sparkline13-hd row" style="margin: 0 3px;">
-                                <h1>{{ __('List') }} <span class="table-project-n">{{ __('Courses') }}</span>
-                                    &nbsp;
-
-                                    <a href="{{ route('par-courses') }}" class="btn btn-custon-four btn-default pull-right" title="{{ __('Courses Parameters') }}" style="margin-right: 10px;"><i class="fas fa-cogs"></i></a>
-
-                                    @can('tiene-permiso','Cursos+Crear')
-                                    <a href="{{ route('cursos.crear') }}" class="btn btn-custon-four btn-success pull-right" style="margin-right: 5px;">
-                                        <i class="fas fa-plus"></i>
-                                        {{ __('Add Course') }}
-                                    </a>
-                                    @endcan
-                                </h1>
-
-                            </div>
+                <a href="{{ route('cursos.crear') }}" class="btn btn-success pull-right" style="margin-right: 30px;">{{ __('Add Course') }}</a>
+            </div>
+        @endcan
+            
+        <div class="row">
+            @foreach($courses as $course)
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 mg-b-15">
+                    <div class="courses-inner res-mg-b-30" style="border-bottom: 4px solid {{ $course->category->Color }} !important;">
+                        <div class="courses-title">
+                            <a href="#"><img src="{{ is_null($course->Image) ? asset('storage/images/courses/1.jpg') : asset('storage/'.$course->Image) }}" alt="{{ $course->ShortName }}"></a>
+                            <h2>{{ $course->Name }}</h2>
                         </div>
-                        <div class="sparkline13-graph">
-                            <div class="datatable-dashv1-list custom-datatable-overright">
-                                <div id="toolbar">
-                                    <select class="form-control dt-tb">
-                                        <option value="">{{ __('Export Basic') }}</option>
-                                        <option value="all">{{ __('Export All') }}</option>
-                                        <!--option value="selected">Export Selected</option-->
-                                    </select>
-                                </div>
-                                <table
-                                    id="table"
-                                    data-toggle="table"
-                                    data-search="true"
-                                    data-show-pagination-switch="true"
-                                    data-pagination="true"
-                                    data-show-columns="true"
-                                    data-show-pagination-switch="true"
-                                    data-show-refresh="true"
-                                    data-key-events="true"
-                                    data-show-toggle="true"
-                                    data-resizable="true"
-                                    data-show-export="true"
-                                    data-toolbar="#toolbar"
-                                    >
-                                    
-                                    <thead>
-                                        <tr>
-                                            <th data-field="IdCourse">ID</th>
-                                            <th data-field="Name">{{ __('Name') }}</th>
-                                            <th data-field="Code">{{ __('Code') }}</th>
-                                            <th data-field="Description">{{ __('Description') }}</th>
-                                            <th data-field="Category">{{ __('Category') }}</th>
-                                            <th data-field="Language">{{ __('Language') }}</th>
-                                            <th data-field="btns">{{ __('Actions') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($courses as $course)
-                                        <tr>
-                                            <td>{{ $course->IdCourse }}</td>
-                                            <td>{{ $course->Name }}</td>
-                                            <td>{{ $course->Code }}</td>
-                                            <td>{{ $course->Description }}</td>
-                                            <td>{{ $course->category->Name }}</td>
-                                            <td>{{ $course->Language->Name }}</td>
-                                            <td>
-                                                @if($course->Enabled == 'E')
-                                                    <a href="{{ route('cursos.cambiar-estatus',$course->IdCourse) }}" title="Desacivar" class="btn btn-custon-four btn-success btn-xs"><i class="far fa-check-circle" style="color: white;"></i><a>
-                                                @else
-                                                    <a href="{{ route('cursos.cambiar-estatus',$course->IdCourse) }}" title="Activar" class="btn btn-custon-four btn-danger btn-xs"><i class="fas fa-times-circle" style="color: white;"></i><a>
-                                                @endif
-                                                &nbsp;   
-                                                <a href="{{ url('/cursos/editar/'.$course->IdCourse) }}" title="Editar" class="btn btn-custon-four btn-primary btn-xs">
-                                                    <i class="fas fa-pencil-alt" style="color: white;"></i>
-                                                <a>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="courses-alaltic">
+                            <!--span class="cr-ic-r"><span class="course-icon"><i class="fa fa-clock"></i></span> 1 Year</span>
+                            <span class="cr-ic-r"><span class="course-icon"><i class="fa fa-heart"></i></span> 50</span>
+                            <span class="cr-ic-r"><span class="course-icon"><i class="fa fa-dollar"></i></span> 500</span-->
+                        </div>
+                        <div class="course-des">
+                            <p><span><i class="fa fa-clock"></i></span> <b>Duration:</b> {{ $course->duration() }}</p>
+                            <p><span><i class="fa fa-clock"></i></span> <b>Professor:</b> Jane Doe</p>
+                            <p><span><i class="fa fa-clock"></i></span> <b>Students:</b> 100+</p>
+                        </div>
+                        <div class="product-buttons">
+                            <a href="{{ route('cursos.info',$course->IdCourse) }}" class="btn btn-primary cart-btn">{{ __('Read More') }}</a>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
+                
         </div>
     </div>
-    <!-- Static Table End -->
-@endsection
-
-@section('script')
-    <script type="text/javascript">
-        $(function () {
-            $('#table').bootstrapTable();
-        });
-
-        
-    </script>      
+</div>
 @endsection

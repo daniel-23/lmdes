@@ -13,5 +13,6 @@ Route::group(['middleware' => ['auth','can:super-admin']], function () {
 	Route::post('/ciudades/editar/{id}', 'CityController@edit')->where('id', '[0-9]+');
 
 	Route::get('/ciudades/cambiar-estatus/{id}', 'CityController@cambiar_estatus')->name('ciudades.cambiar-estatus')->where('id', '[0-9]+');
-	
+
+	Route::get('/ciudades/get-estado/{id}', 'CityController@get_cities_state')->where('id', '[0-9]+');
 });

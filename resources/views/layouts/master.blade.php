@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
 		============================================ -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/images/favicon.ico') }}">
     <!-- Font Awesome CSS
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
@@ -93,6 +93,10 @@
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/modals.css') }}">
 
+    <!-- dropzone CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/dropzone/dropzone.css') }}">
+
     <!-- style CSS
 		============================================ -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -122,7 +126,7 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="footer-copy-right">
-                            <p>Copyright © 2018. All rights reserved. Template by <a href="https://colorlib.com/wp/templates/">Colorlib</a></p>
+                            <p>Copyright © {{ date('Y') }}. All rights reserved. <a href="#">5MDGROUP</a></p>
                         </div>
                     </div>
                 </div>

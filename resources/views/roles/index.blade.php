@@ -60,7 +60,6 @@
                                             <th data-field="Name">{{ __('Name') }}</th>
                                             <th data-field="Description">{{ __('Description') }}</th>
                                             <th data-field="btns">{{ __('Actions') }}</th>
-                                            
                                         </tr>
                                     </thead>
                                 </table>
@@ -79,7 +78,6 @@
         $(function () {
             $('#table').bootstrapTable();
         });
-
         function ajaxRequest(params) {
             var url = '{{ route("roles.get-list") }}';
             console.log("url", url);

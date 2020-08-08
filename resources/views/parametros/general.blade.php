@@ -11,12 +11,6 @@
                                 <h1>{{ __('Parameters Generals') }}</h1>
 
                             </div>
-                            @if (session('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ __(session('success')) }}
-                                </div>
-                            @endif
-                            
                         </div>
                         <div class="sparkline12-graph">
                             <div class="basic-login-form-ad">
@@ -98,7 +92,7 @@
                                                     
                                                 </div>
 
-
+                                                @can('tiene-permiso','Parámetros Generales+Crear')
                                                 <div class="row" style="margin-top: 15px;">
                                                     <div class="col-xs-12">
                                                         <button type="submit" class="btn btn-custon-four btn-primary"><i class="far fa-save"></i> {{ __('Save') }}</button>
@@ -108,7 +102,7 @@
                                                         </a-->
                                                     </div>
                                                 </div>
-                                                
+                                                @endcan
                                             </form>
                                         </div>
                                     </div>

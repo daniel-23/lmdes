@@ -34,13 +34,11 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/cursos/get-list', 'CourseController@get_list')->name('cursos.get-list')->middleware('tiene_permiso:Cursos+Acceder');
 	Route::get('/cursos/crear', 'CourseController@crear')->name('cursos.crear')->middleware('tiene_permiso:Cursos+Crear');
 	Route::post('/cursos/crear', 'CourseController@create')->middleware('tiene_permiso:Cursos+Crear');
-
 	Route::get('/cursos/traer-estados/{id}', 'CourseController@traer_estados')->where('id', '[0-9]+');
-
-
 	Route::get('/cursos/editar/{id}', 'CourseController@editar')->name('cursos.editar')->where('id', '[0-9]+')->middleware('tiene_permiso:Cursos+Editar');
 	Route::post('/cursos/editar/{id}', 'CourseController@edit')->where('id', '[0-9]+')->middleware('tiene_permiso:Cursos+Editar');
-
 	Route::get('/cursos/cambiar-estatus/{id}', 'CourseController@cambiar_estatus')->name('cursos.cambiar-estatus')->where('id', '[0-9]+')->middleware('tiene_permiso:Cursos+Cambiar Estado');
+	Route::get('/cursos/{id}', 'CourseController@course_info')->name('cursos.info')->where('id', '[0-9]+')->middleware('tiene_permiso:Cursos+Consultar');
+	
 	
 });

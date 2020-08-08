@@ -14,7 +14,9 @@ use App\{
     Regional,
     User,
     Role,
-    ParameterGeneral
+    ParameterGeneral,
+    Country,
+    ParameterCourse
 };
 
 use Illuminate\Support\Facades\DB;
@@ -28,9 +30,9 @@ class CompanyController extends Controller
 {
     public function index()
     {
-    	return view('companies.index')
-    		->with('title', 'Institutions')
-    		->with('act_link', 'parameters');
+        return view('companies.index')
+        ->with('title', 'Institutions')
+        ->with('act_link', 'parameters');
     }
 
     public function get_list(Request $request)
@@ -93,16 +95,45 @@ class CompanyController extends Controller
 
     public function crear()
     {
-    	$types = CompanyType::all();
-
     	return view('companies.create')
     		->with('title', 'Create Company')
     		->with('act_link', 'parameters')
-    		->with('types', $types);
+    		->with('types', CompanyType::all(['IdCompanyType', 'Name']))
+            ->with('countries', Country::select(['IdCountry', 'Name'])->orderBy('Name')->get())
+            ->with('currencies', Currency::select(['IdCurrency', 'Name'])->orderBy('Name')->get())
+            ->with('languages', Language::select(['IdLanguage', 'Name'])->orderBy('Name')->get())
+            ->with('timeZones', TimeZone::select(['IdTimeZone', 'Name'])->orderBy('Name')->get());
     }
 
-    public function create(CompanyCreateRequest $request)
+    public function create(Request $request)
     {
+        $validatedData = $request->validate([
+            'name'               => 'required|string|max:400',
+            'email'              => 'required|email:filter|max:100|unique:Sec_Companies,Email',
+            'web_site'           => 'nullable|url|max:100',
+            'contact_name'       => 'required|string|max:100',
+            'logo'               => 'nullable|image',
+            'db_name'            => 'required|string|max:100',
+            'db_user'            => 'required|string|max:100',
+            'db_password'        => 'required|string|max:100',
+            'max_size_file'      => 'required|integer',
+            'max_users'          => 'required|integer',
+            'max_disc_space'     => 'required|integer',
+            'email_server'       => 'required|string|max:45',
+            'email_sender'       => 'required|string|max:45',
+            'country'            => 'required|integer|exists:Cnf_Countries,IdCountry',
+            'state'              => 'required|integer|exists:Cnf_States,IdState',
+            'city'               => 'required|integer|exists:Cnf_Cities,IdCity',
+            'currency'           => 'required|integer|exists:Cnf_Currencies,IdCurrency',
+            'language'           => 'required|integer|exists:Cnf_Languages,IdLanguage',
+            'timezone'           => 'required|integer|exists:Cnf_TimeZones,IdTimeZone',
+            'course_format'      => 'required|string|max:100',
+            'max_courses_number' => 'required|integer',
+            'max_modules_number' => 'required|integer',
+            'course_duration'    => 'required|integer',
+        ]);
+
+
 
         $data = [
     		'IdCompanyType' => (int) $request->type,
@@ -123,9 +154,37 @@ class CompanyController extends Controller
             $data['DatabaseUser'],
             trim($request->db_password)
         );
+        $company = Company::create($data);
+        
 
-    	$company = Company::create($data);
-    	request()->session()->flash('success', 'Company created successfully');
+        select_company($company->IdCompany);
+        config(['database.default' => 'institucion']);
+        $datosParametros = [
+            'Appearance' => $request->appearance,
+            'Emailserver'=> trim(strtolower($request->email_server)),
+            'EmailSender'=> trim(strtolower($request->email_sender)),
+            'MaxSizeFile'=> (int)$request->max_size_file,
+            'ActivateNotifications'=> is_null($request->activate_notifications) ? 0 : 1,
+        ];
+        if (count($request->file()) > 0) {
+            $path = $request->file('logo')->store(
+                'images', 'public'
+            );
+            $datosParametros['Logo'] = $path;
+        }
+
+        $datosParametrosCursos = [
+            'CourseFormat' => $request->course_format,
+            'MaxCoursesNumber'=> (int)$request->max_courses_number,
+            'CourseDuration'=> (int)$request->course_duration,
+            'MaxModulesNumber'=> (int)$request->max_modules_number,
+        ];
+
+        $paramater = ParameterGeneral::find(1);
+        $paramater->update($datosParametros);
+        $paramaterCourse = ParameterCourse::find(1);
+        $paramaterCourse->update($datosParametrosCursos);
+        request()->session()->flash('success', 'Institution created successfully');
         return redirect('/companies');
 
     }

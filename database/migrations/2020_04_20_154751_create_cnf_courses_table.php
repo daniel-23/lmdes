@@ -25,6 +25,7 @@ class CreateCnfCoursesTable extends Migration
             $table->string('Enabled',1)->default('E')->comment('E = enabled, D = disabled');
             $table->dateTime('StartDate');
             $table->dateTime('EndDate');
+            $table->string('EndCondition',1)->default('A')->comment('A= Automatic: The course ends with the end date, U= By user: The course ends when the user has finished the activities, T= By Teacher: The course ends when the teacher has graded the activities');
             $table->unsignedInteger('IdCourseFormat');
             $table->foreign('IdCourseFormat')->references('IdCourseFormat')->on('Cnf_Courses_Format');
             $table->unsignedInteger('ModulesNumber');
@@ -33,6 +34,11 @@ class CreateCnfCoursesTable extends Migration
             $table->foreign('IdLanguage')->references('IdLanguage')->on('Cnf_Languages');
             $table->string('ShowCalifications',1)->default('Y')->comment('Y = yes, N = No');
             $table->unsignedInteger('MaxFileSize')->nullable()->comment('In MB - Default value on Sec_Company table or less');
+            $table->string('Image',200)->nullable();
+            $table->unsignedInteger('IdCreatorUser');
+            $table->foreign('IdCreatorUser')->references('IdUser')->on('Sec_Users');
+            $table->string('Status',1)->default('C')->comment('C= created, A = active, I = inactive, F= Finished');
+            $table->timestamps();
         });
     }
 

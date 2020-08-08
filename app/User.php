@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany('App\Role','Sec_Users_has_Sec_Roles','IdUser','IdRole')->withPivot('IdSec_Users_has_Sec_Roles');
+        return $this->belongsToMany('App\Role','Sec_Users_has_Sec_Roles','IdUser','IdRole');
     }
 
     public function groups()

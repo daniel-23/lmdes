@@ -24,11 +24,11 @@ class Role extends Model
 
     public function permissions()
     {
-        return $this->belongsToMany('App\Permission','Sec_RolePermComponents','IdRole','IdPermission')->withPivot('IdRolePermComponents','IdComponent');
+        return $this->belongsToMany('App\Permission','Sec_RolePermComponents','IdRole','IdPermission')->withPivot('IdComponent');
     }
 
     public function components()
     {
-        return $this->belongsToMany('App\Component','Sec_RolePermComponents','IdRole','IdComponent')->withPivot('IdRolePermComponents','IdPermission');
+        return $this->belongsToMany('App\Component','Sec_RolePermComponents','IdRole','IdComponent')->withPivot('IdPermission');
     }
 }

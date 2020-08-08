@@ -54,19 +54,20 @@
                                                 </div>
                                                 <ul class="message-menu">
                                                     <li>
-                                                        <a href="#">
+                                                        <a href="{{ route('set.language','es') }}">
                                                             <div class="message-img">
                                                                 <img src="{{ asset('storage/images/languages/es-esp.png') }}" alt="">
                                                             </div>
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#">
+                                                        <a href="{{ route('set.language','en') }}">
                                                             <div class="message-img">
                                                                 <img src="{{ asset('storage/images/languages/en-us.png') }}" alt="">
                                                             </div>
                                                         </a>
-                                                    </li>                                                        </ul>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </li>
                                         <li class="nav-item dropdown">

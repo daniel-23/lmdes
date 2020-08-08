@@ -22,8 +22,7 @@ class AudEventsTableSeeder extends Seeder
 			'Begin Course',
 			'Finish Course',
 		];
-
-		foreach ($events as $value) {
+        foreach ($events as $value) {
 			AudEvent::create(['Description' => $value]);
 		}
     }

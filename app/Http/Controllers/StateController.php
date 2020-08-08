@@ -88,6 +88,10 @@ class StateController extends Controller
             return redirect('/estados');
             
         }
+    }
 
+    public function get_states_country($id)
+    {
+        return State::select(['IdState', 'Name'])->where('IdCountry',$id)->get();
     }
 }

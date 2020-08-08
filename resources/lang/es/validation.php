@@ -190,6 +190,7 @@ return [
         'phone'                 => 'teléfono',
         'prefix'                => 'prefijo',
         'price'                 => 'precio',
+        'resources'             => 'recursos',
         'route_file'            => 'ruta de archivo',
         'scale'                 => 'escala',
         'second'                => 'segundo',
