@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        /*$this->call([
+        $this->call([
             ComponentsTableSeeder::class,
             PermissionsSeeder::class,
             RoleTableSeeder::class,
@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
             CurrenciesSeeder::class,
             LanguagesSeeder::class,
             ResourcesSeeder::class
-        ]);*/
-        $this->call(ResourcesSeeder::class);
+        ]);
     }
 }
