@@ -31,4 +31,9 @@ class Role extends Model
     {
         return $this->belongsToMany('App\Component','Sec_RolePermComponents','IdRole','IdComponent')->withPivot('IdPermission');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User','Sec_Users_has_Sec_Roles','IdRole','IdUser');
+    }
 }

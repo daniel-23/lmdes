@@ -21,8 +21,14 @@ class DatabaseSeeder extends Seeder
             UsersParametersTableSeeder::class,
             CountriesTableSeeder::class,
             AudEventsTableSeeder::class,
-            TimeZonesSeeder::class
+            TimeZonesSeeder::class,
+            CompanyTypesSeeder::class,
+            StatesSeeder::class,
+            CitiesSeeder::class,
+            CurrenciesSeeder::class,
+            LanguagesSeeder::class,
+            ResourcesSeeder::class
         ]);*/
-        $this->call(CompanyTypesSeeder::class);
+        $this->call(ResourcesSeeder::class);
     }
 }

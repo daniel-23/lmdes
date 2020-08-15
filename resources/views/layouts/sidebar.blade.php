@@ -47,9 +47,9 @@
                     @can('tiene-permiso','Estudiantes+Acceder')
 
                         <li>
-                            <a href="{{ route('home') }}">
+                            <a href="{{ route('estudiantes') }}">
                                 <span class="educate-icon educate-student icon-wrap"></span>
-                                <span>Estudiantes</span>
+                                <span>{{ __('Estudents') }}</span>
                             </a>
                         </li>
                     @endcan

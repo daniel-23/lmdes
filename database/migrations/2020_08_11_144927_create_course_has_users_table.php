@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCnfCoursesHasSecGroupsTable extends Migration
+class CreateCourseHasUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateCnfCoursesHasSecGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('Cnf_Courses_has_Sec_Groups', function (Blueprint $table) {
+        Schema::create('Courses_has_Users', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->unsignedInteger('IdCourse');
             $table->foreign('IdCourse')->references('IdCourse')->on('Cnf_Courses');
-            $table->unsignedInteger('IdGroup');
-            $table->foreign('IdGroup')->references('IdGroup')->on('Sec_Groups');
+            $table->unsignedInteger('IdUser');
+            $table->foreign('IdUser')->references('IdUser')->on('Sec_Users');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateCnfCoursesHasSecGroupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Cnf_Courses_has_Sec_Groups');
+        Schema::dropIfExists('Courses_has_Users');
     }
 }

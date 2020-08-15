@@ -14,6 +14,8 @@ class CreateCrsModulesHasCrsResourcesTable extends Migration
     public function up()
     {
         Schema::create('Crs_Modules_has_Crs_Resources', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('IdCrsModulesHasCrsResources');
             $table->unsignedInteger('IdModule');
             $table->foreign('IdModule')->references('IdModule')->on('Crs_Modules');
             $table->unsignedInteger('IdCrsResource');

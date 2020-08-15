@@ -17,6 +17,6 @@ class Group extends Model
 
     public function courses()
     {
-        return $this->belongsToMany('App\Course','Cnf_Courses_has_Sec_Groups','IdGroup','IdCourse')->withPivot('IdCnf_Courses_has_Sec_Groups');
+        return $this->belongsToMany('App\Course','Cnf_Courses_has_Sec_Groups','IdGroup','IdCourse');
     }
 }

@@ -11,8 +11,9 @@ class TeacherController extends Controller
     public function index()
     {
         return view('profesores.index')
-    		->with('title', 'Teachers')
-    		->with('act_link', '');
+        ->with('title', 'Teacher')
+        ->with('act_link', 'teacher')
+        ->with('teachers',Role::where('name','Profesor')->first()->users);
     }
 
     public function crear()
@@ -33,9 +34,9 @@ class TeacherController extends Controller
     		'password'	=> 'required|confirmed|min:6|regex:/^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/',
 	    ]);
 
-	    $role = Role::findOrFail(3);
+	    $role = Role::where('Name','Profesor')->first();
 
-    	$data = array(
+        $data = array(
     		'Name' => trim(ucwords(strtolower(strip_tags($request->name)))),
     		'LastName' => trim(ucwords(strtolower(strip_tags($request->last_name)))),
     		'Code' => trim(strip_tags($request->code)),
@@ -50,10 +51,6 @@ class TeacherController extends Controller
     	request()->session()->flash('success', 'Teacher created successfully');
         return redirect('/profesores');
     }
-
-
-
-
 
     public function get_list(Request $request)
     {
@@ -94,5 +91,108 @@ class TeacherController extends Controller
             
         }
         return $data;
+    }
+
+    public function editar($id)
+    {
+        $role = Role::where('Name','Profesor')->first();
+        $teacher = $role->users()->where('Sec_Users.IdUser',$id)->first();
+        if (is_null($teacher)) {
+            return abort('404');
+        }
+
+        return view('profesores.edit')
+        ->with('title', 'Teacher Edit')
+        ->with('act_link', 'teachers')
+        ->with('PasswordStrength', UserParameter::find(1)->PasswordStrength)
+        ->with('teacher',$teacher);
+    }
+
+    public function edit_account(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $PasswordStrength = UserParameter::find(1)->PasswordStrength;
+        $rule = 'nullable|confirmed';
+
+        if ($PasswordStrength != 0) {
+            switch ($PasswordStrength) {
+                case 1:
+                    $rule .= '|min:5';
+                    break;
+                case 2:
+                    $rule .= "|min:6|regex:/^(?=.{6,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$/";
+                    break;
+
+                case 3:
+                    $rule .= "|min:8|regex:/^(?=.{8,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/";
+                    break;
+            }
+        }
+
+        $validatedData = $request->validate([
+            'name'       => 'required|string|min:3|max:200',
+            'last_name'  => 'required|string|min:3|max:200',
+            'email'      => 'required|email:filter|max:200|unique:Sec_Users,Email,'.$id.',IdUser',
+            'code'       => 'required|max:20|unique:Sec_Users,Code,'.$id.',IdUser',
+            'password'   => $rule,
+        ]);
+
+
+        $data = array(
+            'Name' => trim(ucwords(strtolower(strip_tags($request->name)))),
+            'LastName' => trim(ucwords(strtolower(strip_tags($request->last_name)))),
+            'Email' => trim(strtolower($request->email)),
+            'Code' => trim(strtolower($request->code)),
+        );
+
+        if (!is_null($request->password)) {
+            $data['password'] = Hash::make(trim($request->password));
+        }
+
+        $user->update($data);
+        request()->session()->flash('success', 'Teacher modify successfully');
+        return redirect()->back();
+    }
+
+    public function edit_additional(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $validatedData = $request->validate([
+            'gender'                    => 'required|max:1|in:M,F',
+            'birthdate'                 => 'required|date',
+            'height'                    => 'nullable|integer',
+            'weight'                    => 'nullable|integer',
+            'rh'                        => 'nullable|max:5|in:A+,A-,B+,B-,O+,O-,AB+,AB-',
+            'health_care_entity'        => 'nullable|string|max:100',
+            'health_care_type'          => 'nullable|string|max:200',
+            'health_care_contact_name'  => 'nullable|string|max:100',
+            'health_care_contact_phone' => 'nullable|string|max:100',
+            'photo'                     => 'nullable|image',
+        ]);
+        $data = array(
+            'Gender' => $request->gender,
+            'BirthDate' => $request->birthdate,
+            'Height' => $request->height,
+            'Weight' => $request->weight,
+            'RH' => $request->rh,
+            'HealthCareEntity' => trim(strip_tags($request->health_care_entity)),
+            'HealthCareType' => trim(strip_tags($request->health_care_type)),
+            'HealthCareContactName' => trim(strip_tags($request->health_care_contact_name)),
+            'HealthCareContactPhone' => trim(strip_tags($request->health_care_contact_phone)),
+        );
+        if (count($request->file()) > 0) {
+            $path = $request->file('photo')->store(
+                'images/teacher', 'public'
+            );
+            $data['Photo'] = $path;
+        }
+
+        if (is_null($user->add_info)) {
+            $user->add_info()->create($data);
+        }else{
+            $user->add_info->update($data);
+        }
+        request()->session()->flash('success', 'Teacher modify successfully');
+        return redirect()->back();
     }
 }

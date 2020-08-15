@@ -4,11 +4,9 @@ Route::group(['middleware' => ['auth','can:admin']], function () {
 	Route::get('/profesores', 'TeacherController@index')->name('profesores');
 	Route::get('/profesores/crear', 'TeacherController@crear')->name('profesores.crear');
 	Route::get('/profesores/get-list', 'TeacherController@get_list')->name('profesores.get-list');
-	/*Route::get('/companies/get-list', 'CompanyController@get_list')->name('companies.get-list');
-	Route::get('/companies/crear', 'CompanyController@crear')->name('companies.crear');
-	Route::post('/companies/crear', 'CompanyController@create');
-
-	Route::get('/companies/traer-estados/{id}', 'CompanyController@traer_estados')->where('id', '[0-9]+');*/
+	Route::get('/profesores/editar/{id}', 'TeacherController@editar')->name('profesores.editar');
+	Route::post('/profesores/editar-cuenta/{id}', 'TeacherController@edit_account')->middleware('tiene_permiso:Profesores+Editar')->name('profesores.editar.cuenta');
+	Route::post('/profesores/editar-adicional/{id}', 'TeacherController@edit_additional')->middleware('tiene_permiso:Profesores+Editar')->name('profesores.editar.adicional');
 
 
 	Route::post('/profesores/crear', 'TeacherController@create');

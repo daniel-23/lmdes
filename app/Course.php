@@ -27,6 +27,11 @@ class Course extends Model
         return $this->belongsToMany('App\Competency','Cnf_Courses_has_Cnf_Competencies','IdCourse','IdCompetency');
     }
 
+    public function groups()
+    {
+        return $this->belongsToMany('App\Group','Cnf_Courses_has_Sec_Groups','IdCourse','IdGroup');
+    }
+
     public function resources()
     {
         return $this->belongsToMany('App\Resource','Crs_Resources','IdCourse','IdResource')

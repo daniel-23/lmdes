@@ -24,7 +24,7 @@ class ModulesController extends Controller
 			'name'          => 'required|string|max:100',
 			'description'   => 'required|string|max:100',
 			'module_parent' => 'nullable|integer|exists:Crs_Modules,IdModule',
-            'resources'     => 'required|array',
+            #'resources'     => 'required|array',
     	]);
 
     	$datos = [
@@ -35,7 +35,7 @@ class ModulesController extends Controller
     	];
 
     	$module = Module::create($datos);
-        $module->crsResources()->attach($request->resources);
+        #$module->crsResources()->attach($request->resources);
         $request->session()->flash('success', 'Module created successfully');
         return redirect()->route('cursos.info',$course->IdCourse);
     }

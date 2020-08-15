@@ -66,10 +66,14 @@
     <link rel="stylesheet" href="{{ asset('css/calendar/fullcalendar.print.min.css') }}">
     <!-- x-editor CSS
 		============================================ -->
-    <link rel="stylesheet" href="{{ asset('css/editor/select2.css') }}">
+    <!--link rel="stylesheet" href="{{ asset('css/editor/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('css/editor/datetimepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('css/editor/bootstrap-editable.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/editor/x-editor-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/editor/x-editor-style.css') }}"-->
+
+    <!-- duallistbox CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/duallistbox/bootstrap-duallistbox.min.css') }}">
     <!-- select2 CSS
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/select2/select2.min.css') }}">

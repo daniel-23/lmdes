@@ -17,16 +17,19 @@
             
         <div class="row">
             @foreach($courses as $course)
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 mg-b-15">
-                    <div class="courses-inner res-mg-b-30" style="border-bottom: 4px solid {{ $course->category->Color }} !important;">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <div class="courses-inner res-mg-b-30">
                         <div class="courses-title">
-                            <a href="#"><img src="{{ is_null($course->Image) ? asset('storage/images/courses/1.jpg') : asset('storage/'.$course->Image) }}" alt="{{ $course->ShortName }}"></a>
-                            <h2>{{ $course->Name }}</h2>
+                            <a href="#"><img src="{{ is_null($course->Image) ? asset('storage/images/courses/1.jpg') : asset('storage/'.$course->Image) }}" alt="{{ $course->ShortName }}" style="border: 3px solid {{ $course->category->Color }};"></a>
+                        <div class="courses-inner-img">
+                            <img src="{{ asset('storage/images/icons/curso.png') }}" alt="icono">
+                        </div>
+                        <h2>{{ $course->Name }}</h2>
                         </div>
                         <div class="courses-alaltic">
-                            <!--span class="cr-ic-r"><span class="course-icon"><i class="fa fa-clock"></i></span> 1 Year</span>
+                            <span class="cr-ic-r"><span class="course-icon"><i class="fa fa-clock"></i></span> 1 Year</span>
                             <span class="cr-ic-r"><span class="course-icon"><i class="fa fa-heart"></i></span> 50</span>
-                            <span class="cr-ic-r"><span class="course-icon"><i class="fa fa-dollar"></i></span> 500</span-->
+                            <span class="cr-ic-r"><span class="course-icon"><i class="fa fa-dollar"></i></span> 500</span>
                         </div>
                         <div class="course-des">
                             <p><span><i class="fa fa-clock"></i></span> <b>Duration:</b> {{ $course->duration() }}</p>
@@ -35,6 +38,7 @@
                         </div>
                         <div class="product-buttons">
                             <a href="{{ route('cursos.info',$course->IdCourse) }}" class="btn btn-primary cart-btn">{{ __('Read More') }}</a>
+                            <a href="{{ route('cursos.editar',$course->IdCourse) }}" class="btn btn-default cart-btn">{{ __('Edit') }}</a>
                         </div>
                     </div>
                 </div>

@@ -134,7 +134,7 @@ class UserController extends Controller
     		'Name' => trim(ucwords(strtolower(strip_tags($request->name)))),
     		'LastName' => trim(ucwords(strtolower(strip_tags($request->last_name)))),
     		'Email' => trim(strtolower($request->email)),
-    		'password' => $request->role == 1 ? Hash::make(trim($request->password)) : Hash::make(trim($request->password.'12345')),
+    		'password' => $request->role == 1 ? Hash::make(trim($request->password)) : Hash::make(trim($request->password)),
             'IdCompany' => $request->role != 1 ? (int)$request->company_id : 0,
     	);
 

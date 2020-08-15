@@ -57,7 +57,17 @@ class User extends Authenticatable
 
     public function groups()
     {
-        return $this->belongsToMany('App\Group','Sec_Users_has_Sec_Groups','IdUser','IdGroup')->withPivot('IdSec_Users_has_Sec_Groups','Enabled','CreatedAt','UpdateAt');
+        return $this->belongsToMany('App\Group','Sec_Users_has_Sec_Groups','IdUser','IdGroup')->withPivot('Enabled','CreatedAt','UpdateAt');
+    }
+
+    public function add_info()
+    {
+        return $this->hasOne('App\UsrAddInfo','IdUser');
+    }
+
+    public function health_info()
+    {
+        return $this->hasMany('App\UsrAddHealthInfo','IdUser');
     }
 
 }
