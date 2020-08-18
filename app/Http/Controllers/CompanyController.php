@@ -132,6 +132,8 @@ class CompanyController extends Controller
             'max_modules_number' => 'required|integer',
             'course_duration'    => 'required|integer',
         ]);
+		
+		
 
 
 
@@ -154,6 +156,7 @@ class CompanyController extends Controller
             $data['DatabaseUser'],
             trim($request->db_password)
         );
+		
         $company = Company::create($data);
         
 
@@ -208,17 +211,26 @@ class CompanyController extends Controller
         $sentencia = mysqli_prepare($conexion,$crea_db);
 
         if (mysqli_stmt_execute($sentencia)) {
+			
+			#echo "Base de datos creada<br>";
 
             $crea_user = "CREATE USER '$db_user'@'localhost' identified by '$db_password';";
 
             $sentencia = mysqli_prepare($conexion,$crea_user);
-            mysqli_stmt_execute($sentencia);
+			if(mysqli_stmt_execute($sentencia)){
+				#echo "usuario creado<br>";
+			}
+            
 
             $sentencia = mysqli_prepare($conexion,"GRANT ALL PRIVILEGES ON $db_name.* TO $db_user@localhost;");
-            mysqli_stmt_execute($sentencia);
+            
+			if(mysqli_stmt_execute($sentencia)){
+				#echo "Privilegios usuario creado<br>";
+			}
 
             $sentencia = mysqli_prepare($conexion,"FLUSH PRIVILEGES;");
             mysqli_stmt_execute($sentencia);
+			
 
             mysqli_select_db( $conexion , $db_name );
             if (mysqli_connect_errno()) {
@@ -246,20 +258,32 @@ class CompanyController extends Controller
                     $query= '';
                 }
             }
+			exit;
         }
         mysqli_close($conexion);
     }
 
     public function editar($id)
     {
+		
     	$company = Company::findOrFail($id);
-    	$types = CompanyType::all();
+    	select_company($company->IdCompany);
+        config(['database.default' => 'institucion']);
+		$types = CompanyType::all();
+		$paramater = ParameterGeneral::find(1);
+        $paramaterCourse = ParameterCourse::find(1);
 
     	return view('companies.edit')
     		->with('title', 'Edit Company')
     		->with('act_link', 'parameters')
     		->with('types', $types)
-    		->with('company', $company);
+			->with('countries', Country::select(['IdCountry', 'Name'])->orderBy('Name')->get())
+			->with('currencies', Currency::select(['IdCurrency', 'Name'])->orderBy('Name')->get())
+			->with('languages', Language::select(['IdLanguage', 'Name'])->orderBy('Name')->get())
+            ->with('timeZones', TimeZone::select(['IdTimeZone', 'Name'])->orderBy('Name')->get())
+    		->with('company', $company)
+			->with('paramater', $paramater)
+			->with('paramaterCourse', $paramaterCourse);
     }
 
     public function edit(Request $request, $id)
