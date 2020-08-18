@@ -33,7 +33,7 @@ class CompanyController extends Controller
     {
         return view('companies.index')
         ->with('title', 'Institutions')
-        ->with('act_link', 'parameters');
+        ->with('act_link', 'parameters_global');
     }
 
     public function get_list(Request $request)
@@ -98,7 +98,7 @@ class CompanyController extends Controller
     {
     	return view('companies.create')
     		->with('title', 'Create Company')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('types', CompanyType::all(['IdCompanyType', 'Name']))
             ->with('countries', Country::select(['IdCountry', 'Name'])->orderBy('Name')->get())
             ->with('currencies', Currency::select(['IdCurrency', 'Name'])->orderBy('Name')->get())
@@ -286,7 +286,7 @@ class CompanyController extends Controller
 
     	return view('companies.edit')
     		->with('title', 'Edit Company')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('types', $types)
 			->with('countries', Country::select(['IdCountry', 'Name'])->orderBy('Name')->get())
 			->with('currencies', Currency::select(['IdCurrency', 'Name'])->orderBy('Name')->get())
@@ -412,7 +412,7 @@ class CompanyController extends Controller
 
     	return view('companies.regional_index')
     		->with('title', 'Regional')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('company', $company);
     }
 
@@ -426,7 +426,7 @@ class CompanyController extends Controller
 
     	return view('companies.regional_create')
     		->with('title', 'Create Regional')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('company', $company)
     		->with('cities', $cities)
     		->with('currencies', $currencies)
@@ -471,7 +471,7 @@ class CompanyController extends Controller
     {
         return view('companies.users')
             ->with('title', 'Companies')
-            ->with('act_link', 'parameters')
+            ->with('act_link', 'parameters_global')
             ->with('company', Company::findOrFail($id));
     }
 
@@ -480,7 +480,7 @@ class CompanyController extends Controller
         select_company($id);
         return view('companies.users_create')
             ->with('title', 'Companies')
-            ->with('act_link', 'parameters')
+            ->with('act_link', 'parameters_global')
             ->with('company', Company::findOrFail($id))
             ->with('roles', Role::where('IdRole', '>', '1')->get())
             ->with('groups', DB::connection('institucion')->select('SELECT IdGroup, Name FROM Sec_Groups'));
@@ -573,7 +573,7 @@ class CompanyController extends Controller
         $parametros = ParameterGeneral::find(1);
         return view('companies.par_general')
             ->with('title', 'Companies')
-            ->with('act_link', 'parameters')
+            ->with('act_link', 'parameters_global')
             ->with('paramater', $parametros)
             ->with('id',$id);
     }

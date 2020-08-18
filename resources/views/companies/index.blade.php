@@ -35,7 +35,6 @@
                                     <select class="form-control dt-tb">
                                         <option value="">{{ __('Export Basic') }}</option>
                                         <option value="all">{{ __('Export All') }}</option>
-                                        <option value="selected">Export Selected</option>
                                     </select>
                                 </div>
                                 <table

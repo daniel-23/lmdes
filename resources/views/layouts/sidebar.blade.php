@@ -191,7 +191,7 @@
                     @endcan
 
                     @can('tiene-permiso','Parámetros Globales+Acceder')
-                        <li>
+                        <li @if($act_link == 'parameters_global') class="active" @endif>
                             <a class="has-arrow" href="#" aria-expanded="false">
                                 <i class="fas fa-shield-alt"></i> &nbsp; 
                                 <span class="mini-click-non">{{ __('Global Parameters') }}</span>
