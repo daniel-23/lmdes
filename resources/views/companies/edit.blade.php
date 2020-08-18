@@ -149,13 +149,13 @@
                                                                 @enderror
                                                             </div>                                                            
                                                             <div class="form-group-inner @error('email_server') input-with-error @enderror">
-                                                                <input name="email_server" type="text" class="form-control" placeholder="Servidor para envío de correos" value="{{ old('email_server') }}">
+                                                                <input name="email_server" type="text" class="form-control" placeholder="Servidor para envío de correos" value="{{ old('email_server',$paramater->Emailserver) }}">
                                                                 @error('email_server')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
                                                             </div>
                                                             <div class="form-group-inner @error('email_sender') input-with-error @enderror">
-                                                                <input name="email_sender" type="text" class="form-control" placeholder="Correo para envío de notificaciones" value="{{ old('email_sender') }}">
+                                                                <input name="email_sender" type="text" class="form-control" placeholder="Correo para envío de notificaciones" value="{{ old('email_sender',$paramater->EmailSender) }}">
                                                                 @error('email_sender')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
@@ -181,7 +181,12 @@
                                                                     <select name="country" class="form-control" id="pais">
 																		<option @if(is_null(old('country'))) selected @endif disabled>Seleccionar País</option>
                                                                         @foreach($countries as $country)
+                                                                        @if(is_null(old('country')))
+                                                                            <option value="{{ $country->IdCountry }}" {{ $countrySelect->IdCountry == $country->IdCountry ? 'selected' : '' }}>{{ $country->Name }}</option>
+                                                                        @else
                                                                             <option value="{{ $country->IdCountry }}" {{ old('country') == $country->IdCountry ? 'selected' : '' }}>{{ $country->Name }}</option>
+                                                                        @endif
+                                                                            
                                                                         @endforeach
                                                                     </select>
                                                                     @error('country')
@@ -191,11 +196,27 @@
                                                                 <div class="form-group">
                                                                     <select name="state" class="form-control" id="estado">
 																		<option value="" selected disabled>Seleccionar Estado</option>
+                                                                        @foreach($states as $state)
+                                                                        @if(is_null(old('states')))
+                                                                            <option value="{{ $state->IdState }}" {{ $stateSelect->IdState == $state->IdState ? 'selected' : '' }}>{{ $state->Name }}</option>
+                                                                        @else
+                                                                            <option value="{{ $state->IdState }}" {{ old('state') == $state->IdState ? 'selected' : '' }}>{{ $state->Name }}</option>
+                                                                        @endif
+                                                                            
+                                                                        @endforeach
 																	</select>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <select name="city" class="form-control" id="ciudad">
 																		<option value="" selected disabled>Seleccionar Ciudad</option>
+                                                                        @foreach($cities as $city)
+                                                                        @if(is_null(old('city')))
+                                                                            <option value="{{ $city->IdCity }}" {{ $citySelect->IdCity == $city->IdCity ? 'selected' : '' }}>{{ $city->Name }}</option>
+                                                                        @else
+                                                                            <option value="{{ $city->IdCity }}" {{ old('city') == $city->IdCity ? 'selected' : '' }}>{{ $city->Name }}</option>
+                                                                        @endif
+                                                                            
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
     															<div class="form-group-inner @error('currency') input-with-error @enderror">
@@ -203,7 +224,13 @@
                                                                         <option @if(is_null(old('currency'))) selected @endif disabled>Seleccionar Moneda</option>
 
                                                                         @foreach($currencies as $currency)
-                                                                            <option value="{{ $currency->IdCurrency }}" {{ old('currency') == $currency->IdCurrency ? 'selected' : '' }}>{{ $currency->Name }}</option>
+                                                                            @if(is_null(old('currency')))
+                                                                                <option value="{{ $currency->IdCurrency }}" {{ $regional->IdCurrency == $currency->IdCurrency ? 'selected' : '' }}>{{ $currency->Name }}</option>
+
+                                                                            @else
+                                                                                <option value="{{ $currency->IdCurrency }}" {{ old('currency') == $currency->IdCurrency ? 'selected' : '' }}>{{ $currency->Name }}</option>
+                                                                            @endif
+                                                                            
                                                                         @endforeach
                                                                     </select>
                                                                     @error('currency')
@@ -214,7 +241,12 @@
                                                                     <select name="language" class="form-control">
                                                                         <option @if(is_null(old('language'))) selected @endif disabled>Seleccionar Idioma</option>
                                                                         @foreach($languages as $language)
-                                                                            <option value="{{ $language->IdLanguage }}" {{ old('language') == $language->IdLanguage ? 'selected' : '' }}>{{ $language->Name }}</option>
+                                                                            @if(is_null(old('language')))
+                                                                                <option value="{{ $language->IdLanguage }}" {{ $regional->IdLanguage == $language->IdLanguage ? 'selected' : '' }}>{{ $language->Name }}</option>
+                                                                            @else
+                                                                                <option value="{{ $language->IdLanguage }}" {{ old('language') == $language->IdLanguage ? 'selected' : '' }}>{{ $language->Name }}</option>
+                                                                            @endif
+                                                                            
                                                                         @endforeach
                                                                     </select>
                                                                     @error('language')
@@ -230,7 +262,12 @@
                                                                 <select name="timezone" class="form-control">
                                                                     <option @if(is_null(old('timezone'))) selected @endif disabled>Seleccionar Zona horaria</option>
                                                                     @foreach($timeZones as $timeZone)
-                                                                        <option value="{{ $timeZone->IdTimeZone }}" {{ old('timezone') == $timeZone->IdTimeZone ? 'selected' : '' }}>{{ $timeZone->Name }}</option>
+                                                                        @if(is_null(old('timezone')))
+                                                                            <option value="{{ $timeZone->IdTimeZone }}" {{ $regional->IdTimeZone == $timeZone->IdTimeZone ? 'selected' : '' }}>{{ $timeZone->Name }}</option>
+                                                                        @else
+                                                                            <option value="{{ $timeZone->IdTimeZone }}" {{ old('timezone') == $timeZone->IdTimeZone ? 'selected' : '' }}>{{ $timeZone->Name }}</option>
+                                                                        @endif
+                                                                        
                                                                     @endforeach
                                                                 </select>
                                                                 @error('timezone')
@@ -241,8 +278,16 @@
                                                             <div class="form-group-inner @error('course_format') input-with-error @enderror">
                                                                 <select name="course_format" class="form-control">
                                                                     <option @if(is_null(old('course_format'))) selected @endif disabled>Seleccionar Formato de Cursos</option>
-                                                                    <option value="cuadriculas" {{ old('course_format') == 'cuadriculas' ? 'selected' : '' }}>{{ __('Cuadriculas') }}</option>
-                                                                    <option value="pestañas" {{ old('course_format') == 'pestañas' ? 'selected' : '' }}>{{ __('Pestañas') }}</option>
+
+                                                                    @if(is_null(old('course_format')))
+                                                                        <option value="cuadriculas" {{ $paramaterCourse->CourseFormat == 'cuadriculas' ? 'selected' : '' }}>{{ __('Cuadriculas') }}</option>
+                                                                        <option value="pestañas" {{ $paramaterCourse->CourseFormat == 'pestañas' ? 'selected' : '' }}>{{ __('Pestañas') }}</option>
+                                                                    @else
+                                                                        <option value="cuadriculas" {{ old('course_format') == 'cuadriculas' ? 'selected' : '' }}>{{ __('Cuadriculas') }}</option>
+                                                                        <option value="pestañas" {{ old('course_format') == 'pestañas' ? 'selected' : '' }}>{{ __('Pestañas') }}</option>
+                                                                    @endif
+
+                                                                    
                                                                 </select>
                                                                 @error('course_format')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
@@ -250,19 +295,19 @@
                                                             </div>
 
                                                             <div class="form-group-inner @error('max_courses_number') input-with-error @enderror">
-                                                                <input name="max_courses_number" type="number" class="form-control" placeholder="Número Máximo de cursos" value="{{ old('max_courses_number') }}">
+                                                                <input name="max_courses_number" type="number" class="form-control" placeholder="Número Máximo de cursos" value="{{ old('max_courses_number',$paramaterCourse->MaxCoursesNumber) }}">
                                                                 @error('max_courses_number')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
                                                             </div>
 															<div class="form-group-inner @error('max_modules_number') input-with-error @enderror">
-                                                                <input name="max_modules_number" type="number" class="form-control" placeholder="Número Máximo de módulos por curso" value="{{ old('max_modules_number') }}">
+                                                                <input name="max_modules_number" type="number" class="form-control" placeholder="Número Máximo de módulos por curso" value="{{ old('max_modules_number',$paramaterCourse->MaxModulesNumber) }}">
                                                                 @error('max_modules_number')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
                                                             </div>
 															<div class="form-group-inner @error('course_duration') input-with-error @enderror">
-                                                                <input name="course_duration" type="number" class="form-control" placeholder="Duración del curso (en días)" value="{{ old('course_duration') }}">
+                                                                <input name="course_duration" type="number" class="form-control" placeholder="Duración del curso (en días)" value="{{ old('course_duration',$paramaterCourse->CourseDuration) }}">
                                                                 @error('course_duration')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror

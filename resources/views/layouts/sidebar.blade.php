@@ -192,7 +192,7 @@
 
                     @can('tiene-permiso','Parámetros Globales+Acceder')
                         <li>
-                            <a class="has-arrow" href="all-courses.html" aria-expanded="false">
+                            <a class="has-arrow" href="#" aria-expanded="false">
                                 <i class="fas fa-shield-alt"></i> &nbsp; 
                                 <span class="mini-click-non">{{ __('Global Parameters') }}</span>
                             </a>

@@ -16,6 +16,7 @@ use App\{
     Role,
     ParameterGeneral,
     Country,
+    State,
     ParameterCourse
 };
 
@@ -70,11 +71,11 @@ class CompanyController extends Controller
 
             $btnEdit = '<a href="'.url("/companies/editar/{$key->IdCompany}").'" title="Editar" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-pencil-alt" style="color: white;"></i><a>';
 
-            $btnCnf = '<a href="'.url("/companies/regional/{$key->IdCompany}").'" title="Regional" class="btn btn-custon-four btn-warning btn-xs"><i class="fas fa-cogs" style="color: white;"></i><a>';
+            /*$btnCnf = '<a href="'.url("/companies/regional/{$key->IdCompany}").'" title="Regional" class="btn btn-custon-four btn-warning btn-xs"><i class="fas fa-cogs" style="color: white;"></i><a>';*/
 
-            $btnUsers = '<a href="'.url("/companies/{$key->IdCompany}/users").'" title="Usuarios" class="btn btn-custon-four btn-primary btn-xs"><i class="fas fa-users" style="color: white;"></i><a>';
+            $btnUsers = '<a href="'.url("/companies/{$key->IdCompany}/users").'" title="Usuarios" class="btn btn-custon-four btn-info btn-xs"><i class="fas fa-users" style="color: white;"></i><a>';
 
-            $btnPar = '<a href="'.url("/companies/parameters/{$key->IdCompany}").'" title="Parametros Generales" class="btn btn-custon-four btn-info btn-xs"><i class="fas fa-cog" style="color: white;"></i><a>';
+            /*$btnPar = '<a href="'.url("/companies/parameters/{$key->IdCompany}").'" title="Parametros Generales" class="btn btn-custon-four btn-info btn-xs"><i class="fas fa-cog" style="color: white;"></i><a>';*/
 
             $data['rows'][] = [
                 'IdCompany' => $key->IdCompany,
@@ -84,7 +85,7 @@ class CompanyController extends Controller
                 'ContactName' => $key->ContactName,
                 'WebSite' => "<a href=\"{$key->WebSite}\" target=\"_blanck\" class=\"btn btn-sm btn-info \">Ver</a>",
                 'DatabaseName' => $key->DatabaseName,
-                'btns' => '<div class="btn-group" role="group">'.$btnStatus . $btnEdit. $btnCnf . $btnUsers . $btnPar.'</div>'
+                'btns' => '<div class="btn-group" role="group">'.$btnStatus . $btnEdit . $btnUsers .'</div>'
             ];
             
         }
@@ -132,11 +133,6 @@ class CompanyController extends Controller
             'max_modules_number' => 'required|integer',
             'course_duration'    => 'required|integer',
         ]);
-		
-		
-
-
-
         $data = [
     		'IdCompanyType' => (int) $request->type,
     		'Name' => ucwords(trim(strtolower(strip_tags($request->name)))),
@@ -158,7 +154,14 @@ class CompanyController extends Controller
         );
 		
         $company = Company::create($data);
-        
+        $datosRegional = [
+            'IdCompany' => $company->IdCompany,
+            'IdCity' => $request->city,
+            'IdCurrency' => $request->currency,
+            'IdTimeZone' => $request->timezone,
+            'IdLanguage' => $request->language,
+        ];
+        $reg = Regional::create($datosRegional);
 
         select_company($company->IdCompany);
         config(['database.default' => 'institucion']);
@@ -183,10 +186,12 @@ class CompanyController extends Controller
             'MaxModulesNumber'=> (int)$request->max_modules_number,
         ];
 
+
         $paramater = ParameterGeneral::find(1);
         $paramater->update($datosParametros);
         $paramaterCourse = ParameterCourse::find(1);
         $paramaterCourse->update($datosParametrosCursos);
+
         request()->session()->flash('success', 'Institution created successfully');
         return redirect('/companies');
 
@@ -267,6 +272,12 @@ class CompanyController extends Controller
     {
 		
     	$company = Company::findOrFail($id);
+        $regional = Regional::where('IdCompany',$company->IdCompany)->first();
+        $citySelect = City::findOrFail($regional->IdCity);
+        $stateSelect = State::findOrFail($citySelect->IdState);
+        $countrySelect = Country::findOrFail($stateSelect->IdCountry);
+        $states = State::where('IdCountry',$countrySelect->IdCountry)->get();
+        $cities = City::where('IdState',$stateSelect->IdState)->get();
     	select_company($company->IdCompany);
         config(['database.default' => 'institucion']);
 		$types = CompanyType::all();
@@ -283,42 +294,101 @@ class CompanyController extends Controller
             ->with('timeZones', TimeZone::select(['IdTimeZone', 'Name'])->orderBy('Name')->get())
     		->with('company', $company)
 			->with('paramater', $paramater)
-			->with('paramaterCourse', $paramaterCourse);
+			->with('paramaterCourse', $paramaterCourse)
+            ->with('regional', $regional)
+            ->with('citySelect', $citySelect)
+            ->with('stateSelect', $stateSelect)
+            ->with('countrySelect', $countrySelect)
+            ->with('states', $states)
+            ->with('cities',$cities);
     }
 
     public function edit(Request $request, $id)
     {
     	$company = Company::findOrFail($id);
-    	$validatedData = request()->validate([
-            'type'        => 'required|integer',
-            'name'        => 'required|min:4|unique:Sec_Companies,Name,'.$id.',IdCompany',
-            'email'       => 'required|email:filter|unique:Sec_Companies,Email,'.$id.',IdCompany',
-            'web_site'    => 'nullable|url',
-            'contact_name'=> 'required|min:4',
-            'db_name'     => 'required',
-            'db_user'     => 'required',
-            'max_size_file'        => 'required|integer',
-            'max_users'        => 'required|integer',
-            'max_disc_space'        => 'required|integer',
-        ]);
+        $regional = Regional::where('IdCompany',$company->IdCompany)->first();
 
-    	$data = [
-    		'IdCompanyType' => (int) $request->type,
-    		'Name' => ucwords(trim(strtolower(strip_tags($request->name)))),
-    		'Email' => trim(strtolower($request->email)),
-    		'WebSite' => trim($request->web_site),
-    		'ContactName' => ucwords(trim(strtolower(strip_tags($request->contact_name)))),
-    		'DatabaseName' => trim($request->db_name),
-    		'DatabaseUser' => trim($request->db_user),
-    		'MaxSizeFile' => (int) $request->max_size_file,
-    		'MaxUsers' => (int) $request->max_users,
-    		'MaxDiscSpace' => (int) $request->max_disc_space,
-    	];
-    	if (!is_null($request->db_password)) {
-    		$data['DatabasePassword'] = encrypt(trim($request->db_password));
-    	}
-    	$company->update($data);
-    	request()->session()->flash('success', 'Company modify successfully');
+    	$validatedData = $request->validate([
+            'name'               => 'required|string|max:400',
+            'email'              => 'required|email:filter|max:100|unique:Sec_Companies,Email,'.$id.',IdCompany',
+            'web_site'           => 'nullable|url|max:100',
+            'contact_name'       => 'required|string|max:100',
+            'logo'               => 'nullable|image',
+            'db_name'            => 'required|string|max:100',
+            'db_user'            => 'required|string|max:100',
+            'db_password'        => 'nullable|string|max:100',
+            'max_size_file'      => 'required|integer',
+            'max_users'          => 'required|integer',
+            'max_disc_space'     => 'required|integer',
+            'email_server'       => 'required|string|max:45',
+            'email_sender'       => 'required|string|max:45',
+            'country'            => 'required|integer|exists:Cnf_Countries,IdCountry',
+            'state'              => 'required|integer|exists:Cnf_States,IdState',
+            'city'               => 'required|integer|exists:Cnf_Cities,IdCity',
+            'currency'           => 'required|integer|exists:Cnf_Currencies,IdCurrency',
+            'language'           => 'required|integer|exists:Cnf_Languages,IdLanguage',
+            'timezone'           => 'required|integer|exists:Cnf_TimeZones,IdTimeZone',
+            'course_format'      => 'required|string|max:100',
+            'max_courses_number' => 'required|integer',
+            'max_modules_number' => 'required|integer',
+            'course_duration'    => 'required|integer',
+        ]);
+        $data = [
+            'IdCompanyType' => (int) $request->type,
+            'Name' => ucwords(trim(strtolower(strip_tags($request->name)))),
+            'Email' => trim(strtolower($request->email)),
+            'WebSite' => trim($request->web_site),
+            'ContactName' => ucwords(trim(strtolower(strip_tags($request->contact_name)))),
+            'DatabaseName' => trim($request->db_name),
+            'DatabaseUser' => trim($request->db_user),
+            'MaxSizeFile' => (int) $request->max_size_file,
+            'MaxUsers' => (int) $request->max_users,
+            'MaxDiscSpace' => (int) $request->max_disc_space,
+        ];
+        if (!is_null($request->db_password)) {
+            $data['DatabasePassword'] = encrypt(trim($request->db_password));
+        }
+
+        
+        $company->update($data);
+        $datosRegional = [
+            'IdCompany' => $company->IdCompany,
+            'IdCity' => $request->city,
+            'IdCurrency' => $request->currency,
+            'IdTimeZone' => $request->timezone,
+            'IdLanguage' => $request->language,
+        ];
+        $regional->update($datosRegional);
+        select_company($company->IdCompany);
+        config(['database.default' => 'institucion']);
+        $datosParametros = [
+            'Appearance' => $request->appearance,
+            'Emailserver'=> trim(strtolower($request->email_server)),
+            'EmailSender'=> trim(strtolower($request->email_sender)),
+            'MaxSizeFile'=> (int)$request->max_size_file,
+            'ActivateNotifications'=> is_null($request->activate_notifications) ? 0 : 1,
+        ];
+        if (count($request->file()) > 0) {
+            $path = $request->file('logo')->store(
+                'images', 'public'
+            );
+            $datosParametros['Logo'] = $path;
+        }
+
+        $datosParametrosCursos = [
+            'CourseFormat' => $request->course_format,
+            'MaxCoursesNumber'=> (int)$request->max_courses_number,
+            'CourseDuration'=> (int)$request->course_duration,
+            'MaxModulesNumber'=> (int)$request->max_modules_number,
+        ];
+
+
+        $paramater = ParameterGeneral::find(1);
+        $paramater->update($datosParametros);
+        $paramaterCourse = ParameterCourse::find(1);
+        $paramaterCourse->update($datosParametrosCursos);
+
+        request()->session()->flash('success', 'Institution modify successfully');
         return redirect('/companies');
     }
 
