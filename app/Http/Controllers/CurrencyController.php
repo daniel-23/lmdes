@@ -13,7 +13,7 @@ class CurrencyController extends Controller
 
     	return view('monedas.index')
     		->with('title', 'Currencies')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('currencies', $currencies);
     }
 
@@ -21,7 +21,7 @@ class CurrencyController extends Controller
     {
     	return view('monedas.create')
     		->with('title', 'Crearte Currencie')
-    		->with('act_link', 'parameters');
+    		->with('act_link', 'parameters_global');
     }
 
     public function create(Request $request)
@@ -49,7 +49,7 @@ class CurrencyController extends Controller
 
     	return view('monedas.edit')
     		->with('title', 'Edit Currency')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('currency', $currency);
     }
 

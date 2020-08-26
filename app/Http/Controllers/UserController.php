@@ -27,7 +27,7 @@ class UserController extends Controller
     {
         return view('usuarios.index')
     		->with('title', 'Users')
-    		->with('act_link', '');
+    		->with('act_link', 'security');
     }
     public function get_list(Request $request)
     {
@@ -92,7 +92,7 @@ class UserController extends Controller
     {
     	return view('usuarios.create')
     		->with('title', 'Create User')
-    		->with('act_link', '')
+    		->with('act_link', 'security')
     		->with('roles', Role::where('IdRole','<',3)->get())
             ->with('groups', Group::where('Enabled','E')->get())
             ->with('companies', Company::select(['IdCompany','Name'])->where('Enabled','E')->get())
@@ -135,7 +135,7 @@ class UserController extends Controller
     		'LastName' => trim(ucwords(strtolower(strip_tags($request->last_name)))),
     		'Email' => trim(strtolower($request->email)),
     		'password' => $request->role == 1 ? Hash::make(trim($request->password)) : Hash::make(trim($request->password)),
-            'IdCompany' => $request->role != 1 ? (int)$request->company_id : 0,
+            'IdCompany' => $request->role != 1 ? $request->company_id : 0,
     	);
 
         $user = User::create($data);
@@ -158,7 +158,7 @@ class UserController extends Controller
 
         return view('usuarios.edit')
             ->with('title', 'Edit User')
-            ->with('act_link', '')
+            ->with('act_link', 'security')
             ->with('user', $user)
     		->with('roles', Role::where('Enabled','E')->get())
             ->with('groups', Group::where('Enabled','E')->get())
@@ -260,7 +260,7 @@ class UserController extends Controller
 
         return view('usuarios.parameters')
             ->with('title', 'Users Parameters')
-            ->with('act_link', '')
+            ->with('act_link', 'security')
             ->with('parameter', $parameter);
     }
 
@@ -296,7 +296,7 @@ class UserController extends Controller
     {
         return view('usuarios.aud')
             ->with('title', 'Users Aud')
-            ->with('act_link', '');
+            ->with('act_link', 'security');
     }
 
     public function get_auditoria(Request $request)
@@ -360,7 +360,7 @@ class UserController extends Controller
 
         return view('usuarios.edit_user_company')
             ->with('title', 'Edit User')
-            ->with('act_link', '')
+            ->with('act_link', 'security')
             ->with('user', $user)
             ->with('roles', Role::where([['Enabled','=','E'],['IdRole','>',1]])->get())
             ->with('groups', Group::where('Enabled','E')->get())

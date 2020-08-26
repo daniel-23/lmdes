@@ -263,7 +263,6 @@ class CompanyController extends Controller
                     $query= '';
                 }
             }
-			exit;
         }
         mysqli_close($conexion);
     }
@@ -314,9 +313,6 @@ class CompanyController extends Controller
             'web_site'           => 'nullable|url|max:100',
             'contact_name'       => 'required|string|max:100',
             'logo'               => 'nullable|image',
-            'db_name'            => 'required|string|max:100',
-            'db_user'            => 'required|string|max:100',
-            'db_password'        => 'nullable|string|max:100',
             'max_size_file'      => 'required|integer',
             'max_users'          => 'required|integer',
             'max_disc_space'     => 'required|integer',
@@ -339,16 +335,10 @@ class CompanyController extends Controller
             'Email' => trim(strtolower($request->email)),
             'WebSite' => trim($request->web_site),
             'ContactName' => ucwords(trim(strtolower(strip_tags($request->contact_name)))),
-            'DatabaseName' => trim($request->db_name),
-            'DatabaseUser' => trim($request->db_user),
             'MaxSizeFile' => (int) $request->max_size_file,
             'MaxUsers' => (int) $request->max_users,
             'MaxDiscSpace' => (int) $request->max_disc_space,
         ];
-        if (!is_null($request->db_password)) {
-            $data['DatabasePassword'] = encrypt(trim($request->db_password));
-        }
-
         
         $company->update($data);
         $datosRegional = [

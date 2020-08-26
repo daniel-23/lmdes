@@ -79,7 +79,7 @@
                                                                             Browse
                                                                             <input type="file" onchange="document.getElementById('prepend-small-btn').value = this.value;" accept="image/*" name="logo">
                                                                         </div>
-                                                                        <input type="text" id="prepend-small-btn" placeholder="no file selected">
+                                                                        <input type="text" id="prepend-small-btn" placeholder="{{ __('No file selected') }}">
                                                                         @error('logo')
                                                                         <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                         @enderror
@@ -108,28 +108,12 @@
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
                                                             </div>
-                                                            <div class="form-group-inner @error('db_name') input-with-error @enderror">
-                                                                <input name="db_name" type="text" class="form-control" placeholder="{{ __('Database Name') }}" value="{{ old('db_name',$company->DatabaseName) }}">
-                                                                @error('db_name')
-                                                                <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                                @enderror
-                                                            </div>
+                                                            
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
     														
     														
-                                                            <div class="form-group-inner @error('db_user') input-with-error @enderror">
-                                                                <input name="db_user" type="text" class="form-control" placeholder="{{ __('Database User') }}" value="{{ old('db_user',$company->DatabaseUser) }}">
-                                                                @error('db_user')
-                                                                <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                                @enderror
-                                                            </div>
-                                                            <div class="form-group-inner @error('db_password') input-with-error @enderror">
-                                                                <input name="db_password" type="password" class="form-control" placeholder="{{ __('Database Password') }}">
-                                                                @error('db_password')
-                                                                <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                                @enderror
-                                                            </div>
+                                                            
                                                             <div class="form-group-inner @error('max_size_file') input-with-error @enderror">
                                                                 <input name="max_size_file" type="number" class="form-control" placeholder="{{ __('Max File Size (in MB)') }}" value="{{ old('max_size_file',$company->MaxSizeFile) }}">
                                                                 @error('max_size_file')

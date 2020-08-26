@@ -165,7 +165,7 @@ body {}
     color: #fff;
 	position:fixed;
     transition: all 0.3s;
-	z-index:999;
+	z-index:100;
 	height:100%;
 }
 .mini-navbar .all-content-wrapper {
@@ -3753,6 +3753,9 @@ div#sparklinehome canvas {
     background: #006DF0;
 	padding: 20px 0px;
     text-align: center;
+    /*bottom: 0;
+    position: absolute;
+    width: 85%;*/
 }
 .message-single-top h1, .notification-single-top h1 {
     border-bottom: 1px solid #F6F8FA;
@@ -4745,4 +4748,18 @@ div#sparklinehome canvas {
 .footer-copy-right a{
 	color:#fff;
 	text-decoration:none;
+}
+
+#preloader {
+        position: fixed;
+        top:0; left:0;
+        right:0; bottom:0;
+        background: #FFFFFF;
+        z-index: 101;
+        opacity: 0.9;
+    }
+#loader {
+    position: absolute;
+    left:50%; top:50%;
+    margin:-200px 0 0 -200px;
 }

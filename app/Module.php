@@ -20,4 +20,9 @@ class Module extends Model
     {
     	return $this->belongsTo('App\Course', 'IdCourse', 'IdCourse');
     }
+
+    public function forums()
+    {
+        return $this->hasMany('App\Forum','IdModule','IdModule');
+    }
 }

@@ -1,4 +1,5 @@
 @extends('layouts.master')
+
 @section('breadcome')
 <li>
     <span class="bread-blod">{{ __('Global Parameters') }}</span>
@@ -9,6 +10,9 @@
 </li>
 @endsection
 @section('content')
+    <div id="preloader">
+        <img src="{{ asset('storage/images/load.gif') }}" id="loader">
+    </div>
     <!-- Static Table Start -->
     <div class="data-table-area mg-b-50">
         <div class="container-fluid">
@@ -80,6 +84,7 @@
     <script type="text/javascript">
         $(function () {
             $('#table').bootstrapTable();
+            $('#preloader').fadeOut('slow');
         });
 
         function ajaxRequest(params) {

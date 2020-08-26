@@ -29,7 +29,7 @@ class ModulesController extends Controller
 
     	$datos = [
     		'Name' => trim(strip_tags($request->name)),
-    		'Description' => trim(strip_tags($request->description)),
+    		'Description'       => trim(strip_tags($request->description,'<h1><h2><h3><h4><h5><p><span>')),
     		'IdCourse' => $course->IdCourse,
     		'IdModuleParent' => $request->module_parent,
     	];

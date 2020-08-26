@@ -18,29 +18,27 @@
 
                     @can('tiene-permiso','Calendario+Acceder')
                         <li>
-                            <a title="Landing Page" href="events.html" aria-expanded="false">
+                            <a href="events.html" aria-expanded="false">
                                 <span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span>
                                 <span class="mini-click-non">{{ __('Calendar') }}</span>
                             </a>
                         </li>
                     @endcan
-                               
-
 
                     @can('tiene-permiso','Cursos+Acceder')
                         <li>
-                            <a title="Landing Page" href="{{ route('cursos') }}" aria-expanded="false">
+                            <a href="{{ route('cursos') }}" aria-expanded="false">
                                 <span class="educate-icon educate-course icon-wrap"></span>
                                 <span class="mini-click-non">{{ __('Courses') }}</span>
                             </a>
                         </li>
                     @endcan
-                    
+
                     @can('tiene-permiso','Profesores+Acceder')
                         <li>
                             <a href="{{ route('profesores') }}">
                                 <span class="educate-icon educate-professor icon-wrap"></span>
-                                <span>Profesores</span>
+                                <span>{{ __('Teachers') }}</span>
                             </a>
                         </li>
                     @endcan
@@ -53,7 +51,6 @@
                             </a>
                         </li>
                     @endcan
-
                     
                     @can('tiene-permiso','Biblioteca+Acceder')
                         <li>
@@ -78,18 +75,18 @@
                         <li>
                             <a href="{{ route('home') }}">
                                 <span class="educate-icon educate-library icon-wrap"></span>
-                                <span>Cartelera</span>
+                                <span>{{ __('Billboard') }}</span>
                             </a>
                         </li>
                     @endcan
 
                     @can('tiene-permiso','Parámetros Generales+Acceder')
-                        <li>
+                        <!--li>
                             <a href="{{ route('par-general') }}">
                                 <i class="fa fa-cog" aria-hidden="true" style="font-size: 23px; margin-right: 8px;"></i>
                                 <span>{{ __('General Parameters') }}</span>
                             </a>
-                        </li>
+                        </li-->
                     @endcan
 
                     @can('tiene-permiso','Administrar Usuarios+Acceder')
@@ -102,7 +99,6 @@
                     @endcan
 
                     @can('tiene-permiso','Administrar Utilidades+Acceder')
-                        
                         <li>
                             <a class="has-arrow" href="all-courses.html" aria-expanded="false">
                                 <span class="educate-icon educate-library icon-wrap"></span>
@@ -119,13 +115,13 @@
                         <li>
                             <a class="has-arrow" href="all-courses.html" aria-expanded="false">
                                 <span class="educate-icon educate-course icon-wrap"></span>
-                                <span class="mini-click-non">Administrar Cursos</span>
+                                <span class="mini-click-non">{{ __('Manage Courses') }}</span>
                             </a>
                             <ul class="submenu-angle" aria-expanded="false">
                                 @can('tiene-permiso','Grupos+Acceder')
                                 <li>
                                     <a href="{{ route('grupos') }}">
-                                        <span class="mini-sub-pro">Grupos</span>
+                                        <span class="mini-sub-pro">{{ __('Groups') }}</span>
                                     </a>
                                 </li>
                                 @endcan
@@ -133,7 +129,7 @@
                                 @can('tiene-permiso','Categorias+Acceder')
                                 <li>
                                     <a href="{{ route('categorias') }}">
-                                        <span class="mini-sub-pro">Categorias</span>
+                                        <span class="mini-sub-pro">{{ __('Categories') }}</span>
                                     </a>
                                 </li>
                                 @endcan
@@ -149,16 +145,15 @@
                                 @can('tiene-permiso','Formatos+Acceder')
                                 <li>
                                     <a href="{{ route('formatos') }}">
-                                        <span class="mini-sub-pro">Formatos</span>
+                                        <span class="mini-sub-pro">{{ __('Formats') }}</span>
                                     </a>
                                 </li>
                                 @endcan
 
-
                                 @can('tiene-permiso','Escalas+Acceder')
                                 <li>
                                     <a href="{{ route('escalas') }}">
-                                        <span class="mini-sub-pro">Escalas</span>
+                                        <span class="mini-sub-pro">{{ ('Scales') }}</span>
                                     </a>
                                 </li>
                                 @endcan
@@ -166,7 +161,7 @@
                                 @can('tiene-permiso','Competencias+Acceder')
                                 <li>
                                     <a href="{{ route('competencias') }}">
-                                        <span class="mini-sub-pro">Competencias</span>
+                                        <span class="mini-sub-pro">{{ __('Competencies') }}</span>
                                     </a>
                                 </li>
                                 @endcan
@@ -174,7 +169,7 @@
                                 @can('tiene-permiso','Insignias+Acceder')
                                 <li>
                                     <a href="{{ route('badges') }}">
-                                        <span class="mini-sub-pro">Insignias</span>
+                                        <span class="mini-sub-pro">{{ __('Badges') }}</span>
                                     </a>
                                 </li>
                                 @endcan 
@@ -182,7 +177,7 @@
                                 @can('tiene-permiso','Parametros+Acceder')
                                 <li>
                                     <a href="{{ route('par-courses') }}">
-                                        <span class="mini-sub-pro">Parametros</span>
+                                        <span class="mini-sub-pro">{{ __('Parameters') }}</span>
                                     </a>
                                 </li>
                                 @endcan
@@ -197,7 +192,6 @@
                                 <span class="mini-click-non">{{ __('Global Parameters') }}</span>
                             </a>
                             <ul class="submenu-angle" aria-expanded="false">
-
                                 @can('tiene-permiso','Compañía+Acceder')
                                 <li>
                                     <a href="{{ route('companies') }}">
@@ -260,9 +254,8 @@
                             </ul>
                         </li>
                     @endcan
-
                     @can('tiene-permiso','Seguridad+Acceder')
-                        <li>
+                        <li @if($act_link == 'security') class="active" @endif>
                             <a class="has-arrow" href="all-courses.html" aria-expanded="false">
                                 <i class="fas fa-shield-alt"></i> &nbsp; 
                                 <span class="mini-click-non">{{ __('Security') }}</span>
@@ -310,24 +303,18 @@
                             @can('tiene-permiso','Aud Usuarios+Acceder')
                             <li>
                                 <a title="Bar Charts" href="bar-charts.html">
-                                    <span class="mini-sub-pro">Aud Usuarios</span>
+                                    <span class="mini-sub-pro">{{ __('Aud Users') }}</span>
                                 </a>
                             </li>
                             @endcan
-
-                            
                         </ul>
                     </li>
                     @endcan
-
-
-
-                    
                     <li>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
-                        <a title="Landing Page" href="events.html" aria-expanded="false" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <a href="events.html" aria-expanded="false" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <span class="educate-icon educate-pages icon-wrap"></span>
                             <span class="mini-click-non">{{ __('Sign off') }}</span>
                         </a>

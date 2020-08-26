@@ -13,6 +13,9 @@
 </li>
 @endsection
 @section('content')
+    <div id="preloader">
+        <img src="{{ asset('storage/images/load.gif') }}" id="loader">
+    </div>
 	<div class="single-pro-review-area mt-t-30 mg-b-50">
         <div class="container-fluid">
             <div class="row">
@@ -284,6 +287,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#preloader').fadeOut('slow');
             $(document).on('change', '#pais', function(event) {
                 let id = $(this).val();
                 if (id != '') {
@@ -320,6 +324,8 @@
                     });
                     
                 }
+            }).on('submit', '#demo1-upload', function(event) {
+                $('#preloader').fadeIn('fast');
             });
         });
     </script>

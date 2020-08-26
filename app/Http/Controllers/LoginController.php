@@ -213,7 +213,7 @@ class LoginController extends Controller
         if (isset($_COOKIE['institucion']) && $_COOKIE['institucion'] != 0) {
             $institucion = Company::findOrFail((int) $_COOKIE['institucion']);
             $name = str_replace(' ', '-', $institucion->Name);
-            return redirect('/login/'.$name);
+            return redirect("/$name/login");
         }else{
             return redirect()->route('login');
         }

@@ -13,7 +13,7 @@ class CountryController extends Controller
 
     	return view('paises.index')
     		->with('title', 'Countries')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('countries', $countries);
     }
 
@@ -21,7 +21,7 @@ class CountryController extends Controller
     {
     	return view('paises.create')
     		->with('title', 'Create Country')
-    		->with('act_link', 'parameters');
+    		->with('act_link', 'parameters_global');
     }
 
     public function create(Request $request)
@@ -46,7 +46,7 @@ class CountryController extends Controller
 
     	return view('paises.edit')
     		->with('title', 'Edit Country')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('country', $country);
     }
 

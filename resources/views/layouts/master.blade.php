@@ -109,6 +109,8 @@
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     <!-- modernizr JS
 		============================================ -->
+    @section('style')
+    @show
     <script src="{{ asset('js/vendor/modernizr-2.8.3.min.js') }}"></script>
 </head>
 

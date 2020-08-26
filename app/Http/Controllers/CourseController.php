@@ -20,10 +20,24 @@ class CourseController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+        $rol = $user->roles()->first();
+        
+        if ($rol->Name == 'Estudiante') {
+            $cursos = array();
+            foreach ($user->groups as $group) {
+                foreach ($group->courses as $curso) {
+                    $cursos[] = $curso;
+                }
+            }
+        }else{
+            $cursos = Course::all();
+        }
+        
     	return view('cursos.index')
             ->with('title', 'Courses')
             ->with('act_link', '')
-            ->with('courses', Course::all());
+            ->with('courses', $cursos);
     }
 
     public function crear()
@@ -41,7 +55,6 @@ class CourseController extends Controller
 
     public function create(Request $request)
     {
-
         $validatedData = request()->validate([
             'name'              => 'required|min:4|unique:Cnf_Courses,Name',
             'short_name'        => 'required|min:4',
@@ -67,7 +80,7 @@ class CourseController extends Controller
             'Name'              => strip_tags(trim($request->name)),
             'IdCourseCategory'  => (int) $request->category,
             'Code'              => strtolower(strip_tags(trim($request->code))),
-            'Description'       => trim(strip_tags($request->description)),
+            'Description'       => trim(strip_tags($request->description,'<h1><h2><h3><h4><h5><p><span>')),
             'StartDate'         => $request->start_date,
             'EndDate'           => $request->end_date,
             'IdCourseFormat'    => (int) $request->format,
@@ -78,6 +91,7 @@ class CourseController extends Controller
             'MaxFileSize'       => (int) $request->max_file_size,
             'IdCreatorUser'     => $request->user()->IdUser,
         ];
+
         if (count($request->file()) > 0) {
             $path = $request->file('image')->store(
                 'images/courses', 'public'

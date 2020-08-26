@@ -13,7 +13,7 @@ class TimeZoneController extends Controller
 
     	return view('zonas-horarias.index')
     		->with('title', 'Times Zones')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('zones', $zones);
     }
 
@@ -21,7 +21,7 @@ class TimeZoneController extends Controller
     {
     	return view('zonas-horarias.create')
     		->with('title', 'Crearte Time Zone')
-    		->with('act_link', 'parameters');
+    		->with('act_link', 'parameters_global');
     }
 
     public function create(Request $request)
@@ -47,7 +47,7 @@ class TimeZoneController extends Controller
 
     	return view('zonas-horarias.edit')
     		->with('title', 'Edit Time Zone')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('zone', $zone);
     }
 

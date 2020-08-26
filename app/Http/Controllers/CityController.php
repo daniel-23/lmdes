@@ -15,7 +15,7 @@ class CityController extends Controller
     {
     	return view('ciudades.index')
     		->with('title', 'Cities')
-    		->with('act_link', 'parameters');
+    		->with('act_link', 'parameters_global');
     }
     public function get_list(Request $request)
     {
@@ -68,7 +68,7 @@ class CityController extends Controller
 
     	return view('ciudades.create')
     		->with('title', 'Crearte City')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('countries', $countries);
     }
 
@@ -98,7 +98,7 @@ class CityController extends Controller
 
     	return view('ciudades.edit')
     		->with('title', 'Edit City')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('countries', $countries)
     		->with('states', $states)
     		->with('city', $city);

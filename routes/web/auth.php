@@ -1,5 +1,11 @@
 <?php
-Route::get('/login/{company?}', 'LoginController@index')->name('login');
+
+
+
+Route::get('/{company?}/login', 'LoginController@index')->name('login');
+Route::get('/login', 'LoginController@index')->name('login');
+
+#Route::get('/login/{company?}', 'LoginController@index')->name('login');
 Route::get('/reset-password', 'LoginController@reset_password')->name('reset.password');
 
 

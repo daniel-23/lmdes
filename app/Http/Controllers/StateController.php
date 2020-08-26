@@ -14,7 +14,7 @@ class StateController extends Controller
 
     	return view('estados.index')
     		->with('title', 'States')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('states', $states);
     }
 
@@ -24,7 +24,7 @@ class StateController extends Controller
 
     	return view('estados.create')
     		->with('title', 'Create State')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('countries', $countries);
     }
 
@@ -51,7 +51,7 @@ class StateController extends Controller
 
     	return view('estados.edit')
     		->with('title', 'Edit State')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('state', $state)
     		->with('countries', $countries);
     }

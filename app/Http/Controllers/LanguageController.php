@@ -15,7 +15,7 @@ class LanguageController extends Controller
 
     	return view('idiomas.index')
     		->with('title', 'Languages')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('languages', $languages);
     }
 
@@ -23,7 +23,7 @@ class LanguageController extends Controller
     {
     	return view('idiomas.create')
     		->with('title', 'Create Language')
-    		->with('act_link', 'parameters');
+    		->with('act_link', 'parameters_global');
     }
 
     public function create(IdiomaCrearRequest $request)
@@ -43,7 +43,7 @@ class LanguageController extends Controller
     	$language = Language::findOrFail($id);
     	return view('idiomas.edit')
     		->with('title', 'Edit Language')
-    		->with('act_link', 'parameters')
+    		->with('act_link', 'parameters_global')
     		->with('language', $language);
     }
 

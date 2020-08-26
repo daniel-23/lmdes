@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('style')
+    <!-- summernote CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/summernote/summernote.css') }}">
+@endsection
 @section('breadcome')
 <li>
     <span class="bread-blod">{{ __('Manage Courses') }}</span>
@@ -26,7 +31,6 @@
                         <form action="{{ route('cursos.crear') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div id="myTabContent" class="tab-content custom-product-edit">
-                                
                                 <div class="product-tab-list tab-pane fade active in" id="description">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -35,7 +39,7 @@
                                                     <div class="row">
                                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                             <div class="form-group-inner @error('name') input-with-error @enderror">
-                                                                <input name="name" type="text" class="form-control" placeholder="Course Name" value="{{ old('name') }}">
+                                                                <input name="name" type="text" class="form-control" placeholder="{{ __('Course Name') }}" value="{{ old('name') }}">
                                                                 @error('name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
@@ -106,9 +110,8 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                            
                                                             <div class="form-group-inner @error('description') input-with-error @enderror">
-                                                                <textarea name="description" placeholder="Description" class="form-control" style="resize: none;">{{ old('description') }}</textarea>
+                                                                <textarea name="description" id="summernote2" style="resize: none;">{{ old('description') }}</textarea>
                                                                 @error('description')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
@@ -259,5 +262,14 @@
         ============================================ -->
     <script src="{{ asset('js/duallistbox/jquery.bootstrap-duallistbox.js') }}"></script>
     <script src="{{ asset('js/duallistbox/duallistbox.active.js') }}"></script>
+    <script src="{{ asset('js/summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript">
+        (function ($) {
+            $('#summernote2').summernote({
+                height: 200,
+                placeholder: '{{ __('Description') }}',
+            });
+        })(jQuery); 
+    </script>
 @endsection
 
