@@ -25,4 +25,9 @@ class Module extends Model
     {
         return $this->hasMany('App\Forum','IdModule','IdModule');
     }
+
+    public function quizzes()
+    {
+        return $this->hasMany('App\Quiz','IdModule','IdModule');
+    }
 }

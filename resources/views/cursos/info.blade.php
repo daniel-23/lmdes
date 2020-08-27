@@ -163,6 +163,10 @@
                                             @foreach($module->forums as $forum)
                                             <li><a href="{{ route('foros.show',$forum->IdForum) }}">{{$forum->Title}}</a></li>
                                             @endforeach
+
+                                            @foreach($module->quizzes as $quiz)
+                                            <li><a href="{{ route('quizzes.show',$quiz->IdQuiz) }}">{{ $quiz->Title }}</a></li>
+                                            @endforeach
                                             </ul>
                                         </div>
                                     </div>
@@ -189,7 +193,7 @@
                                 @foreach($resources as $resource)
                                 
                                     <label for="radio-{{ $resource->cnfResource->Name}}">
-                                        <input type="radio" name="resource" id="radio-{{ $resource->cnfResource->Name }}" value="{{$resource->IdCrsResource}}" />
+                                        <input type="radio" name="resource" id="radio-{{ $resource->cnfResource->Name }}" value="{{$resource->cnfResource->IdResource}}" />
                                         <img src="{{ asset('storage/images/icons/'.$resource->cnfResource->Name.'.png') }}" alt="{{ $resource->cnfResource->Name}}">
                                         {{ $resource->cnfResource->Name}}
                                     </label><br />

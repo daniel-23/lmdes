@@ -8,7 +8,7 @@ class ForumReply extends Model
 {
     protected $guarded = [];
 
-    protected $table = 'Ult_Forum_Replies';
+    protected $table = 'Utl_Forum_Replies';
     protected $primaryKey = 'IdForumReply';
 
     public function user()

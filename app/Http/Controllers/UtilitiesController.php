@@ -3,15 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Course,Module,Forum,ForumReply};
+use App\{
+    Course,
+    Module,
+    Forum,
+    ForumReply,
+    Quiz,
+    Question,
+    Option
+};
 class UtilitiesController extends Controller
 {
     public function agregar(Request $request, $id)
     {
+
     	switch ($request->resource) {
     		case 1:
     			$view = 'add_foro';
     			break;
+
+            case 4:
+                $view = 'add_quiz';
+                break;
     		
     		default:
     			$view = 'index';
@@ -72,5 +85,69 @@ class UtilitiesController extends Controller
             $request->session()->flash('success', 'Reply created successfully');
             return redirect("/utilidades/foros/$forum->IdForum");
         }
+    }
+
+    public function agregar_quiz(Request $request,$id)
+    {
+        $module = Module::findOrFail($id);
+        $validatedData = $request->validate([
+            'title'               => 'required|string|max:255',
+            'total_questions'     => 'required|integer',
+            'points_right_answer' => 'required|integer',
+            'points_wrong_answer' => 'required|integer',
+            'start_date'          => 'required|date',
+            'end_date'            => 'required|date',
+            'duration'            => 'required|integer',
+        ]);
+        $datos = [
+            'Title'       => trim(strip_tags($request->title)),
+            'IdUser' => auth()->id(),
+            'TotalQuestions' => $request->total_questions,
+            'PointsRightAnswer' => $request->points_right_answer,
+            'PointsWrongAnswer' => $request->points_wrong_answer,
+            'IdModule'          => $id,
+            'StartDate'         => $request->start_date,
+            'EndDate'           => $request->end_date,
+            'duration'          => $request->duration,
+        ];
+        $quiz = Quiz::create($datos);
+        $request->session()->flash('success', 'Quiz created successfully');
+        return redirect('/utilidades/add-questions/'.$quiz->IdQuiz);
+    }
+
+    public function add_questions($id)
+    {
+        return view("utilidades.quiz.add_questions")
+            ->with('title', 'Add Questions')
+            ->with('act_link', 'parameters')
+            ->with('quiz',Quiz::findOrFail($id));
+
+    }
+
+    public function add_questionsp(Request $request, $id)
+    {
+        $quiz = Quiz::findOrFail($id);
+        for ($i=0; $i < $quiz->TotalQuestions; $i++) {
+            $datosQuestion = [
+                'IdQuiz' => $quiz->IdQuiz,
+                'Question' => $request->question[$i],
+                'Type'     => $request->type[$i],
+                'CorrectAnswer' => $request->resp_correct[$i],
+            ];
+
+            $question = Question::create($datosQuestion);
+            if ($question->type != 'open') {
+                $opt = $i+1;
+                foreach ($request->option[$opt] as $option) {
+                    if (!is_null($option)) {
+                        Option::create(['IdQuestion' => $question->IdQuestion, 'Option' => $option]);
+                    }
+                }
+            }
+        }
+        $courseId = $quiz->module->course->IdCourse;
+
+        $request->session()->flash('success', 'Questions created successfully');
+        return redirect('/cursos/'.$courseId);
     }
 }

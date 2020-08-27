@@ -220,34 +220,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            
-                                <!--div class="product-tab-list tab-pane fade" id="INFORMATION">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <div class="review-content-section">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="devit-card-custom">
-                                                            <div class="form-group">
-                                                                <input type="url" class="form-control" placeholder="Facebook URL">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="url" class="form-control" placeholder="Twitter URL">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="url" class="form-control" placeholder="Google Plus">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <input type="url" class="form-control" placeholder="Linkedin URL">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div-->
                             </div>
                         </form>
                     </div>

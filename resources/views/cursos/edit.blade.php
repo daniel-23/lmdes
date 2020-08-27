@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('style')
+    <!-- summernote CSS
+        ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/summernote/summernote.css') }}">
+@endsection
 @section('breadcome')
 <li>
     <span class="bread-blod">{{ __('Manage Courses') }}</span>
@@ -116,7 +121,7 @@
                                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                             
                                                             <div class="form-group-inner @error('description') input-with-error @enderror">
-                                                                <textarea name="description" placeholder="Description" class="form-control" style="resize: none;">{{ old('description',$course->Description) }}</textarea>
+                                                                <textarea name="description" id="summernote2" class="form-control" style="resize: none;">{{ old('description',$course->Description) }}</textarea>
                                                                 @error('description')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
@@ -253,5 +258,14 @@
         ============================================ -->
     <script src="{{ asset('js/duallistbox/jquery.bootstrap-duallistbox.js') }}"></script>
     <script src="{{ asset('js/duallistbox/duallistbox.active.js') }}"></script>
+    <script src="{{ asset('js/summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript">
+        (function ($) {
+            $('#summernote2').summernote({
+                height: 200,
+                placeholder: '{{ __('Description') }}',
+            });
+        })(jQuery); 
+    </script>
 @endsection
 

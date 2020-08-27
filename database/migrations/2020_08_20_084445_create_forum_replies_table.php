@@ -13,7 +13,7 @@ class CreateForumRepliesTable extends Migration
      */
     public function up()
     {
-        Schema::create('Ult_Forum_Replies', function (Blueprint $table) {
+        Schema::create('Utl_Forum_Replies', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('IdForumReply');
             $table->unsignedInteger('IdForum');
@@ -33,6 +33,6 @@ class CreateForumRepliesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Ult_Forum_Replies');
+        Schema::dropIfExists('Utl_Forum_Replies');
     }
 }
