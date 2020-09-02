@@ -24,20 +24,20 @@
                             <div class="col-lg-6 col-md-7 col-sm-6 col-xs-12">
                                 <div class="header-top-menu tabl-d-n">
                                     <ul class="nav navbar-nav mai-top-nav">
-                                        <li class="nav-item"><a href="#" class="nav-link">Inicio</a>
+                                        <li class="nav-item"><a href="#" class="nav-link">{{ __('Home') }}</a>
                                         </li>
-                                        <li class="nav-item"><a href="#" class="nav-link">Cartelera</a>
+                                        <li class="nav-item"><a href="#" class="nav-link">{{ __('Billboard') }}</a>
                                         </li>
-                                        <li class="nav-item"><a href="#" class="nav-link">Cartera</a>
+                                        <li class="nav-item"><a href="#" class="nav-link">{{ __('Purse') }}</a>
                                         </li>
-                                        <li class="nav-item"><a href="#" class="nav-link">Directorio</a>
+                                        <li class="nav-item"><a href="#" class="nav-link">{{ __('Directory') }}</a>
                                         </li>
                                         <li class="nav-item dropdown res-dis-nn">
-                                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">Soporte <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
+                                            <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">{{ __('Support') }} <span class="angle-down-topmenu"><i class="fa fa-angle-down"></i></span></a>
                                             <div role="menu" class="dropdown-menu animated zoomIn">
-                                                <a href="#" class="dropdown-item">Documentacion</a>
+                                                <a href="#" class="dropdown-item">{{ __('Documentation') }}</a>
                                                 <a href="#" class="dropdown-item">FAQs</a>
-                                                <a href="#" class="dropdown-item">Contáctenos</a>
+                                                <a href="#" class="dropdown-item">{{ __('Contact Us') }}</a>
                                             </div>
                                         </li>
                                     </ul>
@@ -50,7 +50,7 @@
                                             <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle"><i class="fa fa-globe" aria-hidden="true"></i><span class="indicator-ms"></span></a>
                                             <div role="menu" class="author-message-top dropdown-menu animated zoomIn">
                                                 <div class="message-single-top">
-                                                    <h1>Idiomas</h1>
+                                                    <h1>{{ __('Languages') }}</h1>
                                                 </div>
                                                 <ul class="message-menu">
                                                     <li>

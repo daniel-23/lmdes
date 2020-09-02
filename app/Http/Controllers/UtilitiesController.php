@@ -16,9 +16,12 @@ class UtilitiesController extends Controller
 {
     public function agregar(Request $request, $id)
     {
-
-    	switch ($request->resource) {
-    		case 1:
+        switch ($request->resource) {
+    		
+            case 1:
+                $view = 'add_video';
+                break;
+            case 2:
     			$view = 'add_foro';
     			break;
 

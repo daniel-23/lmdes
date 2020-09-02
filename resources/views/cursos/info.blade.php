@@ -5,26 +5,27 @@
     <link rel="stylesheet" href="{{ asset('css/summernote/summernote.css') }}">
     <style type="text/css">
         /* HIDE RADIO */
-    [type=radio] { 
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+        
 
-    /* IMAGE STYLES */
-    [type=radio] + img {
-      cursor: pointer;
-      width: 70px;
-      height: 70px;
-      border-radius: 10px;
-    }
-
-    /* CHECKED STYLES */
-    [type=radio]:checked + img {
-      outline: 2px solid #1564d2;
-
-    }
+        /* IMAGE STYLES */
+        [type=radio] + img {
+            cursor: pointer;
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+        }
+        /* CHECKED STYLES */
+        [type=radio]:checked + img {
+            outline: 2px solid #1564d2;
+        }
+        .thumbnail img{
+            border-radius: 0 !important;
+            width: 50%;
+            margin-left: 15px;
+        }
+        .thumbnail{
+            border: 0 !important;
+        }
     </style>
 @endsection
 @section('breadcome')
@@ -72,7 +73,7 @@
                         <div class="row" style="display: none;" id="form-modulo">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="comment-head">
-                                    <h3>{{ __('Agregar Módulo') }}</h3>
+                                    <h3>{{ __('Add Module') }}</h3>
                                 </div>
                             </div>
                             <form action="{{ route('cursos.add_modulo',$course->IdCourse) }}" method="POST" class="addcourse" id="demo1-upload" enctype="multipart/form-data">
@@ -150,24 +151,72 @@
                                 </div>
                             </div>
                         </div>
-                            
-                            
+
                         @foreach($course->modules as $module)
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="user-comment admin-comment">
                                         <div class="comment-details">
-                                            <h4>{{ $module->Name }} <span class="comment-replay"><a href="#" data-toggle="modal" data-target="#PrimaryModalftblack" id-module="{{$module->IdModule}}" class="add-utl"><span class="comment-replay">{{ __('Add Utility') }}</span></a></span></h4>
+                                            <h3>{{ $module->Name }} <span class="comment-replay"><a href="#" data-toggle="modal" data-target="#PrimaryModalftblack" id-module="{{$module->IdModule}}" class="add-utl btn btn-info"><span class="comment-replay" style="color: #fff;">{{ __('Add Utility') }}</span></a></span></h3>
                                             {!! $module->Description !!}
-                                            <ul>
-                                            @foreach($module->forums as $forum)
-                                            <li><a href="{{ route('foros.show',$forum->IdForum) }}">{{$forum->Title}}</a></li>
-                                            @endforeach
+                                            <div class="row" style="margin-top: 15px;">
+                                                @foreach($module->forums as $forum)
+                                                    <div class="col-sm-6 col-md-3">
+                                                        <div class="thumbnail">
+                                                            <div class="col-xs-12">
+                                                                <img src="{{ asset('storage/images/icons/Foros.png') }}" alt="{{__('Forum')}}" class="img-responsive">
+                                                            </div>
+                                                            
+                                                            <div class="caption">
+                                                                <h3>
+                                                                    <a href="{{ route('foros.show',$forum->IdForum) }}">
+                                                                        {{$forum->Title}}
+                                                                    </a>
+                                                                </h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            
+                                                
 
-                                            @foreach($module->quizzes as $quiz)
-                                            <li><a href="{{ route('quizzes.show',$quiz->IdQuiz) }}">{{ $quiz->Title }}</a></li>
-                                            @endforeach
-                                            </ul>
+                                                @foreach($module->quizzes as $quiz)
+                                                    <div class="col-sm-6 col-md-3">
+                                                        <div class="thumbnail">
+                                                            <div class="col-xs-12 text-center">
+                                                                <img src="{{ asset('storage/images/icons/Quiz.png') }}" alt="" class="img-responsive">
+                                                            </div>
+                                                            <div class="caption">
+                                                                <h3>
+                                                                    <a href="{{ route('quizzes.show',$quiz->IdQuiz) }}">{{ $quiz->Title }}</a>
+                                                                </h3>
+                                                            </div>
+                                                        </div>
+                                                                
+                                                    </div>
+                                                    
+                                                @endforeach
+
+                                                @foreach($module->videos as $video)
+                                                    <div class="col-sm-6 col-md-3">
+                                                        <div class="thumbnail">
+                                                            <div class="col-xs-12 text-center">
+                                                                <img src="{{ asset('storage/images/icons/Videos.png') }}" alt="" class="img-responsive">
+                                                            </div>
+                                                            <div class="caption">
+                                                                <h3><a href="#" data-toggle="modal" data-target="#PrimaryModalhdbgcl" video-id="{{ $video->youtube_id() }}" class="open-video" title="{{ $video->Title }}">{{ $video->Title }}</a></h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <!--p>{{ $video->Description }}</p-->
+                                                    
+                                                    
+                                                    <!--iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $video->youtube_id() }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe-->
+
+                                                @endforeach
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -186,26 +235,47 @@
                         <form action="{{ route('utilidades.agregar',$course->IdCourse) }}" method="POST">
                             @csrf
                             <input type="hidden" name="module_id" id="input-module_id">
-                        <div class="modal-body" style="color: white;">
-                            <i class="educate-icon educate-checked modal-check-pro"></i>
-                            <h2>{{__('Utilities') }}</h2>
-                            <ul>   
-                                @foreach($resources as $resource)
-                                
-                                    <label for="radio-{{ $resource->cnfResource->Name}}">
-                                        <input type="radio" name="resource" id="radio-{{ $resource->cnfResource->Name }}" value="{{$resource->cnfResource->IdResource}}" />
-                                        <img src="{{ asset('storage/images/icons/'.$resource->cnfResource->Name.'.png') }}" alt="{{ $resource->cnfResource->Name}}">
-                                        {{ $resource->cnfResource->Name}}
-                                    </label><br />
-                                @endforeach
-                                
-                            </ul>
-                        </div>
-                        <div class="modal-footer footer-modal-admin">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ __('Cancel') }}</button>
-                            <button type="submit" class="btn btn-primary">{{ __('Add') }}</button>
-                        </div>
+                            <div class="modal-body" style="color: white;">
+                                <i class="educate-icon educate-checked modal-check-pro"></i>
+                                <h2>{{__('Utilities') }}</h2>
+                                <div class="row">
+                                    @foreach($resources as $resource)
+                                        <div class="col-sm-6 col-md-3">
+                                            <label for="radio-{{ $resource->cnfResource->Name}}">
+                                                <div class="thumbnail">
+                                                    <div class="col-xs-12 text-center">
+                                                        <img src="{{ asset('storage/images/icons/'.$resource->cnfResource->Name.'.png') }}" alt="" class="img-responsive">
+                                                    </div>
+                                                    <div class="caption">
+                                                        <input type="radio" name="resource" id="radio-{{ $resource->cnfResource->Name }}" value="{{$resource->cnfResource->IdResource}}" />
+                                                        {{ $resource->cnfResource->Name}}
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="modal-footer footer-modal-admin">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button type="submit" class="btn btn-primary">{{ __('Add') }}</button>
+                            </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+            <div id="PrimaryModalhdbgcl" class="modal modal-edu-general default-popup-PrimaryModal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header header-color-modal bg-color-1">
+                            <h4 class="modal-title" id="modal-video-title"></h4>
+                            <div class="modal-close-area modal-close-df">
+                                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <iframe id="frame-youtube" width="560" height="315" src="" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -229,6 +299,15 @@
         $('#form-modulo').hide('fast');
     }).on('click', '.add-utl', function(event) {
         $('#input-module_id').val($(this).attr('id-module'));
+    }).on('click', '.open-video', function(event) {
+        var title = $(this).attr('title');
+        console.log("title", title);
+        $('#modal-video-title').text(title);
+        var video_id = $(this).attr('video-id');
+        console.log("video_id", video_id);
+        var url = 'https://www.youtube.com/embed/'+video_id;
+        console.log("url", url);
+        $('#frame-youtube').attr('src', url);
     });
 </script>
 @endsection

@@ -11,8 +11,8 @@ use App\{
     Company
 };
 use App\Mail\ResetPassword;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{Mail,Hash};
+use Illuminate\Support\Str;
 
 
 class LoginController extends Controller
@@ -197,10 +197,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-
-
         $user = Auth::user();
-
         AudUser::create([
             'IdUser' => $user->IdUser,
             'IpConection' => request()->ip(),
@@ -212,7 +209,7 @@ class LoginController extends Controller
         Auth::logout();
         if (isset($_COOKIE['institucion']) && $_COOKIE['institucion'] != 0) {
             $institucion = Company::findOrFail((int) $_COOKIE['institucion']);
-            $name = str_replace(' ', '-', $institucion->Name);
+            $name = Str::slug($institucion->Name);
             return redirect("/$name/login");
         }else{
             return redirect()->route('login');

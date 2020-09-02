@@ -133,7 +133,21 @@
                                                                 @enderror
                                                             </div>
                                                             <div class="form-group-inner @error('modules_format') input-with-error @enderror">
-                                                                <input type="text" class="form-control" name="modules_format" id="modules_format" value="{{ old('modules_format',$course->ModulesFormat) }}" placeholder="{{ __('Modules Format') }}">
+                                                                <select name="modules_format" id="modules_format" class="form-control">
+                                                                    
+                                                                    @if(!is_null(old('modules_format')))
+                                                                        @if(old('modules_format') == 1)
+                                                                            <option value="All grids visible">{{ __('All grids visible') }}</option>
+                                                                            <option value="Visible grids when modules are finished">{{ __('Visible grids when modules are finished') }}</option>
+                                                                        @else
+                                                                            <option value="All visibles tabs">{{ __('All visibles tabs') }}</option>
+                                                                            <option value="Visible tabs when modules are finished">{{ __('Visible tabs when modules are finished') }}</option>
+                                                                        @endif
+                                                                    @else
+                                                                        <option value="$course->ModulesFormat">{{ $course->ModulesFormat }}</option>
+                                                                    @endif
+                                                                </select>
+                                                                
                                                                 @error('modules_format')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
@@ -264,6 +278,15 @@
             $('#summernote2').summernote({
                 height: 200,
                 placeholder: '{{ __('Description') }}',
+            });
+            $('#format').change(function(event) {
+                var format = $(this).val();
+                if (format == 1) {
+                    $('#modules_format').html(`<option value="All grids visible">{{ __('All grids visible') }}</option><option value="Visible grids when modules are finished">{{ __('Visible grids when modules are finished') }}</option>`);
+                }else{
+                    $('#modules_format').html(`<option value="All visibles tabs">{{ __('All visibles tabs') }}</option><option value="Visible tabs when modules are finished">{{ __('Visible tabs when modules are finished') }}</option>`);
+                }
+                console.log("format", format);
             });
         })(jQuery); 
     </script>

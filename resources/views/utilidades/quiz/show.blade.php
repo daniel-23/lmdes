@@ -20,7 +20,7 @@
                     <div class="sparkline12-list">
                         <div class="sparkline12-hd">
                             <div class="main-sparkline12-hd">
-                                <h1>{{ __('Add Questions') }} {{ $quiz->Title }}</h1>
+                                <h1>{{ $question->Question }}</h1>
                             </div>
                         </div>
                         <div class="sparkline12-graph">
@@ -28,49 +28,42 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="all-form-element-inner">
-                                            <form action="{{ route('utilidades.agregar-questions',$quiz->IdQuiz) }}" method="POST">
+                                            <form action="{{ route('question_replies.create') }}" method="POST">
                                                 @csrf
-                                                @for($i=1; $i <= $quiz->TotalQuestions; $i++)
-                                                    <div class="form-group-inner @error('title') input-with-error @enderror col-md-9">
-                                                        <input type="text" class="form-control" name="question[]" value="{{ old('title') }}" required placeholder="{{ __('Question') }} {{ $i }}">
-                                                        @error('title')
-                                                            <span class="help-block small" style="color: red;">{{ __($message) }}</span>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="form-group-inner col-md-3">
-                                                        <select name="type[]" id="type-{{$i}}" class="form-control type" i="{{$i}}">
-                                                            <option value="open">{{ __('Open') }}</option>
-                                                            <option value="simple">{{ __('Simple selection') }}</option>
-                                                            <option value="multiple">{{ __('Multiple choice') }}</option>
-                                                        </select>
-                                                    </div>
+                                                <input type="hidden" value="{{ $question->IdQuestion }}" name="question_id">
+                                                @if($question->Type == 'open')
 
-                                                    <div style="display: none;" id="options-question-{{$i}}">
-                                                        <div class="form-group-inner col-md-6">
-                                                            <input type="text" class="form-control" name="option[{{$i}}][]" value="{{ old('title') }}" placeholder="{{ __('Option a') }}">
+                                                <div class="form-group-inner @error('response') input-with-error @enderror">
+                                                    <textarea class="form-control" name="response" required></textarea>
+                                                    @error('response')
+                                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                                    @enderror
+                                                </div>
+
+                                                @endif
+                                                @if($question->Type == 'simple')
+                                                    @foreach($question->options as $option)
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="i-checks pull-left">
+                                                                    <label><input type="radio" value="{{ $option->IdOption }}" name="response" required> <i></i> {{ $option->Option }} </label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-group-inner col-md-6">
-                                                            <input type="text" class="form-control" name="option[{{$i}}][]" value="{{ old('title') }}" placeholder="{{ __('Option b') }}">
+                                                    @endforeach
+                                                @endif
+                                                @if($question->Type == 'multiple')
+                                                    @foreach($question->options as $option)
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="i-checks pull-left">
+                                                                    <label><input type="checkbox" value="{{$option->IdOption}}" name="response[]" required> <i></i> {{ $option->Option }} </label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-group-inner col-md-6">
-                                                            <input type="text" class="form-control" name="option[{{$i}}][]" value="{{ old('title') }}" placeholder="{{ __('Option c') }}">
-                                                        </div>
-                                                        <div class="form-group-inner col-md-6">
-                                                            <input type="text" class="form-control" name="option[{{$i}}][]" value="{{ old('title') }}" placeholder="{{ __('Option d') }}">
-                                                        </div>
-                                                        <div class="form-group-inner col-xs-12">
-                                                            <select name="resp_correct[]" class="form-control">
-                                                                <option value="">{{ __('Select answer for question') }} {{$i}}</option>
-                                                                <option value="1">{{ __('Option') }} a</option>
-                                                                <option value="2">{{ __('Option') }} b</option>
-                                                                <option value="3">{{ __('Option') }} c</option>
-                                                                <option value="4">{{ __('Option') }} d</option>
-                                                            </select>
-                                                        </div>
-                                                        <p>&nbsp;</p>
-                                                    </div>
-                                                    
-                                                @endfor
+                                                    @endforeach
+                                                @endif
+                                                
 
                                                 <div class="row" style="margin-top: 15px;">
                                                     <div class="col-xs-12">

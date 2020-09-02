@@ -18,7 +18,7 @@
 
                     @can('tiene-permiso','Calendario+Acceder')
                         <li>
-                            <a href="events.html" aria-expanded="false">
+                            <a href="{{ url('/calendario') }}" aria-expanded="false">
                                 <span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span>
                                 <span class="mini-click-non">{{ __('Calendar') }}</span>
                             </a>

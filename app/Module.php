@@ -30,4 +30,9 @@ class Module extends Model
     {
         return $this->hasMany('App\Quiz','IdModule','IdModule');
     }
+
+    public function videos()
+    {
+        return $this->hasMany('App\Video','IdModule','IdModule');
+    }
 }

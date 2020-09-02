@@ -15,6 +15,12 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('/utilidades/quizzes/{quiz}', 'QuizController@show')->where('id', '[0-9]+')->name('quizzes.show');
 
+	//QUESTIONS
+	Route::post('/questionreplies', 'QuestionReplyController@create')->name('question_replies.create');
+
+	//VIDEOS
+	Route::post('/utilidades/agregar-video/{module}', 'VideoController@store')->where('id', '[0-9]+')->name('utilidades.agregar-video');
+
 
 	
 });

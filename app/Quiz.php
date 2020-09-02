@@ -16,4 +16,9 @@ class Quiz extends Model
     {
         return $this->belongsTo('App\Module','IdModule','IdModule');
     }
+
+    public function questions()
+    {
+    	return $this->hasMany('App\Question','IdQuiz');
+    }
 }
