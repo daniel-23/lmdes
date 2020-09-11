@@ -166,7 +166,7 @@ class CourseController extends Controller
             'ShowCalifications' => $request->show_califications,
             'MaxFileSize'       => (int) $request->max_file_size,
         ];
-        if (count($request->file()) > 0) {
+        if (count($request->file()) > 0 && !is_null($request->file('image'))) {
             $path = $request->file('image')->store(
                 'images/courses', 'public'
             );
