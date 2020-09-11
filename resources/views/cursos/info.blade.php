@@ -213,6 +213,19 @@
                                                     <!--iframe width="560" height="315" src="https://www.youtube.com/embed/{{ $video->youtube_id() }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe-->
 
                                                 @endforeach
+
+                                                @foreach($module->files as $file)
+                                                    <div class="col-sm-6 col-md-3">
+                                                        <div class="thumbnail">
+                                                            <div class="col-xs-12 text-center">
+                                                                <img src="{{ asset('storage/images/icons/File.png') }}" alt="" class="img-responsive">
+                                                            </div>
+                                                            <div class="caption">
+                                                                <h3><a href="{{ route('file.dowload',$file->IdFile) }}">{{ $file->Name }}</a></h3>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                             
                                         </div>

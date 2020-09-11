@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 use App\{Module, Course, CrsResource, File};
 class ModulesController extends Controller
 {
@@ -94,5 +96,13 @@ class ModulesController extends Controller
         $request->session()->flash('success', 'File created successfully');
         $file = File::create($datos);
         return $file;
+    }
+
+    public function descargar_archivo($id)
+    {
+
+        $file = File::findOrFail($id);
+        return Storage::disk('public')->download($file->Url,$file->Name);
+        
     }
 }

@@ -35,4 +35,9 @@ class Module extends Model
     {
         return $this->hasMany('App\Video','IdModule','IdModule');
     }
+
+    public function files()
+    {
+        return $this->hasMany('App\File','IdModule','IdModule');
+    }
 }
