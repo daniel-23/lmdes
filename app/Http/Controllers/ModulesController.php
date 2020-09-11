@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\{Module, Course, CrsResource};
+use App\{Module, Course, CrsResource, File};
 class ModulesController extends Controller
 {
     public function crear($id)
@@ -73,5 +73,26 @@ class ModulesController extends Controller
         $request->session()->flash('success', 'Module modify successfully');
         return redirect()->route('cursos.info',$module->IdCourse);
         dd($request->all());
+    }
+
+    public function subir_archivo(Request $request)
+    {
+        $validatedData = $request->validate([
+            'modulo_id' => 'required|integer|exists:Crs_Modules,IdModule',
+            'archivo'   => 'required|file',
+        ]);
+        $path = $request->file('archivo')->store(
+            'files', 'public'
+        );
+
+        $datos = [
+            'IdUser' => auth()->id(),
+            'Name' => trim(strip_tags($request->file('archivo')->getClientOriginalName())),
+            'Url' => $path,
+            'IdModule' => $request->modulo_id,
+        ];
+        $request->session()->flash('success', 'File created successfully');
+        $file = File::create($datos);
+        return $file;
     }
 }

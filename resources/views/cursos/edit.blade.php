@@ -14,7 +14,7 @@
     <span class="bread-slash">/</span>
 </li>
 <li>
-    <span class="bread-blod">{{ __('Create') }}</span>
+    <span class="bread-blod">{{ __('Edit') }}</span>
 </li>
 @endsection
 @section('content')
@@ -24,7 +24,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="product-payment-inner-st">
                         <ul id="myTabedu1" class="tab-review-design">
-                            <li class="active"><a href="#description">Courses Details</a></li>
+                            <li class="active"><a href="#description">{{ __('Courses Details') }}</a></li>
                             <li><a href="#groups"> {{ __('Groups') }}</a></li>
                         </ul>
                         <form action="{{ route('cursos.editar',$course->IdCourse) }}" method="POST" enctype="multipart/form-data">
@@ -45,13 +45,13 @@
                                                                 @enderror
                                                             </div>
                                                             <div class="form-group-inner @error('short_name') input-with-error @enderror">
-                                                                <input name="short_name" type="text" class="form-control" placeholder="Short Name" value="{{ old('short_name',$course->ShortName) }}">
+                                                                <input name="short_name" type="text" class="form-control" placeholder="{{ __('Short Name') }}" value="{{ old('short_name',$course->ShortName) }}">
                                                                 @error('short_name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
                                                             </div>
                                                             <div class="form-group-inner @error('code') input-with-error @enderror">
-                                                                <input name="code" type="text" class="form-control" placeholder="Course Code" value="{{ old('code',$course->Code) }}">
+                                                                <input name="code" type="text" class="form-control" placeholder="{{ __('Course Code') }}" value="{{ old('code',$course->Code) }}">
                                                                 @error('code')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
@@ -91,10 +91,10 @@
                                                                 <div class="file-upload-inner ts-forms">
                                                                     <div class="input prepend-small-btn">
                                                                         <div class="file-button">
-                                                                            Browse
+                                                                            {{ __('Browse') }}
                                                                             <input type="file" onchange="document.getElementById('prepend-small-btn').value = this.value;" accept="image/*" name="image">
                                                                         </div>
-                                                                        <input type="text" id="prepend-small-btn" placeholder="{{ $course->Image ?? 'no file selected' }}">
+                                                                        <input type="text" id="prepend-small-btn" placeholder="{{ $course->Image ?? __('No file selected') }}">
                                                                         @error('image')
                                                                         <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                         @enderror
@@ -144,7 +144,7 @@
                                                                             <option value="Visible tabs when modules are finished">{{ __('Visible tabs when modules are finished') }}</option>
                                                                         @endif
                                                                     @else
-                                                                        <option value="$course->ModulesFormat">{{ $course->ModulesFormat }}</option>
+                                                                        <option value="{{ $course->ModulesFormat }}">{{ $course->ModulesFormat }}</option>
                                                                     @endif
                                                                 </select>
                                                                 

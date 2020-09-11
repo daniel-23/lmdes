@@ -11,7 +11,7 @@ class ResourcesSeeder extends Seeder
      */
     public function run()
     {
-        $recursos = ['Videos','Foros','Tareas','Quiz'];
+        $recursos = ['Videos','Foros','Tareas','Quiz','Url','File','Page','Lesson','Glosary','Survey','Book'];
         foreach ($recursos as $key) {
         	Resource::create(['Name' => $key]);
         }

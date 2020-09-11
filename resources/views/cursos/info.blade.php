@@ -4,8 +4,6 @@
         ============================================ -->
     <link rel="stylesheet" href="{{ asset('css/summernote/summernote.css') }}">
     <style type="text/css">
-        /* HIDE RADIO */
-        
 
         /* IMAGE STYLES */
         [type=radio] + img {
@@ -247,7 +245,7 @@
                                                         <img src="{{ asset('storage/images/icons/'.$resource->cnfResource->Name.'.png') }}" alt="" class="img-responsive">
                                                     </div>
                                                     <div class="caption">
-                                                        <input type="radio" name="resource" id="radio-{{ $resource->cnfResource->Name }}" value="{{$resource->cnfResource->IdResource}}" />
+                                                        <input type="radio" name="resource" class="reso" id="radio-{{ $resource->cnfResource->Name }}" value="{{$resource->cnfResource->IdResource}}" />
                                                         {{ $resource->cnfResource->Name}}
                                                     </div>
                                                 </div>
@@ -279,6 +277,35 @@
                     </div>
                 </div>
             </div>
+            <div id="ModalFile" class="modal modal-edu-general default-popup-PrimaryModal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header header-color-modal bg-color-1">
+                            <h4 class="modal-title" id="modal-video-title"></h4>
+                            <div class="modal-close-area modal-close-df">
+                                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group-inner @error('archivo') input-with-error @enderror">
+                                <label for="" id="label-archivo">{{ __('Select a file')}}</label>
+                                <div class="file-upload-inner ts-forms">
+                                    <div class="input prepend-small-btn">
+                                        <div class="file-button">
+                                            {{ __('Browse') }}
+                                            <input type="file" onchange="document.getElementById('prepend-small-btn').value = this.value;" name="archivo" id="archivo">
+                                        </div>
+                                        <input type="text" id="prepend-small-btn" placeholder="{{ __('No file selected') }}">
+                                        @error('archivo')
+                                        <span class="help-block small" style="color: red;">{{ __($message) }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -287,11 +314,16 @@
 <script src="{{ asset('js/summernote/summernote.min.js') }}"></script>
 <script type="text/javascript">
     (function ($) {
-            $('#summernote2').summernote({
-                height: 200,
-                placeholder: '{{ __('Description') }}',
-            });
-        })(jQuery);
+        $('#summernote2').summernote({
+            height: 200,
+            placeholder: '{{ __('Description') }}',
+        });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+    })(jQuery);
     $(document).on('click', '#crear-modulo', function(event) {
         event.preventDefault();
         $('#form-modulo').show('slow');
@@ -301,13 +333,42 @@
         $('#input-module_id').val($(this).attr('id-module'));
     }).on('click', '.open-video', function(event) {
         var title = $(this).attr('title');
-        console.log("title", title);
         $('#modal-video-title').text(title);
         var video_id = $(this).attr('video-id');
-        console.log("video_id", video_id);
         var url = 'https://www.youtube.com/embed/'+video_id;
-        console.log("url", url);
         $('#frame-youtube').attr('src', url);
+    }).on('change', ".reso", function(event) {
+        var valor = $(this).val();
+        if (valor == 7) {
+            $('#PrimaryModalftblack').modal('hide');
+            $('#ModalFile').modal('show');
+        }
+        console.log("valor", valor);
+
+    }).on('change', '#archivo', function(event) {
+        var archivo = this.files[0];
+        console.log("archivo", archivo.name);
+        var block = /(.html|.php|.py|.exe|.pl|.js|.jsp|.asp|.sql)$/i;
+        if (block.exec(archivo.name)) {
+            $('#label-archivo').append('<br> Archivo '+archivo.name+' no permitido.');
+            $("#prepend-small-btn").val("{{ __('No file selected') }}");
+        }else{
+            var datos = new FormData();
+            var modulo = $('#input-module_id').val();
+            datos.append("archivo", archivo);
+            datos.append("modulo_id", modulo);
+            $.ajax({
+                url: '{{ route('modulos.subir_archivo') }}',
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                data: datos,
+            }).done(function(resp) {
+                
+                location.reload(true);
+            });
+        }
     });
 </script>
 @endsection

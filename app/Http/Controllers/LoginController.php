@@ -32,6 +32,9 @@ class LoginController extends Controller
                 setcookie('institucion', 0, time() + (86400 * 30), "/");
             }
         }
+        if (Auth::check()) {
+            return redirect('/');
+        }
 
         return view('login.index');
     }

@@ -32,9 +32,9 @@
                             <span class="cr-ic-r"><span class="course-icon"><i class="fa fa-dollar"></i></span> 500</span>
                         </div>
                         <div class="course-des">
-                            <p><span><i class="fa fa-clock"></i></span> <b>Duration:</b> {{ $course->duration() }}</p>
-                            <p><span><i class="fa fa-clock"></i></span> <b>Professor:</b> Jane Doe</p>
-                            <p><span><i class="fa fa-clock"></i></span> <b>Students:</b> 100+</p>
+                            <p><span><i class="fa fa-clock"></i></span> <b>{{ __('Duration') }}:</b> {{ $course->duration() }}</p>
+                            <p><span><i class="fa fa-clock"></i></span> <b>{{ __('Professor') }}:</b> Jane Doe</p>
+                            <p><span><i class="fa fa-clock"></i></span> <b>{{ __('Students') }}:</b> 100+</p>
                         </div>
                         <div class="product-buttons">
                             <a href="{{ route('cursos.info',$course->IdCourse) }}" class="btn btn-primary cart-btn">{{ __('Read More') }}</a>

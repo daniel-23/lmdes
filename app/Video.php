@@ -12,11 +12,12 @@ class Video extends Model
 
     public function youtube_id()
     {
-    	preg_match(
-    		'/[\\?\\&]v=([^\\?\\&]+)/',
-    		$this->Url,
-    		$matches
-    	);
-    	return $matches[1];
+    	$patron = '%^ (?:https?://)? (?:www\.)? (?: youtu\.be/ | youtube\.com (?: /embed/ | /v/ | /watch\?v= ) ) ([\w-]{10,12}) $%x';
+        $array = preg_match($patron, $this->Url, $parte);
+        if (false !== $array) {
+            return $parte[1];
+        }
+        return false;
+        
     }
 }

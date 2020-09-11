@@ -24,7 +24,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="product-payment-inner-st">
                         <ul id="myTabedu1" class="tab-review-design">
-                            <li class="active"><a href="#description">Courses Details</a></li>
+                            <li class="active"><a href="#description">{{ __('Courses Details') }}</a></li>
                             <li><a href="#groups"> {{ __('Groups') }}</a></li>
                             <!--li><a href="#INFORMATION">Social Information</a></li-->
                         </ul>
@@ -45,13 +45,13 @@
                                                                 @enderror
                                                             </div>
                                                             <div class="form-group-inner @error('short_name') input-with-error @enderror">
-                                                                <input name="short_name" type="text" class="form-control" placeholder="Short Name" value="{{ old('short_name') }}">
+                                                                <input name="short_name" type="text" class="form-control" placeholder="{{ __('Short Name') }}" value="{{ old('short_name') }}">
                                                                 @error('short_name')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
                                                             </div>
                                                             <div class="form-group-inner @error('code') input-with-error @enderror">
-                                                                <input name="code" type="text" class="form-control" placeholder="Course Code" value="{{ old('code') }}">
+                                                                <input name="code" type="text" class="form-control" placeholder="{{ __('Course Code') }}" value="{{ old('code') }}">
                                                                 @error('code')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
@@ -87,10 +87,10 @@
                                                                 <div class="file-upload-inner ts-forms">
                                                                     <div class="input prepend-small-btn">
                                                                         <div class="file-button">
-                                                                            Browse
+                                                                            {{ __('Browse') }}
                                                                             <input type="file" onchange="document.getElementById('prepend-small-btn').value = this.value;" accept="image/*" name="image">
                                                                         </div>
-                                                                        <input type="text" id="prepend-small-btn" placeholder="no file selected">
+                                                                        <input type="text" id="prepend-small-btn" placeholder="{{ __('No file selected') }}">
                                                                         @error('image')
                                                                         <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                         @enderror
@@ -162,7 +162,7 @@
                                                                 @enderror
                                                             </div>
                                                             <div class="form-group-inner @error('max_file_size') input-with-error @enderror">
-                                                                <input type="number" class="form-control" name="max_file_size" id="max_file_size" value="{{ old('max_file_size') }}" placeholder="{{ __('Max File Size') }}">
+                                                                <input type="number" class="form-control" name="max_file_size" id="max_file_size" value="{{ old('max_file_size') }}" placeholder="{{ __('Max File Size (in MB)') }}">
                                                                 @error('max_file_size')
                                                                 <span class="help-block small" style="color: red;">{{ __($message) }}</span>
                                                                 @enderror
