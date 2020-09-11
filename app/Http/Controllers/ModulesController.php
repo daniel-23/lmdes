@@ -24,16 +24,16 @@ class ModulesController extends Controller
 
     	$validatedData = $request->validate([
 			'name'          => 'required|string|max:100',
-			'description'   => 'required|string|max:100',
+			'description'   => 'required|string',
 			'module_parent' => 'nullable|integer|exists:Crs_Modules,IdModule',
             #'resources'     => 'required|array',
     	]);
 
     	$datos = [
-    		'Name' => trim(strip_tags($request->name)),
-    		'Description'       => trim(strip_tags($request->description,'<h1><h2><h3><h4><h5><p><span>')),
-    		'IdCourse' => $course->IdCourse,
-    		'IdModuleParent' => $request->module_parent,
+            'Name'           => trim(strip_tags($request->name)),
+            'Description'    => trim(strip_tags($request->description,'<h1><h2><h3><h4><h5><p><span><img>')),
+            'IdCourse'       => $course->IdCourse,
+            'IdModuleParent' => $request->module_parent,
     	];
 
     	$module = Module::create($datos);
@@ -58,14 +58,14 @@ class ModulesController extends Controller
 
         $validatedData = $request->validate([
             'name'          => 'required|string|max:100',
-            'description'   => 'required|string|max:100',
+            'description'   => 'required|string',
             'module_parent' => 'nullable|integer|exists:Crs_Modules,IdModule',
             'resources'     => 'required|array',
         ]);
 
         $datos = [
-            'Name' => trim(strip_tags($request->name)),
-            'Description' => trim(strip_tags($request->description)),
+            'Name'           => trim(strip_tags($request->name)),
+            'Description'    => trim(strip_tags($request->description,'<h1><h2><h3><h4><h5><p><span><img>')),
             'IdModuleParent' => $request->module_parent,
         ];
 

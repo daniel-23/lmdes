@@ -20,7 +20,7 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                     <div class="courses-inner res-mg-b-30">
                         <div class="courses-title">
-                            <a href="#"><img src="{{ is_null($course->Image) ? asset('storage/images/courses/1.jpg') : asset('storage/'.$course->Image) }}" alt="{{ $course->ShortName }}" style="border: 3px solid {{ $course->category->Color }};"></a>
+                            <a href="{{ route('cursos.info',$course->IdCourse) }}"><img src="{{ is_null($course->Image) ? asset('storage/images/courses/1.jpg') : asset('storage/'.$course->Image) }}" alt="{{ $course->ShortName }}" style="border: 3px solid {{ $course->category->Color }};"></a>
                         <div class="courses-inner-img">
                             <img src="{{ asset('storage/images/icons/curso.png') }}" alt="icono">
                         </div>
